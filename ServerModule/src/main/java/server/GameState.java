@@ -11,7 +11,7 @@ public class GameState {
     private Hex[][] hexes;
     GameState()
     {
-        hexes = new Hex[17][17];
+        hexes = new Hex[25][17];
         initBoard(2);
     }
 
@@ -21,7 +21,7 @@ public class GameState {
      */
     public void initBoard(int numberOfPlayers)
     {
-        for (int i = 0; i < 17; i++)
+        for (int i = 0; i < 25; i++)
         {
             for (int j = 0; j < 17; j++)
             {
@@ -29,6 +29,7 @@ public class GameState {
             }
         }
         hexes[0][0] = new Hex(Hex.State.PLAYER1);
+        hexes[24][15] = new Hex(Hex.State.PLAYER2);
     }
 
     public Hex[][] getHexes() {
