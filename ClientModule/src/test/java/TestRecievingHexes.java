@@ -20,7 +20,7 @@ public class TestRecievingHexes {
         var out = new PrintWriter(socket.getOutputStream(), true);
         out.println("requestHexes");
         String serverResponse = (String) inObject.readObject();
-        Hex[][] hexes = new Hex[17][17];
+        Hex[][] hexes = new Hex[25][17];
         System.out.println(serverResponse);
         if (serverResponse.equals("sendingHexes")) {
 
