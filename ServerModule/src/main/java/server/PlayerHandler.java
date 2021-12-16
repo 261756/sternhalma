@@ -12,6 +12,9 @@ import java.util.Scanner;
  *
  * OBSŁUGIWANE KOMENDY:
  * requestHexes: odpowiada "sendingHexes", wysyła tablicę Hexów
+ * requestMove: wykonuje zadany przez gracza ruch
+ * requestTurn: zwraca true jeśli tura gracza
+ * passTurn: pasuje turę gracza
  *
  */
 public class PlayerHandler implements Runnable {
@@ -39,11 +42,24 @@ public class PlayerHandler implements Runnable {
         System.out.println("Connection count: " + connectionCount);
         try {
             while (SCI.availableCommandFromClient()) {
-                //System.out.println(in.nextLine());
-                if (SCI.getCommandFromClient().equals("requestHexes"))
+                String command = SCI.getCommandFromClient();
+                if (command.equals("requestHexes"))
                 {
                     SCO.writeObject("sendingHexes");
                     SCO.writeObject(GS.getHexes());
+                }
+                else if (command.equals("requestTurn"))
+                {
+                    SCO.writeObject(GS.checkTurn(socket));
+                }
+                else if (command.startsWith("requestMove"))
+                {
+                    handleMove(command);
+                }
+                else if (command.equals("passTurn"))
+                {
+                    if (GS.checkTurn(socket))
+                        GS.passTurn(socket);
                 }
                 else
                 {
@@ -60,5 +76,14 @@ public class PlayerHandler implements Runnable {
             //connectionCount--;
             System.out.println("Closed: " + socket);
         }
+    }
+    private void handleMove(String command)
+    {
+        String parts[] = command.substring(11).split(" ");
+        int x1 = Integer.parseInt(parts[0]);
+        int y1 = Integer.parseInt(parts[1]);
+        int x2 = Integer.parseInt(parts[2]);
+        int y2 = Integer.parseInt(parts[3]);
+        GS.move(x1,y1,x2,y2);
     }
 }
