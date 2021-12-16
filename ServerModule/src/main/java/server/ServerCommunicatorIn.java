@@ -6,6 +6,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
 
+/**
+ * Odpowiada za przyjmowanie Stringów z danego inputStream
+ */
 public class ServerCommunicatorIn {
 
     Scanner in;

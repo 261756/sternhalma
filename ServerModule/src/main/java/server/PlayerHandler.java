@@ -9,6 +9,10 @@ import java.util.Scanner;
 /**
  * każdy klient dostanie swój własny playerHandler (testowane connectionCount)
  * playerHandelr umiera kiedy jego klient się rozłączy także lepiej tu nie przechowywać informacji
+ *
+ * OBSŁUGIWANE KOMENDY:
+ * requestHexes: odpowiada "sendingHexes", wysyła tablicę Hexów
+ *
  */
 public class PlayerHandler implements Runnable {
     private Socket socket;

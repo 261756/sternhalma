@@ -10,18 +10,20 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 
-/**
- * OBSŁUGIWANE KOMENDY:
- * requestHexes: odpowiada "sendingHexes", wysyła tablicę Hexów
- */
+
 public class Server {
     private static GameState GS;
     public Server() throws Exception {
         GS = new GameState();
-
     }
-    public void startServer() throws Exception {
-        try (var listener = new ServerSocket(59898)) {
+
+    /**
+     * Główna pętla serwera, jeśli ktoś próbuje się połączyć z portem, to jest mu nadawany PlayerHandler
+     * @throws Exception
+     * @param serverPort - port servera
+     */
+    public void startServer(int serverPort) throws Exception {
+        try (var listener = new ServerSocket(serverPort)) {
             System.out.println("The checkers server is running...");
             var pool = Executors.newFixedThreadPool(20);
             while (true) {
