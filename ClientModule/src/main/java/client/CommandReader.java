@@ -1,18 +1,15 @@
 package client;
 
-import client.exceptions.UnknownCommandException;
-import hex.Hex;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * Klasa odbierająca komendy z serwera
  */
 public class CommandReader {
     Client client;
-    ObjectInputStream objectInputStream;
+    Scanner scanner;
     CommandReader(Client client) {
         this.client = client;
     }
@@ -23,38 +20,22 @@ public class CommandReader {
      */
     public void setConnection(Socket socket) {
         try {
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            scanner = new Scanner(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
+    public boolean hasNext() {
+        return scanner.hasNext();
+    }
     /**
      * Metoda pobiera polecenia z serwera, następnie wywołuje odpowienie metody na kliencie
      */
     public void fetchInstruction()  {
-        try {
-            Object obj = objectInputStream.readObject();
-            if (obj instanceof String) {
-                switch ((String)obj) {
-                    case "sendingHexes" -> {
-                        client.updateBoard((Hex[][]) objectInputStream.readObject());
-                    }
-                    default -> {
-                        throw new UnknownCommandException();
-                    }
-                }
-            } else {
-                throw new UnknownCommandException();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnknownCommandException e) {
-            e.printStackTrace();
-        }
+        String command = scanner.next();
+        if (command.startsWith("sendingHexes")) {
 
+        }
     }
 }
