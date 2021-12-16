@@ -6,30 +6,28 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
-
 
 public class TestClientChannels {
     @Test
-    public void testSetBoard() {
-        Socket socket = new Socket();
-        Hex[][] array = new Hex[17][17];
+    public void testUpdateBoard() {
+        Hex[][] array = new Hex[25][17];
         array[0][0] = new Hex(Hex.State.PLAYER1);
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            Scanner scanner = new Scanner(socket.getInputStream());
-            Client client = new Client();
-            client.setCommunication(socket);
-            client.commandWriter.requestBoardState();
-            Assert.assertEquals("requestHexes",scanner.nextLine());
-            outputStream.writeObject("sendingHexes");
-            outputStream.writeObject(array);
-            Assert.assertEquals(Hex.State.PLAYER1,client.gameState.getHexAt(0,0));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Client client = new Client();
+        client.updateBoard(array);
+        Assert.assertEquals(Hex.State.PLAYER1,client.gameState.getHexAt(0,0).getState());
+    }
+    @Test
+    public void testSetBoard() throws IOException {
 
+        var socket = new Socket("localhost", 59898);
+        Client client = new Client();
+        client.setCommunication(socket);
+        client.commandWriter.requestBoardState();
+        client.commandReader.fetchInstruction();
+        Hex unit1 = client.gameState.getHexAt(0,0);
+        Hex unit2 = client.gameState.getHexAt(24,15);;
+        Assert.assertEquals(Hex.State.PLAYER1,unit1.getState());
+        Assert.assertEquals(Hex.State.PLAYER2,unit2.getState());
     }
 }

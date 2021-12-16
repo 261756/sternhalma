@@ -21,6 +21,7 @@ public class Client {
 
     public Client() {
         this.clientFrame = new ClientFrame(this);
+        this.gameState = new ClientGameState();
         this.commandReader = new CommandReader(this);
         this.commandWriter = new CommandWriter(this);
         clientFrame.setSize(400,400);//temp
@@ -54,6 +55,7 @@ public class Client {
         commandWriter.requestBoardState();
         while (isActive) {
             commandReader.fetchInstruction();
+            isActive = false;
         }
         socket.close();
         clientFrame.dispose();
