@@ -49,4 +49,42 @@ public class TestRecievingHexes {
         System.out.println(serverResponse);
         Assert.assertEquals(serverResponse, "unknownCommand");
     }
+    @Test
+    public void TEST1looped() throws IOException, ClassNotFoundException {
+        var socket = new Socket("localhost", 59898);
+        ObjectInputStream inObject = new ObjectInputStream(socket.getInputStream());
+        var out = new PrintWriter(socket.getOutputStream(), true);
+        while (true) {
+            out.println("requestHexes");
+            String serverResponse = (String) inObject.readObject();
+            Hex[][] hexes = new Hex[25][17];
+            System.out.println(serverResponse);
+            if (serverResponse.equals("sendingHexes")) {
+
+                hexes = (Hex[][]) inObject.readObject();
+
+                System.out.println("xD");
+            }
+            Assert.assertEquals(hexes[0][0].getState(), Hex.State.PLAYER1);
+            Assert.assertEquals(hexes[1][0].getState(), Hex.State.EMPTY);
+            Assert.assertNotEquals(hexes[0][0].getState(), Hex.State.EMPTY);
+
+
+            out.println("requestHexes");
+            serverResponse = (String) inObject.readObject();
+            System.out.println(serverResponse);
+            if (serverResponse.equals("sendingHexes")) {
+
+                hexes = (Hex[][]) inObject.readObject();
+
+                System.out.println("xD");
+            }
+            Assert.assertEquals(hexes[0][0].getState(), Hex.State.PLAYER1);
+
+            out.println("requestxD");
+            serverResponse = (String) inObject.readObject();
+            System.out.println(serverResponse);
+            Assert.assertEquals(serverResponse, "unknownCommand");
+        }
+    }
 }
