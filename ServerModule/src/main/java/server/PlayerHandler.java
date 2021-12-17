@@ -61,6 +61,10 @@ public class PlayerHandler implements Runnable {
                     if (GS.checkTurn(socket))
                         GS.passTurn(socket);
                 }
+                else if (command.equals("quit"))
+                {
+                    System.out.println(socket + "quit");
+                }
                 else
                 {
                     SCO.writeString("unknownCommand");

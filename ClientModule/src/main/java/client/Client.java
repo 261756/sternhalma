@@ -52,13 +52,19 @@ public class Client {
      * @throws IOException od socket.close() nie wiem czy to będzie działać
      */
     public void play() throws IOException {
-        commandWriter.requestBoardState();
-        while (isActive) {
-            commandReader.fetchInstruction();
-            isActive = false;
+        try {
+            while (commandReader.hasNext()) {
+                commandReader.fetchInstruction();
+            }
+            commandWriter.quit();
         }
-        socket.close();
-        clientFrame.dispose();
+
+    catch (Exception e) {
+        e.printStackTrace();
+        } finally {
+            socket.close();
+            clientFrame.dispose();
+        }
     }
 
 }

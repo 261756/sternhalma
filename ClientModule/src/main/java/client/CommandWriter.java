@@ -32,4 +32,13 @@ public class CommandWriter {
     public void requestBoardState() {
         printWriter.println("requestHexes");
     }
+
+    /**
+     * Powiadamia serwer o wyjściu użytkownika
+     */
+    public void quit()
+    {
+        printWriter.println("quit");
+    }
+
 }
