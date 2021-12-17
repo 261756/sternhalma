@@ -2,7 +2,9 @@ package server;
 
 import hex.Hex;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -10,9 +12,11 @@ import java.util.Arrays;
  */
 public class GameState {
     private Hex[][] hexes;
+    private ArrayList<PlayerHandler> players;
     GameState()
     {
         hexes = new Hex[25][17];
+        players = new ArrayList<PlayerHandler>();
         initBoard(2);
     }
 
@@ -59,9 +63,10 @@ public class GameState {
     {
         if (moveIsLegal(a,b,c,d))
         {
-            Hex.State temp = hexes[a][b].getState();
-            hexes[a][b].setState(hexes[c][d].getState());
-            hexes[c][d].setState(temp);
+
+            hexes[c][d].setState(hexes[a][b].getState());
+            hexes[a][b].setState(Hex.State.EMPTY);
+
         }
     }
 
@@ -72,4 +77,21 @@ public class GameState {
     public Boolean moveIsLegal(int a, int b, int c ,int d) {
         return true;
     }
+
+    public void writeToAllPlayers(String s) throws IOException {
+        for (int i = 0; i < players.size(); i++)
+        {
+            players.get(i).write(s);
+        }
+    }
+
+    /**
+     * Dodaje gracza do tablicy graczy w gamestate
+     * @param p
+     */
+    public void addPlayer(PlayerHandler p)
+    {
+        players.add(p);
+    }
+
 }

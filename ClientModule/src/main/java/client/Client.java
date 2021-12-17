@@ -48,10 +48,19 @@ public class Client {
     }
 
     /**
+     * Odświerza stan wyświetlanej planszy
+     */
+    public void updateFrameBoard(){
+        clientFrame.updateBoard();
+    }
+    /**
      * Główna metoda. Najpierw prosi o stan planszy, potem przyjmuje polecenia
      * @throws IOException od socket.close() nie wiem czy to będzie działać
      */
     public void play() throws IOException {
+        commandWriter.requestBoardState();
+        commandReader.fetchInstruction();
+        clientFrame.updateBoard();
         try {
             while (commandReader.hasNext()) {
                 commandReader.fetchInstruction();

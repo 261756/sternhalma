@@ -33,12 +33,20 @@ public class CommandReader {
     }
     /**
      * Metoda pobiera polecenia z serwera, następnie wywołuje odpowienie metody na kliencie
+     * OBSŁUGIWANE POLECENIA:
+     * sendingHexes - metoda konwertuje przychodzący string na tablicę hexów i updateuje ją dla klienta
+     * moveMade - metoda po otrzymaniu komunikatu że ktoś wykonał ruch prosi serwer o wysłanie jej tablicy hexów
      */
     public void fetchInstruction()  {
         String command = scanner.nextLine();
+        System.out.println(command);
         if (command.startsWith("sendingHexes")) {
             command = scanner.nextLine();
             client.updateBoard(new BoardAndString(command).getBoardValue());
+            client.updateFrameBoard();
+        }
+        if (command.startsWith("moveMade")) {
+            client.commandWriter.requestBoardState();
         }
     }
 }
