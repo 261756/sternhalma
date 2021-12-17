@@ -1,5 +1,7 @@
 package server;
 
+import hex.BoardAndString;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -43,14 +45,12 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
+                System.out.println(command);
                 if (command.equals("requestHexes"))
                 {
-                    SCO.writeObject("sendingHexes");
-                    SCO.writeObject(GS.getHexes());
-                }
-                else if (command.equals("requestTurn"))
-                {
-                    SCO.writeObject(GS.checkTurn(socket));
+                    System.out.println("lol");
+                    SCO.writeString("sendingHexes");
+                    SCO.writeString(new BoardAndString(GS.getHexes()).getStringValue());
                 }
                 else if (command.startsWith("requestMove"))
                 {
@@ -63,7 +63,7 @@ public class PlayerHandler implements Runnable {
                 }
                 else
                 {
-                    SCO.writeObject("unknownCommand");
+                    SCO.writeString("unknownCommand");
                 }
             }
         } catch (Exception e) {

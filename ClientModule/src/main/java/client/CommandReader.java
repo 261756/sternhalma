@@ -1,5 +1,7 @@
 package client;
 
+import hex.BoardAndString;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -27,15 +29,16 @@ public class CommandReader {
 
     }
     public boolean hasNext() {
-        return scanner.hasNext();
+        return scanner.hasNextLine();
     }
     /**
      * Metoda pobiera polecenia z serwera, następnie wywołuje odpowienie metody na kliencie
      */
     public void fetchInstruction()  {
-        String command = scanner.next();
+        String command = scanner.nextLine();
         if (command.startsWith("sendingHexes")) {
-
+            command = scanner.nextLine();
+            client.updateBoard(new BoardAndString(command).getBoardValue());
         }
     }
 }

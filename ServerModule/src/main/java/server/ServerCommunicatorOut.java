@@ -3,18 +3,19 @@ package server;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 /**
  * Odpowiada za wysyłanie obietków do danego outputstream
  */
 public class ServerCommunicatorOut {
-    ObjectOutputStream out;
+    PrintWriter out;
     ServerCommunicatorOut(OutputStream outputStream) throws IOException
     {
-        out = new ObjectOutputStream(outputStream);
+        out = new PrintWriter(outputStream,true);
     }
-    public void writeObject(Object obj) throws IOException {
-        out.writeObject(obj);
+    public void writeString(String string) throws IOException {
+        out.println(string);
     }
 
 }
