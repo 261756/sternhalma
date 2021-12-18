@@ -45,8 +45,9 @@ public class ClientFrame extends JFrame {
             JPanel p = new JPanel();
             //p.setBorder(BorderFactory.createLineBorder(Color.black));//debug
             //p.setBackground(Color.black);
-            p.setBackground(boardColor);
-            p.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
+            //p.setBackground(boardColor);
+            p.setOpaque(false);
+            p.setLayout(new FlowLayout(FlowLayout.CENTER,(int)(boardPanel.getHeight()*0.118/yAxis),0));
             p.add(Box.createHorizontalGlue());//lewa wolna przestrzeń
             for (int i = 0; i < xAxis; i++) {
 

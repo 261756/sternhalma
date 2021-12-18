@@ -15,6 +15,7 @@ public class BoardHex extends JPanel{
     public BoardHex() {
         selected = false;
         color = Color.white;
+        this.setOpaque(false);
         //setBackground(Color.white);
         //setBorder(BorderFactory.createLineBorder(Color.black));
         //setLayout(new GridBagLayout());
