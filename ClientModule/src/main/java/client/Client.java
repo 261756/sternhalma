@@ -11,7 +11,7 @@ import java.net.Socket;
  */
 public class Client {
     private static Socket socket;
-    private int playerId;
+    private Hex.State pegsColor;
     private ClientFrame clientFrame;
     private boolean isActive;
     public CommandReader commandReader;
@@ -58,6 +58,8 @@ public class Client {
      * @throws IOException od socket.close() nie wiem czy to będzie działać
      */
     public void play() throws IOException {
+        commandReader.fetchInstruction(); // przyjmowanie przypisanego koloru
+        clientFrame.setTitle("Gracz " + pegsColor.name());
         commandWriter.requestBoardState();
         commandReader.fetchInstruction();
         clientFrame.updateBoard();
@@ -75,5 +77,16 @@ public class Client {
             clientFrame.dispose();
         }
     }
+
+    public Hex.State getPegsColor()
+    {
+        return  pegsColor;
+    }
+    public void setPegsColor(Hex.State color)
+    {
+        pegsColor = color;
+    }
+
+
 
 }

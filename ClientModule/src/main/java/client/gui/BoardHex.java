@@ -22,10 +22,18 @@ public class BoardHex extends JPanel{
     }
 
     public void setColor(Hex.State state) {
-        if (state == Hex.State.PLAYER1)
+        if (state == Hex.State.RED)
             this.color = (Color.red);
-        if (state == Hex.State.PLAYER2)
+        if (state == Hex.State.BLUE)
             this.color = (Color.blue);
+        if (state == Hex.State.WHITE)
+            this.color = (Color.white);
+        if (state == Hex.State.BLACK)
+            this.color = (Color.black);
+        if (state == Hex.State.GREEN)
+            this.color = (Color.green);
+        if (state == Hex.State.YELLOW)
+            this.color = (Color.yellow);
         if (state == Hex.State.EMPTY)
             this.color = (new Color(216,181,140));
         if (state == Hex.State.NULL)
@@ -45,7 +53,7 @@ public class BoardHex extends JPanel{
     {
 
         if (selected) {
-            g.setColor(Color.YELLOW);
+            g.setColor(new Color(255, 217, 51, 173));
         }
         else {
             g.setColor(Color.black);

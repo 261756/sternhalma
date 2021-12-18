@@ -12,14 +12,18 @@ import java.util.Arrays;
  */
 public class GameState {
     private Hex[][] hexes;
+    private int gameId;
+    private int numberOfPlayers;
     private ArrayList<PlayerHandler> players;
     static final int xAxis = 13;
     static final int yAxis = 17;
-    GameState()
+    GameState(int numberOfPlayers, int id)
     {
+        this.numberOfPlayers = numberOfPlayers;
+        this.gameId = id;
         hexes = new Hex[xAxis][yAxis];
         players = new ArrayList<PlayerHandler>();
-        initBoard(2);
+        initBoard(this.numberOfPlayers);
     }
 
     /**
@@ -36,15 +40,44 @@ public class GameState {
                 hexes[i][j] = new Hex(Hex.State.NULL);
             }
         }
-        /*hexes[0][0] = new Hex(Hex.State.PLAYER2);
-        hexes[12][16] = new Hex(Hex.State.PLAYER2);*/
-        initN(Hex.State.PLAYER1);
-        initNE(Hex.State.PLAYER2);
-        initSE(Hex.State.PLAYER1);
-        initS(Hex.State.PLAYER2);
-        initSW(Hex.State.PLAYER1);
-        initNW(Hex.State.PLAYER2);
+        /*hexes[0][0] = new Hex(Hex.State.BLUE);
+        hexes[12][16] = new Hex(Hex.State.BLUE);*/
+        initN(Hex.State.RED);
+        initS(Hex.State.BLUE);
+
+        if (numberOfPlayers >= 3)
+            initNE(Hex.State.WHITE);
+        else
+            initNE(Hex.State.EMPTY);
+        if (numberOfPlayers >= 4)
+            initSW(Hex.State.BLACK);
+        else
+        initSW(Hex.State.EMPTY);
+        if (numberOfPlayers >= 5)
+        initSE(Hex.State.GREEN);
+        else
+            initSW(Hex.State.EMPTY);
+        if (numberOfPlayers >= 6)
+        initNW(Hex.State.YELLOW);
+        else
+            initSW(Hex.State.EMPTY);
         initCenter(Hex.State.EMPTY);
+        /* if (numberOfPlayers >= 3)
+            initSE(Hex.State.WHITE);
+        else
+            initSE(Hex.State.EMPTY);
+        if (numberOfPlayers >= 4)
+            initNW(Hex.State.BLACK);
+        else
+            initSE(Hex.State.EMPTY);
+        if (numberOfPlayers >= 5)
+            initNE(Hex.State.GREEN);
+        else
+            initSE(Hex.State.EMPTY);
+        if (numberOfPlayers >= 6)
+            initSW(Hex.State.YELLOW);
+        else
+            initSE(Hex.State.EMPTY);*/
     }
 
     public Hex[][] getHexes() {
@@ -228,4 +261,9 @@ public class GameState {
             hexes[2+i][8] = new Hex(state);
         }
     }
+    public int getGameId()
+    {
+        return gameId;
+    }
+
 }

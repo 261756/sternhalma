@@ -1,6 +1,7 @@
 package server;
 
 import hex.BoardAndString;
+import hex.Hex;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -29,12 +30,14 @@ public class PlayerHandler implements Runnable {
     /**
      * ile klientow jest polaczylo się z playerHandler podczas jego życia
      */
-    int connectionCount;
+    private int connectionCount;
+    private Hex.State pegsColor;
 
-    PlayerHandler(Socket socket, GameState gs) throws IOException {
+    PlayerHandler(Socket socket, GameState gs, Hex.State pegs) throws IOException {
 
         this.socket = socket;
         this.GS = gs;
+        pegsColor = pegs;
         gs.addPlayer(this);
         SCO = new ServerCommunicatorOut(socket.getOutputStream());
         SCI = new ServerCommunicatorIn(socket.getInputStream());
@@ -43,9 +46,14 @@ public class PlayerHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Connected: " + socket);
-        connectionCount++;
-        System.out.println("Connection count: " + connectionCount);
+        System.out.println("Connected " + pegsColor.name() + " to game " + GS.getGameId() + ": " + socket );
+        try {
+            SCO.writeString("assignColor"+pegsColor.name());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //connectionCount++;
+        //System.out.println("Connection count: " + connectionCount);
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
@@ -83,7 +91,7 @@ public class PlayerHandler implements Runnable {
             } catch (IOException e) {
             }
             //connectionCount--;
-            System.out.println("Closed: " + socket);
+            System.out.println("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);
         }
     }
     private void handleMove(String command)

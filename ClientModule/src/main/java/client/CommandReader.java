@@ -1,6 +1,7 @@
 package client;
 
 import hex.BoardAndString;
+import hex.Hex;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -44,6 +45,9 @@ public class CommandReader {
             command = scanner.nextLine();
             client.updateBoard(new BoardAndString(command).getBoardValue());
             client.updateFrameBoard();
+        }
+        if (command.startsWith("assignColor")) {
+            client.setPegsColor(Hex.State.valueOf(command.substring(11)));
         }
         if (command.startsWith("moveMade")) {
             client.commandWriter.requestBoardState();

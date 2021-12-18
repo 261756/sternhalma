@@ -30,7 +30,7 @@ public class TestRecievingHexes {
             hexes = new BoardAndString(scan.nextLine()).getBoardValue();
             System.out.println("xD");
         }
-        Assert.assertEquals(hexes[0][0].getState(), Hex.State.PLAYER1);
+        Assert.assertEquals(hexes[0][0].getState(), Hex.State.RED);
         Assert.assertEquals(hexes[1][0].getState(), Hex.State.EMPTY);
         Assert.assertNotEquals(hexes[0][0].getState(), Hex.State.EMPTY);
 
@@ -57,7 +57,7 @@ public class TestRecievingHexes {
 
                 System.out.println("xD");
             }
-            Assert.assertEquals(hexes[0][0].getState(), Hex.State.PLAYER1);
+            Assert.assertEquals(hexes[0][0].getState(), Hex.State.RED);
             Assert.assertEquals(hexes[1][0].getState(), Hex.State.EMPTY);
             Assert.assertNotEquals(hexes[0][0].getState(), Hex.State.EMPTY);
 
@@ -71,7 +71,7 @@ public class TestRecievingHexes {
 
                 System.out.println("xD");
             }
-            Assert.assertEquals(hexes[0][0].getState(), Hex.State.PLAYER1);
+            Assert.assertEquals(hexes[0][0].getState(), Hex.State.RED);
 
             out.println("requestxD");
             serverResponse = (String) inObject.readObject();

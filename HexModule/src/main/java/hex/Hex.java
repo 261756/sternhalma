@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Hex implements Serializable {
     public enum State{
-        NULL,EMPTY,PLAYER1,PLAYER2
+        NULL, EMPTY, RED, BLUE, WHITE, YELLOW, GREEN, BLACK;
     }
     public State state;
     public Hex(State s)

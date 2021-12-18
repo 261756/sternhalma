@@ -12,11 +12,11 @@ public class TestBoardAndString {
                 array[j][i] = new Hex(Hex.State.NULL);
             }
         }
-        array[0][0] = new Hex(Hex.State.PLAYER1);
-        array[1][0] = new Hex(Hex.State.PLAYER1);
-        array[2][0] = new Hex(Hex.State.PLAYER2);
+        array[0][0] = new Hex(Hex.State.RED);
+        array[1][0] = new Hex(Hex.State.RED);
+        array[2][0] = new Hex(Hex.State.BLUE);
         array[3][0] = new Hex(Hex.State.EMPTY);
-        array[12][16] = new Hex(Hex.State.PLAYER2);
+        array[12][16] = new Hex(Hex.State.BLUE);
         String value = new BoardAndString(array).getStringValue();
         System.out.println(value);
         Hex[][] converted = new BoardAndString(value).getBoardValue();

@@ -55,7 +55,7 @@ public class ClientFrame extends JFrame {
                 board[i][j] = new BoardHex();
                 board[i][j].addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent e) {
-                        if (!selected)
+                        if (!selected && client.gameState.getHexAt(I,J).getState() == client.getPegsColor())
                         {
                             selected = true;
                             board[I][J].setSelected(true);
@@ -63,7 +63,7 @@ public class ClientFrame extends JFrame {
                             x1 = I;
                             y1 = J;
                         }
-                        else
+                        else if (selected && client.gameState.getHexAt(I,J).getState() == Hex.State.EMPTY)
                         {
                             selected = false;
                             board[x1][y1].setSelected(false);
