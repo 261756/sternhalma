@@ -7,7 +7,8 @@ package hex;
 public class BoardAndString {
     Hex[][] hexes;
     String value;
-
+    final static int xAxis = 13;
+    final static int yAxis = 17;
     /**
      * Konstrukor dla tablicy
      * @param hexes tablica
@@ -23,7 +24,7 @@ public class BoardAndString {
      */
     public BoardAndString(String value) {
         this.value = value;
-        this.hexes = new Hex[25][17];
+        this.hexes = new Hex[xAxis][yAxis];
     }
 
     /**
@@ -31,8 +32,8 @@ public class BoardAndString {
      * @return String
      */
     public String getStringValue() {
-        for (int i = 0; i < 17; i++) {
-            for(int j = 0; j<25; j++) {
+        for (int i = 0; i < yAxis; i++) {
+            for(int j = 0; j < xAxis; j++) {
                 value = value + hexes[j][i].state.name() + " ";
             }
         }
@@ -45,9 +46,9 @@ public class BoardAndString {
      */
     public Hex[][] getBoardValue() {
         String[] array = value.split(" ");
-        for (int i = 0; i < 17; i++) {
-            for(int j = 0; j<25; j++) {
-                hexes[j][i] = new Hex(Hex.State.valueOf(array[i*25+j]));
+        for (int i = 0; i < yAxis; i++) {
+            for(int j = 0; j < xAxis; j++) {
+                hexes[j][i] = new Hex(Hex.State.valueOf(array[i*xAxis+j]));
             }
         }
         return hexes;

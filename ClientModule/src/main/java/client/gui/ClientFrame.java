@@ -1,11 +1,13 @@
 package client.gui;
 
 import client.Client;
+import hex.Hex;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 
 /**
  * Okno klienta, zawiera boardPanel wyświetlający Hexy
@@ -13,7 +15,10 @@ import java.awt.event.MouseEvent;
  */
 public class ClientFrame extends JFrame {
 
-    private BoardHex[][] board = new BoardHex[25][17];
+    final static int xAxis = 13;
+    final static int yAxis = 17;
+    //private BoardHex[][] board = new BoardHex[25][17];
+    private BoardHex[][] board = new BoardHex[xAxis][yAxis];
     protected JPanel boardPanel;
     protected Client client;
     boolean selected; // czy został wybrany pierwszy target move?
@@ -29,10 +34,14 @@ public class ClientFrame extends JFrame {
     public void createBoard() {
         boardPanel = new JPanel();
         boardPanel.setBackground(Color.black);
-        boardPanel.setLayout(new GridLayout(17, 25, 2, 2));
-        for (var i = 0; i < 25; i++)
+        boardPanel.setLayout(new GridLayout(yAxis,1,0,0));//rzędy
+        for (int j = 0; j < yAxis; j++)
         {
-            for (int j = 0; j < 17; j++) {
+            JPanel p = new JPanel();
+            //p.setBorder(BorderFactory.createLineBorder(Color.black));
+            p.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
+            p.add(Box.createHorizontalGlue());//lewa wolna przestrzeń
+            for (int i = 0; i < xAxis; i++) {
 
                 final int I = i;
                 final int J = j;
@@ -52,16 +61,21 @@ public class ClientFrame extends JFrame {
                         }
                     }
                 });
-                boardPanel.add(board[i][j]);
+                if ((j==0&&i==6)||(j==1&&i==6)||(j==1&&i==7)||(j==2&&i==5)||(j==2&&i==6)||(j==2&&i==7))
+                    p.add(board[i][j]);
+                if (i == xAxis-1) {
+                    p.add(Box.createHorizontalGlue());//prawa wolna przestrzeń
+                    boardPanel.add(p);
+                }
             }
         }
 
     }
     public void updateBoard()
     {
-        for (var i = 0; i < 25; i++)
+        for (var i = 0; i < xAxis; i++)
         {
-            for (int j = 0; j < 17; j++) {
+            for (int j = 0; j < yAxis; j++) {
                 board[i][j].setColor(client.gameState.getHexAt(i,j).getState());
                 board[i][j].repaint();
             }

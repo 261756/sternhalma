@@ -8,8 +8,10 @@ import hex.Hex;
  */
 public class ClientGameState {
     Hex[][] hexes;
+    final static int xAxis = 13;
+    final static int yAxis = 17;
     public ClientGameState() {
-        this.hexes = new Hex[25][17];
+        this.hexes = new Hex[xAxis][yAxis];
     }
     public void setHexes(Hex[][] hexes) {
         this.hexes = hexes;

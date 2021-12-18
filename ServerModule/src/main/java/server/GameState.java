@@ -13,9 +13,11 @@ import java.util.Arrays;
 public class GameState {
     private Hex[][] hexes;
     private ArrayList<PlayerHandler> players;
+    static final int xAxis = 13;
+    static final int yAxis = 17;
     GameState()
     {
-        hexes = new Hex[25][17];
+        hexes = new Hex[xAxis][yAxis];
         players = new ArrayList<PlayerHandler>();
         initBoard(2);
     }
@@ -26,15 +28,38 @@ public class GameState {
      */
     public void initBoard(int numberOfPlayers)
     {
-        for (int i = 0; i < 25; i++)
+        for (int i = 0; i < xAxis; i++)
         {
-            for (int j = 0; j < 17; j++)
+            for (int j = 0; j < yAxis; j++)
             {
                 hexes[i][j] = new Hex(Hex.State.EMPTY);
             }
         }
-        hexes[0][0] = new Hex(Hex.State.PLAYER1);
-        hexes[24][15] = new Hex(Hex.State.PLAYER2);
+        hexes[0][0] = new Hex(Hex.State.PLAYER2);
+        hexes[12][16] = new Hex(Hex.State.PLAYER2);
+        hexes[6][0] = new Hex(Hex.State.PLAYER1);
+        hexes[6][1] = new Hex(Hex.State.PLAYER1);
+        hexes[7][1] = new Hex(Hex.State.PLAYER1);
+        hexes[5][2] = new Hex(Hex.State.PLAYER1);
+        hexes[6][2] = new Hex(Hex.State.PLAYER1);
+        hexes[7][2] = new Hex(Hex.State.PLAYER1);
+        hexes[5][3] = new Hex(Hex.State.PLAYER1);
+        hexes[6][3] = new Hex(Hex.State.PLAYER1);
+        hexes[7][3] = new Hex(Hex.State.PLAYER1);
+        hexes[8][3] = new Hex(Hex.State.PLAYER1);
+        hexes[0][4] = new Hex(Hex.State.PLAYER1);
+        hexes[1][4] = new Hex(Hex.State.PLAYER1);
+        hexes[2][4] = new Hex(Hex.State.PLAYER1);
+        hexes[3][4] = new Hex(Hex.State.PLAYER1);
+        hexes[4][4] = new Hex(Hex.State.PLAYER1);
+        hexes[5][4] = new Hex(Hex.State.PLAYER1);
+        hexes[6][4] = new Hex(Hex.State.PLAYER1);
+        hexes[7][4] = new Hex(Hex.State.PLAYER1);
+        hexes[8][4] = new Hex(Hex.State.PLAYER1);
+        hexes[9][4] = new Hex(Hex.State.PLAYER1);
+        hexes[10][4] = new Hex(Hex.State.PLAYER1);
+        hexes[11][4] = new Hex(Hex.State.PLAYER1);
+        hexes[12][4] = new Hex(Hex.State.PLAYER1);
     }
 
     public Hex[][] getHexes() {

@@ -13,7 +13,8 @@ public class BoardHex extends JPanel{
 
     public BoardHex() {
         setBackground(Color.white);
-        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createLineBorder(Color.black));
+        //setLayout(new GridBagLayout());
 
     }
 
@@ -28,4 +29,11 @@ public class BoardHex extends JPanel{
             this.setBackground(Color.black);
 
     }
+
+    @Override
+    public Dimension getPreferredSize() {
+        int height = this.getParent().getHeight();
+        return new Dimension(height,height);
+    }
+
 }
