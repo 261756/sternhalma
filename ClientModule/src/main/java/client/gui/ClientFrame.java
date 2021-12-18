@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
  */
 public class ClientFrame extends JFrame {
 
+    private boolean isBoardCreated = false;
     final static int xAxis = 13;
     final static int yAxis = 17;
     //private BoardHex[][] board = new BoardHex[25][17];
@@ -26,13 +27,14 @@ public class ClientFrame extends JFrame {
     public ClientFrame(Client client) {
         this.client = client;
         selected = false;
-        createBoard();
+        //createBoard();
+        boardPanel = new JPanel();
         this.getContentPane().add(boardPanel, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void createBoard() {
-        boardPanel = new JPanel();
+        //boardPanel = new JPanel();
         boardPanel.setBackground(Color.black);
         boardPanel.setLayout(new GridLayout(yAxis,1,0,0));//rzędy
         for (int j = 0; j < yAxis; j++)
@@ -61,25 +63,34 @@ public class ClientFrame extends JFrame {
                         }
                     }
                 });
-                if ((j==0&&i==6)||(j==1&&i==6)||(j==1&&i==7)||(j==2&&i==5)||(j==2&&i==6)||(j==2&&i==7))
+                //TODO: Plansza powinna wyświetlać pola pola puste i z pionkami
+                if (client.gameState.getHexAt(i,j).getState()== Hex.State.PLAYER1) {
                     p.add(board[i][j]);
+                }
                 if (i == xAxis-1) {
                     p.add(Box.createHorizontalGlue());//prawa wolna przestrzeń
                     boardPanel.add(p);
                 }
             }
         }
-
+        isBoardCreated = true;
     }
     public void updateBoard()
     {
-        for (var i = 0; i < xAxis; i++)
-        {
-            for (int j = 0; j < yAxis; j++) {
-                board[i][j].setColor(client.gameState.getHexAt(i,j).getState());
-                board[i][j].repaint();
+        if (isBoardCreated) {
+            for (var i = 0; i < xAxis; i++)
+            {
+                for (int j = 0; j < yAxis; j++) {
+                    board[i][j].setColor(client.gameState.getHexAt(i,j).getState());
+                    board[i][j].repaint();
+                }
             }
-            }
+        } else {
+            createBoard();
+            boardPanel.revalidate();
+            boardPanel.repaint();
+        }
+
     }
 
 }

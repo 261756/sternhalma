@@ -10,7 +10,6 @@ import java.awt.*;
  */
 public class BoardHex extends JPanel{
 
-
     public BoardHex() {
         setBackground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black));
