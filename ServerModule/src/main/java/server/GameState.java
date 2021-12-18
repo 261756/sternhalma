@@ -52,32 +52,17 @@ public class GameState {
         if (numberOfPlayers >= 4)
             initSW(Hex.State.BLACK);
         else
-        initSW(Hex.State.EMPTY);
+            initSW(Hex.State.EMPTY);
         if (numberOfPlayers >= 5)
-        initSE(Hex.State.GREEN);
+            initSE(Hex.State.GREEN);
         else
-            initSW(Hex.State.EMPTY);
+            initSE(Hex.State.EMPTY);
         if (numberOfPlayers >= 6)
-        initNW(Hex.State.YELLOW);
+            initNW(Hex.State.YELLOW);
         else
-            initSW(Hex.State.EMPTY);
+            initNW(Hex.State.EMPTY);
         initCenter(Hex.State.EMPTY);
-        /* if (numberOfPlayers >= 3)
-            initSE(Hex.State.WHITE);
-        else
-            initSE(Hex.State.EMPTY);
-        if (numberOfPlayers >= 4)
-            initNW(Hex.State.BLACK);
-        else
-            initSE(Hex.State.EMPTY);
-        if (numberOfPlayers >= 5)
-            initNE(Hex.State.GREEN);
-        else
-            initSE(Hex.State.EMPTY);
-        if (numberOfPlayers >= 6)
-            initSW(Hex.State.YELLOW);
-        else
-            initSE(Hex.State.EMPTY);*/
+
     }
 
     public Hex[][] getHexes() {
