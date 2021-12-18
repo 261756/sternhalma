@@ -58,9 +58,12 @@ public class BoardHex extends JPanel{
         else {
             g.setColor(Color.black);
         }
-        g.fillOval(0,0,43,43);
+        int pWidth = this.getWidth();
+        //g.fillOval(0,0,43,43);
+        g.fillOval((int)(0.05*pWidth/2),(int)(0.05*pWidth/2),(int)(0.95*pWidth),(int)(0.95*pWidth));
         g.setColor(color);
-        g.fillOval(0,0,40,40);
+        g.fillOval((int)(0.15*pWidth/2),(int)(0.15*pWidth/2),(int)(0.85*pWidth),(int)(0.85*pWidth));
+        //g.fillOval(0,0,40,40);
     }
     public void setSelected(boolean set)
     {
