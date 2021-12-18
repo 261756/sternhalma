@@ -32,34 +32,19 @@ public class GameState {
         {
             for (int j = 0; j < yAxis; j++)
             {
-                hexes[i][j] = new Hex(Hex.State.EMPTY);
+                //hexes[i][j] = new Hex(Hex.State.EMPTY);
+                hexes[i][j] = new Hex(Hex.State.NULL);
             }
         }
-        hexes[0][0] = new Hex(Hex.State.PLAYER2);
-        hexes[12][16] = new Hex(Hex.State.PLAYER2);
-        hexes[6][0] = new Hex(Hex.State.PLAYER1);
-        hexes[6][1] = new Hex(Hex.State.PLAYER1);
-        hexes[7][1] = new Hex(Hex.State.PLAYER1);
-        hexes[5][2] = new Hex(Hex.State.PLAYER1);
-        hexes[6][2] = new Hex(Hex.State.PLAYER1);
-        hexes[7][2] = new Hex(Hex.State.PLAYER1);
-        hexes[5][3] = new Hex(Hex.State.PLAYER1);
-        hexes[6][3] = new Hex(Hex.State.PLAYER1);
-        hexes[7][3] = new Hex(Hex.State.PLAYER1);
-        hexes[8][3] = new Hex(Hex.State.PLAYER1);
-        hexes[0][4] = new Hex(Hex.State.PLAYER1);
-        hexes[1][4] = new Hex(Hex.State.PLAYER1);
-        hexes[2][4] = new Hex(Hex.State.PLAYER1);
-        hexes[3][4] = new Hex(Hex.State.PLAYER1);
-        hexes[4][4] = new Hex(Hex.State.PLAYER1);
-        hexes[5][4] = new Hex(Hex.State.PLAYER1);
-        hexes[6][4] = new Hex(Hex.State.PLAYER1);
-        hexes[7][4] = new Hex(Hex.State.PLAYER1);
-        hexes[8][4] = new Hex(Hex.State.PLAYER1);
-        hexes[9][4] = new Hex(Hex.State.PLAYER1);
-        hexes[10][4] = new Hex(Hex.State.PLAYER1);
-        hexes[11][4] = new Hex(Hex.State.PLAYER1);
-        hexes[12][4] = new Hex(Hex.State.PLAYER1);
+        /*hexes[0][0] = new Hex(Hex.State.PLAYER2);
+        hexes[12][16] = new Hex(Hex.State.PLAYER2);*/
+        initN(Hex.State.PLAYER1);
+        initNE(Hex.State.PLAYER2);
+        initSE(Hex.State.PLAYER1);
+        initS(Hex.State.PLAYER2);
+        initSW(Hex.State.PLAYER1);
+        initNW(Hex.State.PLAYER2);
+        initCenter(Hex.State.EMPTY);
     }
 
     public Hex[][] getHexes() {
@@ -119,4 +104,128 @@ public class GameState {
         players.add(p);
     }
 
+    /**
+     * init north
+     * @param state Hex.State
+     */
+    public void initN(Hex.State state) {
+        hexes[6][0] = new Hex(state);
+        hexes[5][1] = new Hex(state);
+        hexes[6][1] = new Hex(state);
+        hexes[5][2] = new Hex(state);
+        hexes[6][2] = new Hex(state);
+        hexes[7][2] = new Hex(state);
+        hexes[4][3] = new Hex(state);
+        hexes[5][3] = new Hex(state);
+        hexes[6][3] = new Hex(state);
+        hexes[7][3] = new Hex(state);
+    }
+
+    /**
+     * init north-east
+     * @param state Hex.State
+     */
+    public void initNE(Hex.State state) {
+        hexes[9][4] = new Hex(state);
+        hexes[10][4] = new Hex(state);
+        hexes[11][4] = new Hex(state);
+        hexes[12][4] = new Hex(state);
+        hexes[9][5] = new Hex(state);
+        hexes[10][5] = new Hex(state);
+        hexes[11][5] = new Hex(state);
+        hexes[10][6] = new Hex(state);
+        hexes[11][6] = new Hex(state);
+        hexes[10][7] = new Hex(state);
+    }
+
+    /**
+     * init south-east
+     * @param state Hex.State
+     */
+    public void initSE(Hex.State state) {
+        hexes[9][12] = new Hex(state);
+        hexes[10][12] = new Hex(state);
+        hexes[11][12] = new Hex(state);
+        hexes[12][12] = new Hex(state);
+        hexes[9][11] = new Hex(state);
+        hexes[10][11] = new Hex(state);
+        hexes[11][11] = new Hex(state);
+        hexes[10][10] = new Hex(state);
+        hexes[11][10] = new Hex(state);
+        hexes[10][9] = new Hex(state);
+    }
+    /**
+     * init south
+     * @param state Hex.State
+     */
+    public void initS(Hex.State state) {
+        hexes[6][16] = new Hex(state);
+        hexes[5][15] = new Hex(state);
+        hexes[6][15] = new Hex(state);
+        hexes[5][14] = new Hex(state);
+        hexes[6][14] = new Hex(state);
+        hexes[7][14] = new Hex(state);
+        hexes[4][13] = new Hex(state);
+        hexes[5][13] = new Hex(state);
+        hexes[6][13] = new Hex(state);
+        hexes[7][13] = new Hex(state);
+    }
+    /**
+     * init south-west
+     * @param state Hex.State
+     */
+    public void initSW(Hex.State state) {
+        hexes[0][12] = new Hex(state);
+        hexes[1][12] = new Hex(state);
+        hexes[2][12] = new Hex(state);
+        hexes[3][12] = new Hex(state);
+        hexes[0][11] = new Hex(state);
+        hexes[1][11] = new Hex(state);
+        hexes[2][11] = new Hex(state);
+        hexes[1][10] = new Hex(state);
+        hexes[2][10] = new Hex(state);
+        hexes[1][9] = new Hex(state);
+    }
+    /**
+     * init north-west
+     * @param state Hex.State
+     */
+    public void initNW(Hex.State state) {
+        hexes[0][4] = new Hex(state);
+        hexes[1][4] = new Hex(state);
+        hexes[2][4] = new Hex(state);
+        hexes[3][4] = new Hex(state);
+        hexes[0][5] = new Hex(state);
+        hexes[1][5] = new Hex(state);
+        hexes[2][5] = new Hex(state);
+        hexes[1][6] = new Hex(state);
+        hexes[2][6] = new Hex(state);
+        hexes[1][7] = new Hex(state);
+    }
+
+    /**
+     * init center
+     * @param state Hex.State
+     */
+    public void initCenter(Hex.State state) {
+        for (int i = 0; i < 5; i++) {
+            hexes[4+i][4] = new Hex(state);
+            hexes[4+i][12] = new Hex(state);
+        }
+        for (int i = 0; i < 6; i++) {
+            hexes[3+i][5] = new Hex(state);
+            hexes[3+i][11] = new Hex(state);
+        }
+        for (int i = 0; i < 7; i++) {
+            hexes[3+i][6] = new Hex(state);
+            hexes[3+i][10] = new Hex(state);
+        }
+        for (int i = 0; i < 8; i++) {
+            hexes[2+i][7] = new Hex(state);
+            hexes[2+i][9] = new Hex(state);
+        }
+        for (int i = 0; i < 9; i++) {
+            hexes[2+i][8] = new Hex(state);
+        }
+    }
 }

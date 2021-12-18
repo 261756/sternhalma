@@ -40,7 +40,8 @@ public class ClientFrame extends JFrame {
         for (int j = 0; j < yAxis; j++)
         {
             JPanel p = new JPanel();
-            //p.setBorder(BorderFactory.createLineBorder(Color.black));
+            //p.setBorder(BorderFactory.createLineBorder(Color.black));//debug
+            p.setBackground(Color.black);
             p.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
             p.add(Box.createHorizontalGlue());//lewa wolna przestrzeń
             for (int i = 0; i < xAxis; i++) {
@@ -63,8 +64,7 @@ public class ClientFrame extends JFrame {
                         }
                     }
                 });
-                //TODO: Plansza powinna wyświetlać pola pola puste i z pionkami
-                if (client.gameState.getHexAt(i,j).getState()== Hex.State.PLAYER1) {
+                if (client.gameState.getHexAt(i,j).getState() != Hex.State.NULL) {
                     p.add(board[i][j]);
                 }
                 if (i == xAxis-1) {
