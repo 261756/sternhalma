@@ -18,6 +18,7 @@ public class ClientFrame extends JFrame {
     private boolean isBoardCreated = false;
     final static int xAxis = 13;
     final static int yAxis = 17;
+    private Color boardColor;
     //private BoardHex[][] board = new BoardHex[25][17];
     private BoardHex[][] board = new BoardHex[xAxis][yAxis];
     protected JPanel boardPanel;
@@ -29,19 +30,22 @@ public class ClientFrame extends JFrame {
         selected = false;
         //createBoard();
         boardPanel = new JPanel();
+        boardColor =  new Color(108, 78, 40);
         this.getContentPane().add(boardPanel, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void createBoard() {
         //boardPanel = new JPanel();
-        boardPanel.setBackground(Color.black);
+        //boardPanel.setBackground(Color.black);
+        boardPanel.setBackground(boardColor);
         boardPanel.setLayout(new GridLayout(yAxis,1,0,0));//rzędy
         for (int j = 0; j < yAxis; j++)
         {
             JPanel p = new JPanel();
             //p.setBorder(BorderFactory.createLineBorder(Color.black));//debug
-            p.setBackground(Color.black);
+            //p.setBackground(Color.black);
+            p.setBackground(boardColor);
             p.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
             p.add(Box.createHorizontalGlue());//lewa wolna przestrzeń
             for (int i = 0; i < xAxis; i++) {
@@ -54,12 +58,15 @@ public class ClientFrame extends JFrame {
                         if (!selected)
                         {
                             selected = true;
+                            board[I][J].setSelected(true);
+                            board[I][J].repaint();
                             x1 = I;
                             y1 = J;
                         }
                         else
                         {
                             selected = false;
+                            board[x1][y1].setSelected(false);
                             client.commandWriter.move(x1,y1,I,J);
                         }
                     }

@@ -24,7 +24,7 @@ public class Client {
         this.gameState = new ClientGameState();
         this.commandReader = new CommandReader(this);
         this.commandWriter = new CommandWriter(this);
-        clientFrame.setSize(400,400);//temp
+        clientFrame.setSize(800,800);//temp
         clientFrame.setVisible(true);//temp
         this.isActive = true;
     }

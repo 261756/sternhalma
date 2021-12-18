@@ -10,22 +10,27 @@ import java.awt.*;
  */
 public class BoardHex extends JPanel{
 
+    private Color color;
+    private Boolean selected; // czy pole zostalo wybrane
     public BoardHex() {
-        setBackground(Color.white);
-        setBorder(BorderFactory.createLineBorder(Color.black));
+        selected = false;
+        color = Color.white;
+        //setBackground(Color.white);
+        //setBorder(BorderFactory.createLineBorder(Color.black));
         //setLayout(new GridBagLayout());
 
     }
 
     public void setColor(Hex.State state) {
         if (state == Hex.State.PLAYER1)
-            this.setBackground(Color.red);
+            this.color = (Color.red);
         if (state == Hex.State.PLAYER2)
-            this.setBackground(Color.blue);
+            this.color = (Color.blue);
         if (state == Hex.State.EMPTY)
-            this.setBackground(Color.white);
+            this.color = (new Color(216,181,140));
         if (state == Hex.State.NULL)
-            this.setBackground(Color.black);
+            this.color = (Color.black);
+        //setBackground(color);
 
     }
 
@@ -33,6 +38,25 @@ public class BoardHex extends JPanel{
     public Dimension getPreferredSize() {
         int height = this.getParent().getHeight();
         return new Dimension(height,height);
+    }
+
+    @Override
+    public void paint(Graphics g)
+    {
+
+        if (selected) {
+            g.setColor(Color.YELLOW);
+        }
+        else {
+            g.setColor(Color.black);
+        }
+        g.fillOval(0,0,43,43);
+        g.setColor(color);
+        g.fillOval(0,0,40,40);
+    }
+    public void setSelected(boolean set)
+    {
+        selected = set;
     }
 
 }
