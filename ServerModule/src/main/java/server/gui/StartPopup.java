@@ -57,7 +57,7 @@ public class StartPopup extends JFrame {
         }
         catch (Exception e)
         {
-            System.out.println("Zły format danych");
+            server.log("Podano nieprawidłowe dane");
         }
 
     }

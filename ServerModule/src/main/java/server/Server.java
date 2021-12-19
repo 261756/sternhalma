@@ -15,7 +15,6 @@ public class Server {
     ServerLogDisplay serverLogDisplay;
     public Server(ServerLogDisplay serverLogDisplay) throws Exception {
         this.serverLogDisplay = serverLogDisplay;
-        this.serverLogDisplay.log("lol");
     }
 
     /**
@@ -43,6 +42,10 @@ public class Server {
                 id_count++;
             }
         }
+    }
+    public void log(String msg)
+    {
+        serverLogDisplay.log(msg);
     }
 
 
