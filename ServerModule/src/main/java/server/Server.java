@@ -2,20 +2,20 @@ package server;
 
 
 import hex.Hex;
+import server.gui.ServerLogDisplay;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+
+import javax.swing.*;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.Executors;
 
 
 public class Server {
-    public Server() throws Exception {
 
+    ServerLogDisplay serverLogDisplay;
+    public Server(ServerLogDisplay serverLogDisplay) throws Exception {
+        this.serverLogDisplay = serverLogDisplay;
+        this.serverLogDisplay.log("lol");
     }
 
     /**
@@ -25,11 +25,11 @@ public class Server {
      */
     public void startServer(int serverPort, int numberOfPlayers) throws Exception {
         try (var listener = new ServerSocket(serverPort)) {
-            System.out.println("The checkers server is running...");
+            serverLogDisplay.log("Serwer wystartował na porcie " + serverPort +", hostuje gry dla " + numberOfPlayers + " graczy.");
             int id_count = 0;
             var pool = Executors.newFixedThreadPool(20);
             while (true) {
-                GameState GS = new GameState(numberOfPlayers,id_count);
+                GameState GS = new GameState(numberOfPlayers,id_count,serverLogDisplay);
                 pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.RED));
                 pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLUE));
                 if (numberOfPlayers >= 3)
@@ -44,6 +44,8 @@ public class Server {
             }
         }
     }
+
+
 
 
 

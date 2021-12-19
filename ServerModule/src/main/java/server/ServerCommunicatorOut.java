@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
- * Odpowiada za wysyłanie obietków do danego outputstream
+ * Odpowiada za wysyłanie stringów do danego outputstream
  */
 public class ServerCommunicatorOut {
     PrintWriter out;

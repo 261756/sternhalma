@@ -1,6 +1,7 @@
 package server;
 
 import hex.Hex;
+import server.gui.ServerLogDisplay;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -17,8 +18,10 @@ public class GameState {
     private ArrayList<PlayerHandler> players;
     static final int xAxis = 13;
     static final int yAxis = 17;
-    GameState(int numberOfPlayers, int id)
+    ServerLogDisplay serverLogDisplay;
+    GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
     {
+        this.serverLogDisplay = serverLogDisplay;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
         hexes = new Hex[xAxis][yAxis];
@@ -249,6 +252,11 @@ public class GameState {
     public int getGameId()
     {
         return gameId;
+    }
+
+    public void log(String m)
+    {
+        serverLogDisplay.log(m);
     }
 
 }

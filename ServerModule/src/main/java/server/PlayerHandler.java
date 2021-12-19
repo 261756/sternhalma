@@ -46,7 +46,7 @@ public class PlayerHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Connected " + pegsColor.name() + " to game " + GS.getGameId() + ": " + socket );
+        GS.log("Connected " + pegsColor.name() + " to game " + GS.getGameId() + ": " + socket );
         try {
             SCO.writeString("assignColor"+pegsColor.name());
         } catch (IOException e) {
@@ -57,7 +57,7 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                System.out.println(command);
+                GS.log(command);
                 if (command.equals("requestHexes"))
                 {
                     SCO.writeString("sendingHexes");
@@ -67,7 +67,7 @@ public class PlayerHandler implements Runnable {
                 {
                     handleMove(command);
                     writeToAllPlayers("moveMade");
-                    System.out.println("moved");
+                    GS.log("moved");
                 }
                 else if (command.equals("passTurn"))
                 {
@@ -76,7 +76,7 @@ public class PlayerHandler implements Runnable {
                 }
                 else if (command.equals("quit"))
                 {
-                    System.out.println(socket + "quit");
+                    GS.log(socket + "quit");
                 }
                 else
                 {
@@ -84,14 +84,14 @@ public class PlayerHandler implements Runnable {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:" + socket);
+            GS.log("Error:" + socket);
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
             }
             //connectionCount--;
-            System.out.println("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);
+            GS.log("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);
         }
     }
     private void handleMove(String command)
