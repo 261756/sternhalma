@@ -16,6 +16,7 @@ public class BoardAndString {
     public BoardAndString(Hex[][] hexes) {
         this.hexes = hexes;
         this.value = "";
+        setStringValue();
     }
 
     /**
@@ -25,6 +26,7 @@ public class BoardAndString {
     public BoardAndString(String value) {
         this.value = value;
         this.hexes = new Hex[xAxis][yAxis];
+        setHexValue();
     }
 
     /**
@@ -32,25 +34,37 @@ public class BoardAndString {
      * @return String
      */
     public String getStringValue() {
+        return value;
+    }
+
+    /**
+     * Tworzy zapis String
+     */
+    private void setStringValue() {
         for (int i = 0; i < yAxis; i++) {
             for(int j = 0; j < xAxis; j++) {
                 value = value + hexes[j][i].state.name() + " ";
             }
         }
-        return value;
     }
 
     /**
      * Zwraca tablicę
-     * @return Hex[25][17]
+     * @return Hex[13][17]
      */
     public Hex[][] getBoardValue() {
+        return hexes;
+    }
+
+    /**
+     * Tworzy tablicę
+     */
+    private void setHexValue() {
         String[] array = value.split(" ");
         for (int i = 0; i < yAxis; i++) {
             for(int j = 0; j < xAxis; j++) {
                 hexes[j][i] = new Hex(Hex.State.valueOf(array[i*xAxis+j]));
             }
         }
-        return hexes;
     }
 }

@@ -39,7 +39,6 @@ public class BoardPanel extends JPanel {
             //p.setBackground(boardColor);
             p.setOpaque(false);
             p.setLayout(new FlowLayout(FlowLayout.CENTER,(int)(this.getHeight()*0.118/yAxis),0));
-            p.add(Box.createHorizontalGlue());//lewa wolna przestrzeń
             for (int i = 0; i < xAxis; i++) {
 
                 final int I = i;
@@ -67,7 +66,6 @@ public class BoardPanel extends JPanel {
                     p.add(board[i][j]);
                 }
                 if (i == xAxis-1) {
-                    p.add(Box.createHorizontalGlue());//prawa wolna przestrzeń
                     this.add(p);
                 }
             }
@@ -86,6 +84,7 @@ public class BoardPanel extends JPanel {
             }
         } else {
             createBoard();
+            clientFrame.sidePanel.displaySidePanel();
             this.revalidate();
             this.repaint();
         }

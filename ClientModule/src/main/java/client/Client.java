@@ -13,11 +13,9 @@ public class Client {
     private static Socket socket;
     private Hex.State pegsColor;
     private ClientFrame clientFrame;
-    private boolean isActive;
     public CommandReader commandReader;
     public CommandWriter commandWriter;
     public ClientGameState gameState;
-
 
     public Client() {
         this.clientFrame = new ClientFrame(this);
@@ -26,9 +24,20 @@ public class Client {
         this.commandWriter = new CommandWriter(this);
         clientFrame.setSize(800,800);//temp
         clientFrame.setVisible(true);//temp
-        this.isActive = true;
     }
 
+
+    public void startConfiguration(String message) {
+        try {
+            String[] array = clientFrame.showSetupOptions(message);
+            setCommunication(new Socket(array[0],Integer.parseInt(array[1])));
+        } catch (IOException e) {
+            startConfiguration("Błąd połączenia. Spróbuj ponownie");
+        } catch (Exception e) {
+            System.exit(0);
+        }
+
+    }
     /**
      * konfiguracja commandWriter, commandReader
      * @param socket socket
@@ -86,7 +95,5 @@ public class Client {
     {
         pegsColor = color;
     }
-
-
 
 }

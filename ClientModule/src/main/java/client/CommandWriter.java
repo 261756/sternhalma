@@ -44,5 +44,7 @@ public class CommandWriter {
     {
         printWriter.println("requestMove" + x1 + " " + y1 + " " + x2 + " " + y2);
     }
-
+    public void passTurn() {
+        printWriter.println("passTurn");
+    }
 }
