@@ -19,9 +19,14 @@ public class StartPopup extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400,200);
         this.setLocationRelativeTo(null);
-        //JPanel contain = new JPanel(new GridLayout(1,2));
-        this.getContentPane().add(portField);
-        this.getContentPane().add(comboNumberOfPlayers);
+        JPanel contain1 = new JPanel(new GridLayout(1,2));
+        contain1.add(new JLabel("Numer portu: "));
+        contain1.add(portField);
+        JPanel contain2 = new JPanel(new GridLayout(1,2));
+        contain2.add(new JLabel("Liczba graczy: "));
+        contain2.add(comboNumberOfPlayers);
+        this.getContentPane().add(contain1);
+        this.getContentPane().add(contain2);
         //this.getContentPane().add(contain);
         this.getContentPane().add(new AcceptButton(this));
         this.setVisible(true);
