@@ -31,7 +31,7 @@ public class Client {
     public void startConfiguration(String message) {
         try {
             String[] array = clientFrame.showSetupOptions(message);
-            if (Integer.parseInt(array[1]) > 65535)
+            if (Integer.parseInt(array[1]) > 65535 || Integer.parseInt(array[1]) < 0)
             {
                 throw new NumberFormatException();
             }

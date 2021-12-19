@@ -39,7 +39,7 @@ public class StartPopup extends JFrame {
     public void sendInput() throws Exception {
         try {
             int port = Integer.parseInt(portField.getText());
-            if (port > 65535)
+            if (port > 65535 || port < 0)
             {
                 throw new NumberFormatException();
             }
