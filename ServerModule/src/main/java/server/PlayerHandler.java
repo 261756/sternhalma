@@ -57,17 +57,19 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                GS.log(command);
+                logIn(command);
                 if (command.equals("requestHexes"))
                 {
                     SCO.writeString("sendingHexes");
                     SCO.writeString(new BoardAndString(GS.getHexes()).getStringValue());
+                    logOut("sendingHexes");
+                    logOut("[Hex array]");
                 }
                 else if (command.startsWith("requestMove"))
                 {
                     handleMove(command);
                     writeToAllPlayers("moveMade");
-                    GS.log("moved");
+                    logOutAll("moveMade");
                 }
                 else if (command.equals("passTurn"))
                 {
@@ -76,11 +78,12 @@ public class PlayerHandler implements Runnable {
                 }
                 else if (command.equals("quit"))
                 {
-                    GS.log(socket + "quit");
+                    //log(socket + "quit");
                 }
                 else
                 {
                     SCO.writeString("unknownCommand");
+                    logOut("unknownCommand");
                 }
             }
         } catch (Exception e) {
@@ -108,6 +111,19 @@ public class PlayerHandler implements Runnable {
     }
     public void write(String s) throws IOException {
         SCO.writeString(s);
+    }
+    public void logIn(String msg)
+    {
+        GS.log("Recieved from Game " + GS.getGameId() + ", " + pegsColor.name() + ": "+ msg);
+    }
+    public void logOut(String msg){
+        GS.log("Sent to Game " + GS.getGameId() + ", " + pegsColor.name() + ": " + msg);
+    }
+    public void logOutAll(String msg)
+    {
+
+        GS.log("Sent to Game " + GS.getGameId() + ", [ALL COLORS]: " + msg);
+
     }
 
 }
