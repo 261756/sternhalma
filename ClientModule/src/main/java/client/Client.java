@@ -5,6 +5,7 @@ import hex.Hex;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * Klasa klienta commandReader odczytuje komendy, commandWriter wysyła komendy
@@ -30,9 +31,16 @@ public class Client {
     public void startConfiguration(String message) {
         try {
             String[] array = clientFrame.showSetupOptions(message);
+            if (Integer.parseInt(array[1]) > 65535)
+            {
+                throw new NumberFormatException();
+            }
             setCommunication(new Socket(array[0],Integer.parseInt(array[1])));
         } catch (IOException e) {
-            startConfiguration("Błąd połączenia. Spróbuj ponownie");
+            startConfiguration("Błąd połączenia. Spróbuj ponownie.");
+        }
+        catch (NumberFormatException e) {
+            startConfiguration("Zły format danych.");
         } catch (Exception e) {
             System.exit(0);
         }

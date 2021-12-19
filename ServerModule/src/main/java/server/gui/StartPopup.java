@@ -39,6 +39,10 @@ public class StartPopup extends JFrame {
     public void sendInput() throws Exception {
         try {
             int port = Integer.parseInt(portField.getText());
+            if (port > 65535)
+            {
+                throw new NumberFormatException();
+            }
             int numberOfPlayers = (int) comboNumberOfPlayers.getSelectedItem();
             this.setVisible(false);
             Thread serverThread = new Thread(new Runnable() {
@@ -55,9 +59,12 @@ public class StartPopup extends JFrame {
 
 
         }
-        catch (Exception e)
+        catch (NumberFormatException e)
         {
             server.log("Podano nieprawidłowe dane");
+        }
+        catch (Exception e) {
+            System.exit(0);
         }
 
     }
