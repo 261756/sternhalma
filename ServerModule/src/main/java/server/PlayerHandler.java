@@ -39,8 +39,8 @@ public class PlayerHandler implements Runnable {
         this.GS = gs;
         pegsColor = pegs;
         gs.addPlayer(this);
-        SCO = new ServerCommunicatorOut(socket.getOutputStream());
-        SCI = new ServerCommunicatorIn(socket.getInputStream());
+        SCO = new ServerCommunicatorOut(socket.getOutputStream(),GS.getServerLogDisplay(), this);
+        SCI = new ServerCommunicatorIn(socket.getInputStream(), GS.getServerLogDisplay(),this);
         connectionCount = 0;
     }
 
@@ -57,19 +57,19 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                logIn(command);
+                //logIn(command);
                 if (command.equals("requestHexes"))
                 {
                     SCO.writeString("sendingHexes");
                     SCO.writeString(new BoardAndString(GS.getHexes()).getStringValue());
-                    logOut("sendingHexes");
-                    logOut("[Hex array]");
+                    //logOut("sendingHexes");
+                    //logOut("[Hex array]");
                 }
                 else if (command.startsWith("requestMove"))
                 {
                     handleMove(command);
                     writeToAllPlayers("moveMade");
-                    logOutAll("moveMade");
+                    //logOutAll("moveMade");
                 }
                 else if (command.equals("passTurn"))
                 {
@@ -83,7 +83,7 @@ public class PlayerHandler implements Runnable {
                 else
                 {
                     SCO.writeString("unknownCommand");
-                    logOut("unknownCommand");
+                    //logOut("unknownCommand");
                 }
             }
         } catch (Exception e) {
@@ -125,5 +125,14 @@ public class PlayerHandler implements Runnable {
         GS.log("Sent to Game " + GS.getGameId() + ", [ALL COLORS]: " + msg);
 
     }
+    public int getGameId()
+    {
+        return GS.getGameId();
+    }
+    public String getColorname()
+    {
+        return pegsColor.name();
+    }
+
 
 }

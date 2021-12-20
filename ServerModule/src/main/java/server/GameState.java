@@ -259,4 +259,7 @@ public class GameState {
         serverLogDisplay.log(m);
     }
 
+    public ServerLogDisplay getServerLogDisplay() {
+        return serverLogDisplay;
+    }
 }
