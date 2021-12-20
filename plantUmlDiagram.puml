@@ -1,0 +1,209 @@
+@startuml
+class TestRecievingHexes {
++ void TEST1()
+}
+class server.ServerCommunicatorIn {
+~ Scanner in
+~ Boolean availableCommandFromClient()
+~ String getCommandFromClient()
+}
+class client.exceptions.UnknownCommandException {
+}
+class client.gui.BoardPanel {
+- ClientFrame clientFrame
+- boolean isBoardCreated
+~ {static} int xAxis
+~ {static} int yAxis
+- Color boardColor
+- BoardHex[][] board
+~ boolean selected
+~ int x1
+~ int y1
++ void createBoard()
++ void updateBoard()
+}
+class client.gui.SidePanel {
+~ JButton passButton
+~ JLabel turnInfo
+~ ClientFrame clientFrame
++ void displaySidePanel()
++ void setTurnInfo(String)
++ Dimension getPreferredSize()
+}
+class server.gui.ComboNumberOfPlayers {
+~ StartPopup startPopup
+}
+class server.ServerCommunicatorOut {
+~ PrintWriter out
++ void writeString(String)
+}
+class server.gui.ServerLogDisplay {
+~ JTextArea textArea
++ void log(String)
+}
+class client.gui.ClientStarter {
++ {static} void main(String[])
+}
+class server.gui.StartPopup {
+~ Server server
+~ PortField portField
+~ ComboNumberOfPlayers comboNumberOfPlayers
++ void sendInput()
+}
+class server.gui.AcceptButton {
+~ StartPopup startPopup
+}
+class client.gui.BoardHex {
+- Color color
+- Boolean selected
++ void setColor(Hex.State)
++ Dimension getPreferredSize()
++ void paint(Graphics)
++ void setSelected(boolean)
+}
+class client.CommandWriter {
+~ Client client
+~ PrintWriter printWriter
++ void setConnection(Socket)
++ void requestBoardState()
++ void quit()
++ void move(int,int,int,int)
++ void passTurn()
+}
+class server.PlayerHandler {
+- Socket socket
+- GameState GS
+- ServerCommunicatorOut SCO
+- ServerCommunicatorIn SCI
+- int connectionCount
+- Hex.State pegsColor
++ void run()
+- void handleMove(String)
+- void writeToAllPlayers(String)
++ void write(String)
++ void logIn(String)
++ void logOut(String)
++ void logOutAll(String)
+}
+class client.CommandReader {
+~ Client client
+~ Scanner scanner
++ void setConnection(Socket)
++ boolean hasNext()
++ void fetchInstruction()
+}
+class server.gui.PortField {
+~ StartPopup startPopup
+}
+class client.gui.SetupPanel {
+~ JTextField hostAddress
+~ JTextField portField
+~ JLabel hostAddressLabel
+~ JLabel portLabel
+~ JLabel infoLabel
++ String getAddressText()
++ String getPortText()
++ void setInfoLabel(String)
+}
+class TestBoardAndString {
++ void testConversion()
+}
+class client.ClientGameState {
+~ Hex[][] hexes
+~ {static} int xAxis
+~ {static} int yAxis
++ void setHexes(Hex[][])
++ Hex getHexAt(int,int)
+}
+class server.GameState {
+- Hex[][] hexes
+- int gameId
+- int numberOfPlayers
+- ArrayList<PlayerHandler> players
+~ {static} int xAxis
+~ {static} int yAxis
+~ ServerLogDisplay serverLogDisplay
++ void initBoard(int)
++ Hex[][] getHexes()
++ Boolean checkTurn(Socket)
++ void passTurn(Socket)
++ void move(int,int,int,int)
++ Boolean moveIsLegal(int,int,int,int)
++ void writeToAllPlayers(String)
++ void addPlayer(PlayerHandler)
++ void initN(Hex.State)
++ void initNE(Hex.State)
++ void initSE(Hex.State)
++ void initS(Hex.State)
++ void initSW(Hex.State)
++ void initNW(Hex.State)
++ void initCenter(Hex.State)
++ int getGameId()
++ void log(String)
+}
+class server.ServerStarter {
++ {static} void main(String[])
+}
+class hex.Hex {
++ State state
++ State getState()
++ void setState(State)
+}
+class server.Server {
+~ ServerLogDisplay serverLogDisplay
++ void startServer(int,int)
++ void log(String)
+}
+class hex.BoardAndString {
+~ Hex[][] hexes
+~ String value
+~ {static} int xAxis
+~ {static} int yAxis
++ String getStringValue()
+- void setStringValue()
++ Hex[][] getBoardValue()
+- void setHexValue()
+}
+class client.Client {
+- {static} Socket socket
+- Hex.State pegsColor
+- ClientFrame clientFrame
++ CommandReader commandReader
++ CommandWriter commandWriter
++ ClientGameState gameState
++ void startConfiguration(String)
++ void setCommunication(Socket)
++ void updateBoard(Hex[][])
++ void updateFrameBoard()
++ void play()
++ Hex.State getPegsColor()
++ void setPegsColor(Hex.State)
+}
+class clientTests.TestClientChannels {
++ void testUpdateBoard()
++ void testSetBoard()
+}
+class client.gui.ClientFrame {
+# BoardPanel boardPanel
+# SidePanel sidePanel
+# Client client
++ void updateBoard()
++ void setInfo(String)
++ String[] showSetupOptions(String)
+}
+
+
+client.exceptions.Exception <|-- client.exceptions.UnknownCommandException
+client.gui.JPanel <|-- client.gui.BoardPanel
+client.gui.JPanel <|-- client.gui.SidePanel
+server.gui.JComboBox <|-- server.gui.ComboNumberOfPlayers
+server.gui.JFrame <|-- server.gui.ServerLogDisplay
+server.gui.JFrame <|-- server.gui.StartPopup
+server.gui.JButton <|-- server.gui.AcceptButton
+client.gui.JPanel <|-- client.gui.BoardHex
+server.Runnable <|.. server.PlayerHandler
+server.gui.JTextField <|-- server.gui.PortField
+client.gui.JPanel <|-- client.gui.SetupPanel
+java.io.Serializable <|.. hex.Hex
+client.gui.JFrame <|-- client.gui.ClientFrame
+@enduml
