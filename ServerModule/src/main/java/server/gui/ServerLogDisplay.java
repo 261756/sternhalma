@@ -3,6 +3,9 @@ package server.gui;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+/**
+ * Okienko z logami serwera.
+ */
 public class ServerLogDisplay extends JFrame {
     JTextArea textArea;
     public ServerLogDisplay()

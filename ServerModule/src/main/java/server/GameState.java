@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Klasa zawierająca planszę, informacje o stanie rozgrywi
+ * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
 public class GameState {
     private Hex[][] hexes;

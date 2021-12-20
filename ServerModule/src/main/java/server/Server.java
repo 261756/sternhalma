@@ -9,7 +9,9 @@ import javax.swing.*;
 import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 
-
+/**
+ * Klasa główna serwera
+ */
 public class Server {
 
     ServerLogDisplay serverLogDisplay;

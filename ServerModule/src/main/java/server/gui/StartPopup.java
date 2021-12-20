@@ -6,6 +6,9 @@ import server.ServerStarter;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Popup startowy, który konfiguruje serwer
+ */
 public class StartPopup extends JFrame {
 
     Server server;
@@ -33,10 +36,9 @@ public class StartPopup extends JFrame {
     }
 
     /**
-     * TODO: Weryfikacja inputu
-     * @throws Exception
+     * Wysysła do serwera port i liczbe graczy jednocześnie startując go
      */
-    public void sendInput() throws Exception {
+    public void sendInput() {
         try {
             int port = Integer.parseInt(portField.getText());
             if (port > 65535 || port < 0)

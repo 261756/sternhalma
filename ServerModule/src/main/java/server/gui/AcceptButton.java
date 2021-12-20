@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Przycisk akceptujący ustawienia serwera
+ */
 public class AcceptButton extends JButton {
     StartPopup startPopup;
     AcceptButton(StartPopup startPopup)
