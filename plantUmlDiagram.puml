@@ -206,4 +206,15 @@ server.gui.JTextField <|-- server.gui.PortField
 client.gui.JPanel <|-- client.gui.SetupPanel
 java.io.Serializable <|.. hex.Hex
 client.gui.JFrame <|-- client.gui.ClientFrame
+
+
+server.PlayerHandler *-- server.ServerCommunicatorIn
+server.PlayerHandler *-- server.ServerCommunicatorOut
+server.Server <-- server.ServerStarter
+server.gui.StartPopup <-- server.ServerStarter
+server.gui.ServerLogDisplay <-- server.ServerStarter
+server.GameState <-- server.Server
+server.gui.StartPopup *-- server.gui.ComboNumberOfPlayers
+server.gui.StartPopup *-- server.gui.PortField
+server.gui.StartPopup *-- server.gui.AcceptButton
 @enduml
