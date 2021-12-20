@@ -1,3 +1,5 @@
+package clientTests;
+
 import hex.BoardAndString;
 import hex.Hex;
 import org.junit.Assert;

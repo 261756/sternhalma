@@ -1,5 +1,5 @@
 @startuml
-class TestRecievingHexes {
+class clientTests.TestRecievingHexes {
 + void TEST1()
 }
 class server.ServerCommunicatorIn {
@@ -41,7 +41,7 @@ class server.gui.ServerLogDisplay {
 ~ JTextArea textArea
 + void log(String)
 }
-class client.gui.ClientStarter {
+class client.ClientStarter {
 + {static} void main(String[])
 }
 class server.gui.StartPopup {
@@ -105,7 +105,7 @@ class client.gui.SetupPanel {
 + String getPortText()
 + void setInfoLabel(String)
 }
-class TestBoardAndString {
+class clientTests.TestBoardAndString {
 + void testConversion()
 }
 class client.ClientGameState {
@@ -217,4 +217,22 @@ server.GameState <-- server.Server
 server.gui.StartPopup *-- server.gui.ComboNumberOfPlayers
 server.gui.StartPopup *-- server.gui.PortField
 server.gui.StartPopup *-- server.gui.AcceptButton
+
+client.Client <-- client.ClientStarter
+client.Client *-- client.CommandReader
+client.Client *-- client.CommandWriter
+client.Client *-- client.ClientGameState
+client.Client *-- client.gui.ClientFrame
+client.gui.ClientFrame *-- client.gui.SidePanel
+client.gui.ClientFrame *-- client.gui.BoardPanel
+client.gui.ClientFrame --> client.gui.SetupPanel
+client.gui.BoardPanel *-- client.gui.BoardHex
+server.GameState *-- server.gui.ServerLogDisplay
+
+
+
+hex.BoardAndString <-- client.CommandReader
+hex.BoardAndString <-- server.PlayerHandler
+server.GameState   o-- hex.Hex
+client.ClientGameState o--  hex.Hex
 @enduml
