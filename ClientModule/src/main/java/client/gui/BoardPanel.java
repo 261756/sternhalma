@@ -61,6 +61,19 @@ public class BoardPanel extends JPanel {
                             clientFrame.client.commandWriter.move(x1,y1,I,J);
                         }
                     }
+                    public void mouseEntered(MouseEvent e)
+                    {
+                            board[I][J].setHoveredOver(true);
+                            board[I][J].repaint();
+
+                    }
+                    public void mouseExited(MouseEvent e)
+                    {
+                        board[I][J].setHoveredOver(false);
+                        board[I][J].repaint();
+                    }
+
+
                 });
                 if (clientFrame.client.gameState.getHexAt(i,j).getState() != Hex.State.NULL) {
                     p.add(board[i][j]);

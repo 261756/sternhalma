@@ -11,6 +11,7 @@ class SidePanel extends JPanel {
     ClientFrame clientFrame;
     public SidePanel(ClientFrame clientFrame) {
         this.clientFrame = clientFrame;
+        this.setBackground(new Color(98, 36, 1));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         this.passButton = new JButton("Pas");
         passButton.addActionListener(new ActionListener() {

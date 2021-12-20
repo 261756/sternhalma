@@ -12,8 +12,10 @@ public class BoardHex extends JPanel{
 
     private Color color;
     private Boolean selected; // czy pole zostalo wybrane
+    private Boolean hovered; // czy nad polem jest myszka
     public BoardHex() {
         selected = false;
+        hovered = false;
         color = Color.white;
         this.setOpaque(false);
         //setBackground(Color.white);
@@ -56,6 +58,10 @@ public class BoardHex extends JPanel{
         if (selected) {
             g.setColor(new Color(255, 217, 51, 173));
         }
+        else if (hovered)
+        {
+            g.setColor(new Color(235, 51, 255, 173));
+        }
         else {
             g.setColor(Color.black);
         }
@@ -70,5 +76,12 @@ public class BoardHex extends JPanel{
     {
         selected = set;
     }
+    public boolean getSelected()
+    {
+        return selected;
+    }
 
+    public void setHoveredOver(boolean set) {
+        hovered = set;
+    }
 }
