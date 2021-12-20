@@ -19,8 +19,9 @@ public class TestRecievingHexes {
         var socket = new Socket("localhost", 59898);
         Scanner scan = new Scanner(socket.getInputStream());
         var out = new PrintWriter(socket.getOutputStream(), true);
-        out.println("requestHexes");
         String serverResponse = scan.nextLine();
+        out.println("requestHexes");
+        serverResponse = scan.nextLine();
         Hex[][] hexes = new Hex[25][17];
         System.out.println(serverResponse);
         System.out.println("lol");
@@ -30,9 +31,9 @@ public class TestRecievingHexes {
             hexes = new BoardAndString(scan.nextLine()).getBoardValue();
             System.out.println("xD");
         }
-        Assert.assertEquals(hexes[0][0].getState(), Hex.State.RED);
-        Assert.assertEquals(hexes[1][0].getState(), Hex.State.EMPTY);
-        Assert.assertNotEquals(hexes[0][0].getState(), Hex.State.EMPTY);
+        Assert.assertEquals(hexes[0][0].getState(), Hex.State.NULL);
+        Assert.assertEquals(hexes[1][0].getState(), Hex.State.NULL);
+        Assert.assertNotEquals(hexes[0][0].getState(), Hex.State.RED);
 
 
         out.println("requestxD");

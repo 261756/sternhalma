@@ -17,7 +17,7 @@ public class TestClientChannels {
         client.updateBoard(array);
         Assert.assertEquals(Hex.State.RED,client.gameState.getHexAt(0,0).getState());
     }
-    @Test
+    /*@Test
     public void testSetBoard() throws IOException {
 
         var socket = new Socket("localhost", 59898);
@@ -29,5 +29,5 @@ public class TestClientChannels {
         Hex unit2 = client.gameState.getHexAt(24,15);;
         Assert.assertEquals(Hex.State.RED,unit1.getState());
         Assert.assertEquals(Hex.State.BLUE,unit2.getState());
-    }
+    }*/
 }
