@@ -5,6 +5,9 @@ import client.Client;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * Klasa tworząca instancję klienta.
+ */
 public class ClientStarter {
     public static void main(String[] args) throws IOException {
         Client client = new Client();

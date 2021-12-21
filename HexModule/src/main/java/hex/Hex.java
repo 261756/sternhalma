@@ -2,6 +2,9 @@ package hex;
 
 import java.io.Serializable;
 
+/**
+ * Klasa pojedynczego pola, które przyjmuje Stany.
+ */
 public class Hex implements Serializable {
     public enum State{
         NULL, EMPTY, RED, BLUE, WHITE, YELLOW, GREEN, BLACK;
