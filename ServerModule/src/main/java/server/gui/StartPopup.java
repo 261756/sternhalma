@@ -70,5 +70,41 @@ public class StartPopup extends JFrame {
         }
 
     }
+    public void sendInputNoGUI(String port, String numberOfPlayers) {
+        try {
+            int portI = Integer.parseInt(port);
+            if (portI > 65535 || portI < 0)
+            {
+                throw new NumberFormatException();
+            }
+            int numberOfPlayersI = Integer.parseInt(numberOfPlayers);
+            if (numberOfPlayersI > 6 || numberOfPlayersI < 2)
+            {
+                throw new NumberFormatException();
+            }
+            this.setVisible(false);
+            Thread serverThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        server.startServer(portI, numberOfPlayersI);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            serverThread.start();
+
+
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Podano nieprawidlowe dane");
+        }
+        catch (Exception e) {
+            System.exit(0);
+        }
+
+    }
 
 }

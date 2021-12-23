@@ -15,7 +15,7 @@ import java.io.IOException;
 
 
 public class TestRecievingHexes {
-    @Test
+   /* @Test
     public void TEST1() throws IOException, ClassNotFoundException
     {
         var socket = new Socket("localhost", 59898);
@@ -42,7 +42,7 @@ public class TestRecievingHexes {
         serverResponse = scan.nextLine();
         System.out.println(serverResponse);
         Assert.assertEquals(serverResponse, "unknownCommand");
-    }
+    }*/
     /*@Test
     public void TEST1looped() throws IOException, ClassNotFoundException {
         var socket = new Socket("localhost", 59898);
