@@ -54,11 +54,14 @@ public class BoardPanel extends JPanel {
                             x1 = I;
                             y1 = J;
                         }
-                        else if (selected && clientFrame.client.gameState.getHexAt(I,J).getState() == Hex.State.EMPTY)
+                        else if (selected)
                         {
                             selected = false;
                             board[x1][y1].setSelected(false);
-                            clientFrame.client.commandWriter.move(x1,y1,I,J);
+                            board[x1][y1].repaint();
+                            if (clientFrame.client.gameState.getHexAt(I,J).getState() == Hex.State.EMPTY) {
+                                clientFrame.client.commandWriter.move(x1, y1, I, J);
+                            }
                         }
                     }
                     public void mouseEntered(MouseEvent e)
