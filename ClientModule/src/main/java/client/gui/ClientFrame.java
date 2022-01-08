@@ -32,7 +32,7 @@ public class ClientFrame extends JFrame {
     {
         boardPanel.updateBoard();
     }
-    public void setInfo(String message) {
+    public void notify(String message) {
         sidePanel.setTurnInfo(message);
     }
     public String[] showSetupOptions(String message) throws Exception {

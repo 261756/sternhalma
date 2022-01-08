@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-//TODO: to jest bardzo słabe
+
 class SidePanel extends JPanel {
-    JButton passButton;
-    JLabel turnInfo;
-    ClientFrame clientFrame;
+    private static final int WIDTH = 80;
+    private JButton passButton;
+    private JLabel turnInfo;
+    private ClientFrame clientFrame;
     public SidePanel(ClientFrame clientFrame) {
         this.clientFrame = clientFrame;
         this.setBackground(new Color(98, 36, 1));
@@ -17,15 +18,17 @@ class SidePanel extends JPanel {
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clientFrame.client.commandWriter.passTurn();
-                setTurnInfo("pas");
+                if (clientFrame.client.isMyTurn()) {
+                    clientFrame.client.commandWriter.passTurn();
+                    setTurnInfo("pas");
+                }
             }
         });
-        this.turnInfo = new JLabel("text");
+        this.turnInfo = new JLabel();
         this.add(Box.createVerticalGlue());
         JPanel p1 = new JPanel();
         p1.setOpaque(false);
-        passButton.setPreferredSize(new Dimension(70,70));
+        passButton.setPreferredSize(new Dimension(WIDTH - 10,WIDTH - 10));
         passButton.setFocusable(false);
         p1.setLayout(new FlowLayout(FlowLayout.CENTER,0,30));
         p1.add(passButton);
@@ -44,6 +47,6 @@ class SidePanel extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(80,this.getParent().getHeight());
+        return new Dimension(WIDTH,this.getParent().getHeight());
     }
 }

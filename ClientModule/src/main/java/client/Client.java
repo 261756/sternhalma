@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 public class Client {
     private static Socket socket;
     private Hex.State pegsColor;
+    private boolean myTurn;
     private ClientFrame clientFrame;
     public CommandReader commandReader;
     public CommandWriter commandWriter;
@@ -31,15 +32,13 @@ public class Client {
     public void startConfiguration(String message) {
         try {
             String[] array = clientFrame.showSetupOptions(message);
-            if (Integer.parseInt(array[1]) > 65535 || Integer.parseInt(array[1]) < 0)
-            {
+            if (Integer.parseInt(array[1]) > 65535 || Integer.parseInt(array[1]) < 0) {
                 throw new NumberFormatException();
             }
             setCommunication(new Socket(array[0],Integer.parseInt(array[1])));
         } catch (IOException e) {
             startConfiguration("Błąd połączenia. Spróbuj ponownie.");
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             startConfiguration("Zły format danych.");
         } catch (Exception e) {
             System.exit(0);
@@ -103,5 +102,19 @@ public class Client {
     {
         pegsColor = color;
     }
-
+    public void setMyTurn(boolean bool) {
+        this.myTurn = bool;
+    }
+    public boolean isMyTurn() {
+        return this.myTurn;
+    }
+    public void setCurrentPlayer(String substring) {
+        if (substring.equals(pegsColor.name())) {
+            setMyTurn(true);
+            this.clientFrame.notify(new MessageFactory().myTurnMsg());
+        } else {
+            setMyTurn(false);
+            this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));
+        }
+    }
 }

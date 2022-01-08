@@ -37,6 +37,8 @@ public class CommandReader {
      * OBSŁUGIWANE POLECENIA:
      * sendingHexes - metoda konwertuje przychodzący string na tablicę hexów i updateuje ją dla klienta
      * moveMade - metoda po otrzymaniu komunikatu że ktoś wykonał ruch prosi serwer o wysłanie jej tablicy hexów
+     * assignColor - metoda ustawia kolor gracza na kolor otrzymany z serwera
+     * turnChanged - metoda informuje gracza który gracz ma teraz ruch
      */
     public void fetchInstruction()  {
         String command = scanner.nextLine();
@@ -51,6 +53,9 @@ public class CommandReader {
         }
         if (command.startsWith("moveMade")) {
             client.commandWriter.requestBoardState();
+        }
+        if (command.startsWith("turnChanged")) {
+            client.setCurrentPlayer(command.substring(11));
         }
     }
 }
