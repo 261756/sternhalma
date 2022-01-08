@@ -14,7 +14,9 @@ import java.util.Arrays;
 public class GameState {
     private Hex[][] hexes;
     private int gameId;
-    private int numberOfPlayers;
+    private boolean gameStarted; // czy do gry podłączyli się wszyscy gracze
+    private final int numberOfPlayers;
+    private int currentPlayer; // numer gracza ktory ma teraz ture
     private ArrayList<PlayerHandler> players;
     static final int xAxis = 13;
     static final int yAxis = 17;
@@ -26,7 +28,9 @@ public class GameState {
         this.gameId = id;
         hexes = new Hex[xAxis][yAxis];
         players = new ArrayList<PlayerHandler>();
+        this.currentPlayer=0;
         initBoard(this.numberOfPlayers);
+        gameStarted = false;
     }
 
     /**
@@ -79,7 +83,26 @@ public class GameState {
      */
     public Boolean checkTurn(Socket socket)
     {
-        return true;
+        if (currentPlayer == getPlayerNumber(socket)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param socket
+     * @return return number of player with socket
+     */
+    public int getPlayerNumber(Socket socket)
+    {
+        for (int i =0; i < players.size(); i++) {
+            if (players.get(i).getSocket() == socket)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -88,8 +111,23 @@ public class GameState {
      */
     public void passTurn(Socket socket)
     {
-
+        int n = getPlayerNumber(socket);
+        n++;
+        if (n == numberOfPlayers)
+        {
+            n=0;
+        }
+        currentPlayer=n;
     }
+    public int getCurrentPlayer()
+    {
+        return currentPlayer;
+    }
+    public String getCurrentPlayerColorName()
+    {
+        return players.get(currentPlayer).getColorname();
+    }
+
     public void move(int a, int b, int c ,int d)
     {
         if (moveIsLegal(a,b,c,d))
@@ -120,9 +158,19 @@ public class GameState {
      * Dodaje gracza do tablicy graczy w gamestate
      * @param p
      */
-    public void addPlayer(PlayerHandler p)
-    {
+    public void addPlayer(PlayerHandler p) throws IOException {
         players.add(p);
+        if (players.size() == numberOfPlayers)
+        {
+            gameStarted = true;
+            log("All players are connected. The game started.");
+            writeToAllPlayers("turnChanged");
+            writeToAllPlayers(players.get(0).getColorname());
+        }
+    }
+    public boolean getGameStarted()
+    {
+        return gameStarted;
     }
 
     /**

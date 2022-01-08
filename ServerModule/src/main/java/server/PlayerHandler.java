@@ -26,22 +26,16 @@ public class PlayerHandler implements Runnable {
     private GameState GS;
     private ServerCommunicatorOut SCO;
     private ServerCommunicatorIn SCI;
-
-    /**
-     * ile klientow jest polaczylo się z playerHandler podczas jego życia
-     */
-    private int connectionCount;
     private Hex.State pegsColor;
+    private boolean addedToGS;
 
     PlayerHandler(Socket socket, GameState gs, Hex.State pegs) throws IOException {
-
+        addedToGS=false;
         this.socket = socket;
         this.GS = gs;
         pegsColor = pegs;
-        gs.addPlayer(this);
         SCO = new ServerCommunicatorOut(socket.getOutputStream(),GS.getServerLogDisplay(), this);
         SCI = new ServerCommunicatorIn(socket.getInputStream(), GS.getServerLogDisplay(),this);
-        connectionCount = 0;
     }
 
     @Override
@@ -49,36 +43,45 @@ public class PlayerHandler implements Runnable {
         GS.log("Connected " + pegsColor.name() + " to game " + GS.getGameId() + ": " + socket );
         try {
             SCO.writeString("assignColor"+pegsColor.name());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //connectionCount++;
-        //System.out.println("Connection count: " + connectionCount);
+
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                //logIn(command);
                 if (command.equals("requestHexes"))
                 {
                     SCO.writeString("sendingHexes");
                     SCO.writeString(new BoardAndString(GS.getHexes()).getStringValue());
-                    //logOut("sendingHexes");
-                    //logOut("[Hex array]");
+                    if (!addedToGS) {
+                        GS.addPlayer(this);
+                        addedToGS=true;
+                    }
                 }
                 else if (command.startsWith("requestMove"))
                 {
-                    handleMove(command);
-                    writeToAllPlayers("moveMade");
-                    //logOutAll("moveMade");
+                    if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
+                        if (true) {
+                            handleMove(command);
+                            writeToAllPlayers("moveMade");
+
+                        }
+                    }
                 }
                 else if (command.equals("passTurn"))
                 {
-                    if (GS.checkTurn(socket))
+                    if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
                         GS.passTurn(socket);
+                        GS.serverLogDisplay.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
+                        writeToAllPlayers("turnChanged" + GS.getCurrentPlayerColorName());
+                    }
                 }
                 else if (command.equals("quit"))
                 {
-                    //log(socket + "quit");
+                    GS.log(GS.getCurrentPlayerColorName() +" quit.");
+
                 }
                 else
                 {
@@ -91,9 +94,10 @@ public class PlayerHandler implements Runnable {
         } finally {
             try {
                 socket.close();
+                writeToAllPlayers("terminate");
             } catch (IOException e) {
             }
-            //connectionCount--;
+
             GS.log("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);
         }
     }
@@ -133,6 +137,10 @@ public class PlayerHandler implements Runnable {
     {
         return pegsColor.name();
     }
+    public Socket getSocket() {
+        return socket;
+    }
+
 
 
 }
