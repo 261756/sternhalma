@@ -164,8 +164,7 @@ public class GameState {
         {
             gameStarted = true;
             log("All players are connected. The game started.");
-            writeToAllPlayers("turnChanged");
-            writeToAllPlayers(players.get(0).getColorname());
+            writeToAllPlayers("turnChanged" + players.get(0).getColorname());
         }
     }
     public boolean getGameStarted()
