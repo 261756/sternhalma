@@ -44,8 +44,7 @@ public class CommandReader {
         String command = scanner.nextLine();
         System.out.println(command);
         if (command.startsWith("sendingHexes")) {
-            command = scanner.nextLine();
-            client.updateBoard(new BoardAndString(command).getBoardValue());
+            client.updateBoard(new BoardAndString(command.substring(12)).getBoardValue());
             client.updateFrameBoard();
         }
         if (command.startsWith("assignColor")) {

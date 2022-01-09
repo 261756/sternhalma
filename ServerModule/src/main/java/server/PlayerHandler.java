@@ -27,9 +27,11 @@ public class PlayerHandler implements Runnable {
     private ServerCommunicatorOut SCO;
     private ServerCommunicatorIn SCI;
     private Hex.State pegsColor;
+    private boolean winner;
     private boolean addedToGS;
 
     PlayerHandler(Socket socket, GameState gs, Hex.State pegs) throws IOException {
+        winner = false;
         addedToGS=false;
         this.socket = socket;
         this.GS = gs;
@@ -51,13 +53,25 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                if (command.equals("requestHexes"))
+                if (GS.checkIfGameEnded())
                 {
-                    SCO.writeString("sendingHexes");
-                    SCO.writeString(new BoardAndString(GS.getHexes()).getStringValue());
+                    continue;
+                }
+                else if (command.equals("requestHexes"))
+                {
+                    SCO.writeString("sendingHexes" + new BoardAndString(GS.getHexes()).getStringValue());
                     if (!addedToGS) {
                         GS.addPlayer(this);
                         addedToGS=true;
+                    }
+                    if (GS.checkIfWon(this.pegsColor))
+                    {
+                        winner = true;
+                        GS.log(pegsColor + " won!");
+                        if (GS.checkIfGameEnded())
+                        {
+                            writeToAllPlayers("gameEnded");
+                        }
                     }
                 }
                 else if (command.startsWith("requestMove"))
@@ -66,7 +80,6 @@ public class PlayerHandler implements Runnable {
                         if (true) {
                             handleMove(command);
                             writeToAllPlayers("moveMade");
-
                         }
                     }
                 }
@@ -139,6 +152,10 @@ public class PlayerHandler implements Runnable {
     }
     public Socket getSocket() {
         return socket;
+    }
+    public boolean checkIfWinner()
+    {
+        return winner;
     }
 
 

@@ -31,16 +31,33 @@ public class Server {
             var pool = Executors.newFixedThreadPool(20);
             while (true) {
                 GameState GS = new GameState(numberOfPlayers,id_count,serverLogDisplay);
-                pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.RED));
-                pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLUE));
-                if (numberOfPlayers >= 3)
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.WHITE));
-                if (numberOfPlayers >= 4)
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLACK));
-                if (numberOfPlayers >= 5)
+                pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.RED));
+                if (numberOfPlayers == 2) {
+                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
+                }
+
+                else if (numberOfPlayers == 3) {
                     pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
-                if (numberOfPlayers >= 6)
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLACK));
+                }
+
+
+                else if (numberOfPlayers == 4) {
+                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
                     pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.YELLOW));
+                }
+                else if (numberOfPlayers >= 5) {
+                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.YELLOW));
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.WHITE));
+                }
+                if (numberOfPlayers == 6) {
+
+                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLACK));
+
+                }
                 id_count++;
             }
         }

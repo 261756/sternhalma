@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 /**
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
 public class GameState {
     private Hex[][] hexes;
     private int gameId;
+    private int place; // które miejsce zostało ostatnio zajęte (ilu graczy już wygrało)
     private boolean gameStarted; // czy do gry podłączyli się wszyscy gracze
     private final int numberOfPlayers;
     private int currentPlayer; // numer gracza ktory ma teraz ture
@@ -21,6 +21,26 @@ public class GameState {
     static final int xAxis = 13;
     static final int yAxis = 17;
     ServerLogDisplay serverLogDisplay;
+
+    /**
+     * Klasa przechowująca koordynat tabeli hexes
+     */
+    public class Cord{
+        public int x;
+        public int y;
+        Cord(int x,int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    // koordynaty wchodzące w skład poszczególnych trójkątów
+    private ArrayList<Cord> Ncords;
+    private ArrayList<Cord> Scords;
+    private ArrayList<Cord> NWcords;
+    private ArrayList<Cord> NEcords;
+    private ArrayList<Cord> SWcords;
+    private ArrayList<Cord> SEcords;
     public GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
     {
         this.serverLogDisplay = serverLogDisplay;
@@ -43,34 +63,144 @@ public class GameState {
         {
             for (int j = 0; j < yAxis; j++)
             {
-                //hexes[i][j] = new Hex(Hex.State.EMPTY);
                 hexes[i][j] = new Hex(Hex.State.NULL);
             }
         }
+        fillNcords();
+        fillNEcords();
+        fillNWcords();
+        fillScords();
+        fillSEcords();
+        fillSWcords();
         /*hexes[0][0] = new Hex(Hex.State.BLUE);
         hexes[12][16] = new Hex(Hex.State.BLUE);*/
-        initN(Hex.State.RED);
-        initS(Hex.State.BLUE);
-
-        if (numberOfPlayers >= 3)
-            initNE(Hex.State.WHITE);
-        else
-            initNE(Hex.State.EMPTY);
-        if (numberOfPlayers >= 4)
-            initSW(Hex.State.BLACK);
-        else
-            initSW(Hex.State.EMPTY);
-        if (numberOfPlayers >= 5)
-            initSE(Hex.State.GREEN);
-        else
-            initSE(Hex.State.EMPTY);
-        if (numberOfPlayers >= 6)
-            initNW(Hex.State.YELLOW);
-        else
-            initNW(Hex.State.EMPTY);
+        initNE(Hex.State.EMPTY);
+        initNW(Hex.State.EMPTY);
+        initSW(Hex.State.EMPTY);
+        initSE(Hex.State.EMPTY);
         initCenter(Hex.State.EMPTY);
+        initS(Hex.State.EMPTY);
+        initN(Hex.State.RED);
+        if (numberOfPlayers == 2) {
+            initS(Hex.State.BLUE);
+
+        }
+
+        if (numberOfPlayers == 3) {
+            initSE(Hex.State.GREEN);
+            initSW(Hex.State.BLACK);
+        }
+
+        if (numberOfPlayers == 4) {
+            initNW(Hex.State.YELLOW);
+            initS(Hex.State.BLUE);
+            initSE(Hex.State.GREEN);
+        }
+
+        if (numberOfPlayers >= 5) {
+            initNW(Hex.State.YELLOW);
+            initS(Hex.State.BLUE);
+            initSE(Hex.State.GREEN);
+            initNE(Hex.State.WHITE);
+        }
+
+        if (numberOfPlayers == 6) {
+            initSW(Hex.State.BLACK);
+        }
+
 
     }
+
+    /**
+     * Uzupełnia tablicę koordynatów północnego trójkąta
+     */
+    public void fillNcords()
+    {
+        Ncords = new ArrayList<Cord>();
+        Ncords.add(new Cord(6,0));
+        Ncords.add(new Cord(5,1));
+        Ncords.add(new Cord(6,1));
+        Ncords.add(new Cord(5,2));
+        Ncords.add(new Cord(6,2));
+        Ncords.add(new Cord(7,2));
+        Ncords.add(new Cord(4,3));
+        Ncords.add(new Cord(5,3));
+        Ncords.add(new Cord(6,3));
+        Ncords.add(new Cord(7,3));
+    }
+    public void fillNEcords()
+    {
+        NEcords = new ArrayList<Cord>();
+        NEcords.add(new Cord(9,4));
+        NEcords.add(new Cord(10,4));
+        NEcords.add(new Cord(11,4));
+        NEcords.add(new Cord(12,4));
+        NEcords.add(new Cord(9,5));
+        NEcords.add(new Cord(10,5));
+        NEcords.add(new Cord(11,5));
+        NEcords.add(new Cord(10,6));
+        NEcords.add(new Cord(11,6));
+        NEcords.add(new Cord(10,7));
+    }
+    public void fillNWcords()
+    {
+        NWcords = new ArrayList<Cord>();
+        NWcords.add(new Cord(0,4));
+        NWcords.add(new Cord(1,4));
+        NWcords.add(new Cord(2,4));
+        NWcords.add(new Cord(3,4));
+        NWcords.add(new Cord(0,5));
+        NWcords.add(new Cord(1,5));
+        NWcords.add(new Cord(2,5));
+        NWcords.add(new Cord(1,6));
+        NWcords.add(new Cord(2,6));
+        NWcords.add(new Cord(1,7));
+    }
+    public void fillSEcords()
+    {
+
+        SEcords = new ArrayList<Cord>();
+        SEcords.add(new Cord(9,12));
+        SEcords.add(new Cord(10,12));
+        SEcords.add(new Cord(11,12));
+        SEcords.add(new Cord(12,12));
+        SEcords.add(new Cord(9,11));
+        SEcords.add(new Cord(10,11));
+        SEcords.add(new Cord(11,11));
+        SEcords.add(new Cord(10,10));
+        SEcords.add(new Cord(11,10));
+        SEcords.add(new Cord(10,9));
+    }
+    public void fillSWcords()
+    {
+        SWcords = new ArrayList<Cord>();
+        SWcords.add(new Cord(0,12));
+        SWcords.add(new Cord(1,12));
+        SWcords.add(new Cord(2,12));
+        SWcords.add(new Cord(3,12));
+        SWcords.add(new Cord(0,11));
+        SWcords.add(new Cord(1,11));
+        SWcords.add(new Cord(2,11));
+        SWcords.add(new Cord(1,10));
+        SWcords.add(new Cord(2,10));
+        SWcords.add(new Cord(1,9));
+    }
+
+    public void fillScords()
+    {
+        Scords = new ArrayList<Cord>();
+        Scords.add(new Cord(6,16));
+        Scords.add(new Cord(5,15));
+        Scords.add(new Cord(6,15));
+        Scords.add(new Cord(5,14));
+        Scords.add(new Cord(6,14));
+        Scords.add(new Cord(7,14));
+        Scords.add(new Cord(4,13));
+        Scords.add(new Cord(5,13));
+        Scords.add(new Cord(6,13));
+        Scords.add(new Cord(7,13));
+    }
+
 
     public Hex[][] getHexes() {
         return hexes;
@@ -112,11 +242,13 @@ public class GameState {
     public void passTurn(Socket socket)
     {
         int n = getPlayerNumber(socket);
-        n++;
-        if (n == numberOfPlayers)
-        {
-            n=0;
+        do {
+            n++;
+            if (n == numberOfPlayers) {
+                n = 0;
+            }
         }
+        while (players.get(n).checkIfWinner());
         currentPlayer=n;
     }
     public int getCurrentPlayer()
@@ -177,16 +309,10 @@ public class GameState {
      * @param state Hex.State
      */
     public void initN(Hex.State state) {
-        hexes[6][0] = new Hex(state);
-        hexes[5][1] = new Hex(state);
-        hexes[6][1] = new Hex(state);
-        hexes[5][2] = new Hex(state);
-        hexes[6][2] = new Hex(state);
-        hexes[7][2] = new Hex(state);
-        hexes[4][3] = new Hex(state);
-        hexes[5][3] = new Hex(state);
-        hexes[6][3] = new Hex(state);
-        hexes[7][3] = new Hex(state);
+        for(int i =0; i< Ncords.size(); i++)
+        {
+            hexes[Ncords.get(i).x][Ncords.get(i).y] = new Hex(state);
+        }
     }
 
     /**
@@ -194,16 +320,10 @@ public class GameState {
      * @param state Hex.State
      */
     public void initNE(Hex.State state) {
-        hexes[9][4] = new Hex(state);
-        hexes[10][4] = new Hex(state);
-        hexes[11][4] = new Hex(state);
-        hexes[12][4] = new Hex(state);
-        hexes[9][5] = new Hex(state);
-        hexes[10][5] = new Hex(state);
-        hexes[11][5] = new Hex(state);
-        hexes[10][6] = new Hex(state);
-        hexes[11][6] = new Hex(state);
-        hexes[10][7] = new Hex(state);
+        for(int i =0; i< NEcords.size(); i++)
+        {
+            hexes[NEcords.get(i).x][NEcords.get(i).y] = new Hex(state);
+        }
     }
 
     /**
@@ -211,64 +331,40 @@ public class GameState {
      * @param state Hex.State
      */
     public void initSE(Hex.State state) {
-        hexes[9][12] = new Hex(state);
-        hexes[10][12] = new Hex(state);
-        hexes[11][12] = new Hex(state);
-        hexes[12][12] = new Hex(state);
-        hexes[9][11] = new Hex(state);
-        hexes[10][11] = new Hex(state);
-        hexes[11][11] = new Hex(state);
-        hexes[10][10] = new Hex(state);
-        hexes[11][10] = new Hex(state);
-        hexes[10][9] = new Hex(state);
+        for(int i =0; i< SEcords.size(); i++)
+        {
+            hexes[SEcords.get(i).x][SEcords.get(i).y] = new Hex(state);
+        }
     }
     /**
      * init south
      * @param state Hex.State
      */
     public void initS(Hex.State state) {
-        hexes[6][16] = new Hex(state);
-        hexes[5][15] = new Hex(state);
-        hexes[6][15] = new Hex(state);
-        hexes[5][14] = new Hex(state);
-        hexes[6][14] = new Hex(state);
-        hexes[7][14] = new Hex(state);
-        hexes[4][13] = new Hex(state);
-        hexes[5][13] = new Hex(state);
-        hexes[6][13] = new Hex(state);
-        hexes[7][13] = new Hex(state);
+        for(int i =0; i< Scords.size(); i++)
+        {
+            hexes[Scords.get(i).x][Scords.get(i).y] = new Hex(state);
+        }
     }
     /**
      * init south-west
      * @param state Hex.State
      */
     public void initSW(Hex.State state) {
-        hexes[0][12] = new Hex(state);
-        hexes[1][12] = new Hex(state);
-        hexes[2][12] = new Hex(state);
-        hexes[3][12] = new Hex(state);
-        hexes[0][11] = new Hex(state);
-        hexes[1][11] = new Hex(state);
-        hexes[2][11] = new Hex(state);
-        hexes[1][10] = new Hex(state);
-        hexes[2][10] = new Hex(state);
-        hexes[1][9] = new Hex(state);
+        for(int i =0; i< SWcords.size(); i++)
+        {
+            hexes[SWcords.get(i).x][SWcords.get(i).y] = new Hex(state);
+        }
     }
     /**
      * init north-west
      * @param state Hex.State
      */
     public void initNW(Hex.State state) {
-        hexes[0][4] = new Hex(state);
-        hexes[1][4] = new Hex(state);
-        hexes[2][4] = new Hex(state);
-        hexes[3][4] = new Hex(state);
-        hexes[0][5] = new Hex(state);
-        hexes[1][5] = new Hex(state);
-        hexes[2][5] = new Hex(state);
-        hexes[1][6] = new Hex(state);
-        hexes[2][6] = new Hex(state);
-        hexes[1][7] = new Hex(state);
+        for(int i =0; i< NWcords.size(); i++)
+        {
+            hexes[NWcords.get(i).x][NWcords.get(i).y] = new Hex(state);
+        }
     }
 
     /**
@@ -304,6 +400,58 @@ public class GameState {
     public void log(String m)
     {
         serverLogDisplay.log(m);
+    }
+    boolean checkIfWon(Hex.State player) throws IOException {
+        boolean verdict = false;
+        if (player == Hex.State.RED)
+        {
+            // czerwony wygrał jeśli South(BLUE) trójkąt jest wypełniony czerwonymi
+            for(int i =0; i< Scords.size(); i++)
+            {
+                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.RED)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+
+        if (player == Hex.State.BLUE)
+        {
+            // czerwony wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
+            for(int i =0; i< Ncords.size(); i++)
+            {
+                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.BLUE)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+        if (verdict)
+        {
+            place++;
+            writeToAllPlayers("won" + player.name() + place);
+            return true;
+        }
+        else
+            return false;
+    }
+    public boolean checkIfGameEnded()
+    {
+        int counter = 0;
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (players.get(i).checkIfWinner())
+            {
+                counter++;
+            }
+        }
+        if (counter >= numberOfPlayers-1)
+        {
+            return true;
+        }
+        return false;
     }
 
     public ServerLogDisplay getServerLogDisplay() {
