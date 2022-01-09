@@ -277,7 +277,7 @@ public class GameState {
                 n = 0;
             }
         }
-        while (players.get(n).checkIfWinner());
+        while (players.get(n).checkIfWinner() || players.get(n).checkIfLeft());
         currentPlayer=n;
         this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
     }
@@ -326,7 +326,17 @@ public class GameState {
         {
             gameStarted = true;
             log("All players are connected. The game started.");
-            writeToAllPlayers("turnChanged" + players.get(0).getColorname());
+            int n = 0;
+            // szukamy pierwszego gracza który jeszcze nie wyszedł
+            for (int i = 0; i< players.size(); i++)
+            {
+                if (!players.get(i).checkIfLeft()) {
+                    n = i;
+                    break;
+                }
+            }
+            currentPlayer=n;
+            writeToAllPlayers("turnChanged" + players.get(n).getColorname());
             this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
     }
@@ -527,7 +537,7 @@ public class GameState {
         int counter = 0;
         for (int i = 0; i < players.size(); i++)
         {
-            if (players.get(i).checkIfWinner())
+            if (players.get(i).checkIfWinner() || players.get(i).checkIfLeft())
             {
                 counter++;
             }

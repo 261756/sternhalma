@@ -28,10 +28,12 @@ public class PlayerHandler implements Runnable {
     private ServerCommunicatorIn SCI;
     private Hex.State pegsColor;
     private boolean winner;
+    private boolean left; // czy gracz wyszedł z gry zanim wygrał
     private boolean addedToGS;
 
     PlayerHandler(Socket socket, GameState gs, Hex.State pegs) throws IOException {
         winner = false;
+        left = false;
         addedToGS=false;
         this.socket = socket;
         this.GS = gs;
@@ -106,7 +108,17 @@ public class PlayerHandler implements Runnable {
         } finally {
             try {
                 socket.close();
-                writeToAllPlayers("terminate");
+                left=true;
+                if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
+                    GS.passTurn(socket);
+                    GS.serverLogDisplay.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
+                    writeToAllPlayers("turnChanged" + GS.getCurrentPlayerColorName());
+                }
+                if (GS.checkIfGameEnded())
+                {
+                    writeToAllPlayers("gameEnded");
+                }
+                writeToAllPlayers("left" + pegsColor.name());
             } catch (IOException e) {
             }
 
@@ -130,7 +142,7 @@ public class PlayerHandler implements Runnable {
     }
     public void logIn(String msg)
     {
-        GS.log("Recieved from Game " + GS.getGameId() + ", " + pegsColor.name() + ": "+ msg);
+        GS.log("Received from Game " + GS.getGameId() + ", " + pegsColor.name() + ": "+ msg);
     }
     public void logOut(String msg){
         GS.log("Sent to Game " + GS.getGameId() + ", " + pegsColor.name() + ": " + msg);
@@ -155,6 +167,10 @@ public class PlayerHandler implements Runnable {
     public boolean checkIfWinner()
     {
         return winner;
+    }
+    public boolean checkIfLeft()
+    {
+        return left;
     }
 
 
