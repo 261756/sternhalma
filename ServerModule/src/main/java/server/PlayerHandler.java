@@ -77,8 +77,7 @@ public class PlayerHandler implements Runnable {
                 else if (command.startsWith("requestMove"))
                 {
                     if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
-                        if (true) {
-                            handleMove(command);
+                        if (handleMove(command)) {
                             writeToAllPlayers("moveMade");
                         }
                     }
@@ -114,14 +113,14 @@ public class PlayerHandler implements Runnable {
             GS.log("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);
         }
     }
-    private void handleMove(String command)
+    private boolean handleMove(String command)
     {
         String[] parts = command.substring(11).split(" ");
         int x1 = Integer.parseInt(parts[0]);
         int y1 = Integer.parseInt(parts[1]);
         int x2 = Integer.parseInt(parts[2]);
         int y2 = Integer.parseInt(parts[3]);
-        GS.move(x1,y1,x2,y2);
+        return GS.move(x1,y1,x2,y2);
     }
     private void writeToAllPlayers(String command) throws IOException {
         GS.writeToAllPlayers(command);

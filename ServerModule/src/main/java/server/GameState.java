@@ -290,15 +290,15 @@ public class GameState {
         return players.get(currentPlayer).getColorname();
     }
 
-    public void move(int a, int b, int c ,int d)
+    public boolean move(int a, int b, int c ,int d)
     {
         if (moveIsLegal(a,b,c,d))
         {
-
             hexes[c][d].setState(hexes[a][b].getState());
             hexes[a][b].setState(Hex.State.EMPTY);
-
+            return true;
         }
+        return false;
     }
 
     /**
