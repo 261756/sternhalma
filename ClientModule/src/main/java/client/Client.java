@@ -15,8 +15,17 @@ public class Client {
     private Hex.State pegsColor;
     private boolean myTurn;
     private ClientFrame clientFrame;
+    /**
+     * CommandReader przypisany do klienta, pisze do serwera.
+     */
     public CommandReader commandReader;
+    /**
+     * CommandWriter przypisany do klienta, czyta z serwera.
+     */
     public CommandWriter commandWriter;
+    /**
+     * Klasa przechowująca informacje o stanie planszy pobrane z serwera
+     */
     public ClientGameState gameState;
 
     public Client() {
@@ -95,10 +104,18 @@ public class Client {
         }
     }
 
+    /**
+     * @return Hex.State przypisany do tego klienta
+     */
     public Hex.State getPegsColor()
     {
         return  pegsColor;
     }
+
+    /**
+     * Ustawia Hex.State przypisany do klienta
+     * @param color - Hex.State mający zostać przypisany
+     */
     public void setPegsColor(Hex.State color)
     {
         pegsColor = color;

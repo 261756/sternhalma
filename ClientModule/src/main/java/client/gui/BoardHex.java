@@ -13,6 +13,10 @@ public class BoardHex extends JPanel{
     private Color color;
     private Boolean selected; // czy pole zostalo wybrane
     private Boolean hovered; // czy nad polem jest myszka
+
+    /**
+     * Standardowy konstruktor BoardHex.
+     */
     public BoardHex() {
         selected = false;
         hovered = false;
@@ -24,6 +28,10 @@ public class BoardHex extends JPanel{
 
     }
 
+    /**
+     * Ustawia kolor BoardHexu na podstawie Hex.State
+     * @param state
+     */
     public void setColor(Hex.State state) {
         if (state == Hex.State.RED)
             this.color = (Color.red);
@@ -72,6 +80,11 @@ public class BoardHex extends JPanel{
         g.fillOval((int)(0.15*pWidth/2),(int)(0.15*pWidth/2),(int)(0.85*pWidth),(int)(0.85*pWidth));
         //g.fillOval(0,0,40,40);
     }
+
+    /**
+     * Ustawia stan wybrania BoardHexa
+     * @param set - 1 - wybrany, 0 - nie wybrany
+     */
     public void setSelected(boolean set)
     {
         selected = set;

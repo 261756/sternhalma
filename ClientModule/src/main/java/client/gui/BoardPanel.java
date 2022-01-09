@@ -22,6 +22,10 @@ public class BoardPanel extends JPanel {
     boolean selected; // czy został wybrany pierwszy target move?
     int x1; int y1;
 
+    /**
+     * Standardowy konstruktor BoardPanela.
+     * @param CF - Frame w którym znajduje się BoardPanel
+     */
     public BoardPanel(ClientFrame CF)
     {
         boardColor =  new Color(108, 78, 40);
@@ -29,6 +33,9 @@ public class BoardPanel extends JPanel {
         clientFrame = CF;
     }
 
+    /**
+     * Funkcja tworząca strukturę Panelu.
+     */
     public void createBoard() {
 
         this.setBackground(boardColor);
@@ -88,6 +95,10 @@ public class BoardPanel extends JPanel {
         }
         isBoardCreated = true;
     }
+
+    /**
+     * Funkcja updatująca wygląd BoardPanelu.
+     */
     public void updateBoard()
     {
         if (isBoardCreated) {
