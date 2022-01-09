@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
@@ -351,18 +352,17 @@ public class GameState {
         if (players.size() == numberOfPlayers)
         {
             gameStarted = true;
+            ArrayList<Integer> activePlayers = new ArrayList<Integer>();
             log("All players are connected. The game started.");
-            int n = 0;
             // szukamy pierwszego gracza który jeszcze nie wyszedł
             for (int i = 0; i< players.size(); i++)
             {
                 if (!players.get(i).checkIfLeft()) {
-                    n = i;
-                    break;
+                    activePlayers.add(i);
                 }
             }
-            currentPlayer=n;
-            writeToAllPlayers("turnChanged" + players.get(n).getColorname());
+            currentPlayer= new Random().nextInt(activePlayers.size());
+            writeToAllPlayers("turnChanged" + players.get(currentPlayer).getColorname());
             this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
     }
