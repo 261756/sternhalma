@@ -134,7 +134,7 @@ public class Client {
             setMyTurn(false);
             if (substring.equals("gameEnded"))
             {
-                this.clientFrame.notify("Koniec gry.");
+                this.clientFrame.notify("<html><div style='text-align: center;'>Koniec gry.</div><br></html>");
             }
             else {
                 this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));

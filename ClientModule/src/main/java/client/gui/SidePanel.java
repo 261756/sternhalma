@@ -27,17 +27,17 @@ class SidePanel extends JPanel {
         });
         this.turnInfo = new JLabel("<html><div style='text-align: center;'>Oczekiwanie na<br>pozostałych graczy</div></html>");
         this.winnersInfo = new JLabel("<html></html>"); //informacje o zwycięzcach i wychodzących
-        this.add(Box.createVerticalGlue());
+        //this.add(Box.createVerticalGlue());
         JPanel p1 = new JPanel();
         p1.setOpaque(false);
         passButton.setPreferredSize(new Dimension(WIDTH - 10,WIDTH - 10));
         passButton.setFocusable(false);
-        p1.setLayout(new FlowLayout(FlowLayout.CENTER,0,30));
+        p1.setLayout(new FlowLayout(FlowLayout.CENTER,0,10));
         p1.add(passButton);
         p1.add(turnInfo);
         p1.add(winnersInfo);
         this.add(p1);
-        this.add(Box.createVerticalGlue());
+        //this.add(Box.createVerticalGlue());
         this.setVisible(false);
     }
 
