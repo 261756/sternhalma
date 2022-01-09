@@ -21,7 +21,7 @@ public class GameState {
     static final int xAxis = 13;
     static final int yAxis = 17;
     ServerLogDisplay serverLogDisplay;
-    GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
+    public GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
     {
         this.serverLogDisplay = serverLogDisplay;
         this.numberOfPlayers = numberOfPlayers;
