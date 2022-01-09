@@ -59,5 +59,13 @@ public class CommandReader {
         if (command.startsWith("won")) {
             client.updateWinners(command.substring(3));
         }
+        if (command.startsWith("gameEnded"))
+        {
+            client.setCurrentPlayer("gameEnded");
+        }
+        if (command.startsWith("left"))
+        {
+            client.updateLeavers(command.substring(4));
+        }
     }
 }

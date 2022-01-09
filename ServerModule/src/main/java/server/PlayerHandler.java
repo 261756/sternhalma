@@ -65,6 +65,7 @@ public class PlayerHandler implements Runnable {
                     if (!addedToGS) {
                         GS.addPlayer(this);
                         addedToGS=true;
+                        GS.activateWriteBuffer(this.pegsColor);
                     }
                     if (!winner && GS.checkIfWon(this.pegsColor))
                     {

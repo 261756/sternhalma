@@ -7,6 +7,7 @@ import server.gui.ServerLogDisplay;
 
 import javax.swing.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.Executors;
 
 /**
@@ -28,37 +29,59 @@ public class Server {
         try (var listener = new ServerSocket(serverPort)) {
             serverLogDisplay.log("Serwer wystartował na porcie " + serverPort +", hostuje gry dla " + numberOfPlayers + " graczy.");
             int id_count = 0;
+            Socket socket = null;
             var pool = Executors.newFixedThreadPool(20);
             while (true) {
+                id_count++;
+                if (socket == null)
+                    socket = listener.accept();
                 GameState GS = new GameState(numberOfPlayers,id_count,serverLogDisplay);
-                pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.RED));
+                pool.execute(new PlayerHandler(socket, GS, Hex.State.RED));
                 if (numberOfPlayers == 2) {
-                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket, GS, Hex.State.BLUE));
+                    socket = listener.accept();
                 }
 
                 else if (numberOfPlayers == 3) {
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLACK));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.GREEN));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.BLACK));
+                    socket = listener.accept();
                 }
 
 
-                else if (numberOfPlayers == 4) {
-                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.YELLOW));
+                else if (numberOfPlayers >= 4) {
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket, GS, Hex.State.BLUE));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.GREEN));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.YELLOW));
+                    if (numberOfPlayers == 4)
+                        socket = listener.accept();
                 }
-                else if (numberOfPlayers >= 5) {
-                    pool.execute(new PlayerHandler(listener.accept(), GS, Hex.State.BLUE));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.GREEN));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.YELLOW));
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.WHITE));
+                if (numberOfPlayers >= 5) {
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.WHITE));
+                    if (numberOfPlayers == 5)
+                        socket = listener.accept();
                 }
                 if (numberOfPlayers == 6) {
-
-                    pool.execute(new PlayerHandler(listener.accept(),GS, Hex.State.BLACK));
+                    socket =listener.accept();
+                    if (GS.checkIfGameEnded()) {continue;}
+                    pool.execute(new PlayerHandler(socket,GS, Hex.State.BLACK));
 
                 }
-                id_count++;
+
             }
         }
     }

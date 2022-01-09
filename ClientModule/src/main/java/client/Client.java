@@ -77,7 +77,8 @@ public class Client {
         commandReader.fetchInstruction(); // przyjmowanie przypisanego koloru
         clientFrame.setTitle("Gracz " + pegsColor.name());
         commandWriter.requestBoardState();
-        commandReader.fetchInstruction();
+        if (commandReader.hasNext())
+            commandReader.fetchInstruction();
         clientFrame.updateBoard();
         try {
             while (commandReader.hasNext()) {
@@ -114,7 +115,13 @@ public class Client {
             this.clientFrame.notify(new MessageFactory().myTurnMsg());
         } else {
             setMyTurn(false);
-            this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));
+            if (substring.equals("gameEnded"))
+            {
+                this.clientFrame.notify("Koniec gry.");
+            }
+            else {
+                this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));
+            }
         }
     }
     public void updateWinners(String substring)
@@ -124,5 +131,9 @@ public class Client {
         int number = Integer.parseInt(numberS);
         String color = substring.substring(0,size-1);
         this.clientFrame.updateWinners(new MessageFactory().winnerMsg(clientFrame.getWinnerMsg(),color,number));
+    }
+    public void updateLeavers(String substring)
+    {
+        this.clientFrame.updateWinners(new MessageFactory().leftMsg(clientFrame.getWinnerMsg(),substring));
     }
 }

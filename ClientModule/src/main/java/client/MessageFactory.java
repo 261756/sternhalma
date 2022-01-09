@@ -19,4 +19,11 @@ public class MessageFactory {
         System.out.println(builder.toString());
         return  builder.toString();
     }
+    public String leftMsg(String prevmsg, String color) {
+        StringBuilder builder = new StringBuilder(prevmsg);
+        String n = "<div style='text-align: center;'><font color = '" + color + "'><br>" + color + "<br><font color = 'BLACK'> wyszedł z gry.</div>";
+        builder.insert(6,n);
+        System.out.println(builder.toString());
+        return  builder.toString();
+    }
 }

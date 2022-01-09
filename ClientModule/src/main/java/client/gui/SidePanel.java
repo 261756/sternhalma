@@ -26,7 +26,7 @@ class SidePanel extends JPanel {
             }
         });
         this.turnInfo = new JLabel("<html><div style='text-align: center;'>Oczekiwanie na<br>pozostałych graczy</div></html>");
-        this.winnersInfo = new JLabel("<html></html>");
+        this.winnersInfo = new JLabel("<html></html>"); //informacje o zwycięzcach i wychodzących
         this.add(Box.createVerticalGlue());
         JPanel p1 = new JPanel();
         p1.setOpaque(false);

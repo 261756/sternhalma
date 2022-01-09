@@ -21,6 +21,7 @@ public class GameState {
     private final int numberOfPlayers;
     private int currentPlayer; // numer gracza ktory ma teraz ture
     private ArrayList<PlayerHandler> players;
+    private ArrayList<ArrayList<String >> writeBuffer; // tutaj lądują wiadomości wysyłane do klientów, którzy jeszcze nie połączyli sie z serwerem
     static final int xAxis = 13;
     static final int yAxis = 17;
     ServerLogDisplay serverLogDisplay;
@@ -80,6 +81,7 @@ public class GameState {
         this.currentPlayer=0;
         initBoard(this.numberOfPlayers);
         gameStarted = false;
+        initBuffer();
     }
 
     /**
@@ -310,9 +312,33 @@ public class GameState {
     }
 
     public void writeToAllPlayers(String s) throws IOException {
+
         for (int i = 0; i < players.size(); i++)
         {
+            /*for (int j = 0; j < writeBuffer.get(i).size(); j++)
+            {
+                players.get(i).write(writeBuffer.get(i).get(j));
+            }*/
             players.get(i).write(s);
+        }
+        for (int i = players.size(); i < numberOfPlayers; i++)
+        {
+            writeBuffer.get(i).add(s);
+        }
+    }
+
+    /**
+     * Wyślij wiadomości z buffer do gracza o kolorze pegs
+     */
+    public void activateWriteBuffer(Hex.State pegs) throws IOException {
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (Objects.equals(players.get(i).getColorname(), pegs.name())) {
+            for (int j = 0; j < writeBuffer.get(i).size(); j++) {
+                players.get(i).write(writeBuffer.get(i).get(j));
+            }
+        }
+
         }
     }
 
@@ -542,11 +568,20 @@ public class GameState {
                 counter++;
             }
         }
+        System.out.println(counter + " " + numberOfPlayers);
         if (counter >= numberOfPlayers-1)
         {
             return true;
         }
         return false;
+    }
+    public void initBuffer()
+    {
+        writeBuffer = new ArrayList<>();
+        for (int i=0; i < numberOfPlayers; i++)
+        {
+            writeBuffer.add(new ArrayList<String>());
+        }
     }
 
     public ServerLogDisplay getServerLogDisplay() {
