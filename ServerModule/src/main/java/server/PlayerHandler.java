@@ -64,7 +64,7 @@ public class PlayerHandler implements Runnable {
                         GS.addPlayer(this);
                         addedToGS=true;
                     }
-                    if (GS.checkIfWon(this.pegsColor))
+                    if (!winner && GS.checkIfWon(this.pegsColor))
                     {
                         winner = true;
                         GS.log(pegsColor + " won!");

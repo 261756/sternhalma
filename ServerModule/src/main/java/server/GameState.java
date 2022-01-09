@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
@@ -402,6 +404,16 @@ public class GameState {
         serverLogDisplay.log(m);
     }
     boolean checkIfWon(Hex.State player) throws IOException {
+
+        // jeśli player wygrał już wcześniej
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (Objects.equals(players.get(i).getColorname(), player.name()) && players.get(i).checkIfWinner())
+            {
+                return true;
+            }
+        }
+
         boolean verdict = false;
         if (player == Hex.State.RED)
         {
@@ -418,10 +430,54 @@ public class GameState {
 
         if (player == Hex.State.BLUE)
         {
-            // czerwony wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
+            // niebieski wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
             for(int i =0; i< Ncords.size(); i++)
             {
                 if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.BLUE)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+        if (player == Hex.State.YELLOW)
+        {
+            for(int i =0; i< SEcords.size(); i++)
+            {
+                if (hexes[SEcords.get(i).x][SEcords.get(i).y].getState() != Hex.State.YELLOW)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+        if (player == Hex.State.WHITE)
+        {
+            for(int i =0; i< SWcords.size(); i++)
+            {
+                if (hexes[SWcords.get(i).x][SWcords.get(i).y].getState() != Hex.State.WHITE)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+        if (player == Hex.State.BLACK)
+        {
+            for(int i =0; i< NEcords.size(); i++)
+            {
+                if (hexes[NEcords.get(i).x][NEcords.get(i).y].getState() != Hex.State.BLACK)
+                {
+                    return false;
+                }
+            }
+            verdict = true;
+        }
+        if (player == Hex.State.GREEN)
+        {
+            for(int i =0; i< NWcords.size(); i++)
+            {
+                if (hexes[NWcords.get(i).x][NWcords.get(i).y].getState() != Hex.State.GREEN)
                 {
                     return false;
                 }
