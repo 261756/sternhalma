@@ -130,14 +130,14 @@ public class GameState {
         }
 
         if (numberOfPlayers >= 5) {
-            initNW(Hex.State.YELLOW);
+            initNW(Hex.State.BLACK);
             initS(Hex.State.BLUE);
             initSE(Hex.State.GREEN);
             initNE(Hex.State.WHITE);
         }
 
         if (numberOfPlayers == 6) {
-            initSW(Hex.State.BLACK);
+            initSW(Hex.State.YELLOW);
         }
 
 

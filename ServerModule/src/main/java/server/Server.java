@@ -59,8 +59,6 @@ public class Server {
                     socket =listener.accept();
                     if (GS.checkIfGameEnded()) {continue;}
                     pool.execute(new PlayerHandler(socket,GS, Hex.State.WHITE));
-                    if (numberOfPlayers == 5)
-                        socket = listener.accept();
                 }
                 if (numberOfPlayers >= 4) {
                     socket =listener.accept();
@@ -72,7 +70,7 @@ public class Server {
                     socket =listener.accept();
                     if (GS.checkIfGameEnded()) {continue;}
                     pool.execute(new PlayerHandler(socket,GS, Hex.State.BLACK));
-                    if (numberOfPlayers == 4)
+                    if (numberOfPlayers == 4 || numberOfPlayers == 5)
                         socket = listener.accept();
                 }
 
