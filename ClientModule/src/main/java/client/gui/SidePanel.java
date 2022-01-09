@@ -6,13 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class SidePanel extends JPanel {
-    private static final int WIDTH = 80;
+    private static final int WIDTH = 120;
     private JButton passButton;
     private JLabel turnInfo;
+    private JLabel winnersInfo;
     private ClientFrame clientFrame;
     public SidePanel(ClientFrame clientFrame) {
         this.clientFrame = clientFrame;
-        this.setBackground(new Color(98, 36, 1));
+        this.setBackground(new Color(255, 197, 168));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         this.passButton = new JButton("Pas");
         passButton.addActionListener(new ActionListener() {
@@ -20,11 +21,12 @@ class SidePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (clientFrame.client.isMyTurn()) {
                     clientFrame.client.commandWriter.passTurn();
-                    setTurnInfo("pas");
+                    //setTurnInfo("pas");
                 }
             }
         });
-        this.turnInfo = new JLabel();
+        this.turnInfo = new JLabel("<html><div style='text-align: center;'>Oczekiwanie na<br>pozostałych graczy</div></html>");
+        this.winnersInfo = new JLabel("<html></html>");
         this.add(Box.createVerticalGlue());
         JPanel p1 = new JPanel();
         p1.setOpaque(false);
@@ -33,6 +35,7 @@ class SidePanel extends JPanel {
         p1.setLayout(new FlowLayout(FlowLayout.CENTER,0,30));
         p1.add(passButton);
         p1.add(turnInfo);
+        p1.add(winnersInfo);
         this.add(p1);
         this.add(Box.createVerticalGlue());
         this.setVisible(false);
@@ -43,6 +46,13 @@ class SidePanel extends JPanel {
     }
     public void setTurnInfo(String turnInfo) {
         this.turnInfo.setText(turnInfo);
+    }
+    public void setWinnersInfo(String winnersInfo) {
+        this.winnersInfo.setText(winnersInfo);
+    }
+    public String getWinnersInfo()
+    {
+        return winnersInfo.getText();
     }
 
     @Override

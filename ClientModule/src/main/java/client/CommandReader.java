@@ -56,5 +56,8 @@ public class CommandReader {
         if (command.startsWith("turnChanged")) {
             client.setCurrentPlayer(command.substring(11));
         }
+        if (command.startsWith("won")) {
+            client.updateWinners(command.substring(3));
+        }
     }
 }

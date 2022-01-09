@@ -117,4 +117,12 @@ public class Client {
             this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));
         }
     }
+    public void updateWinners(String substring)
+    {
+        int size = substring.length();
+        String numberS = substring.substring(size-1);
+        int number = Integer.parseInt(numberS);
+        String color = substring.substring(0,size-1);
+        this.clientFrame.updateWinners(new MessageFactory().winnerMsg(clientFrame.getWinnerMsg(),color,number));
+    }
 }

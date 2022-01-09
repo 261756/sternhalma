@@ -35,6 +35,13 @@ public class ClientFrame extends JFrame {
     public void notify(String message) {
         sidePanel.setTurnInfo(message);
     }
+    public void updateWinners(String message) {
+        sidePanel.setWinnersInfo(message);
+    }
+    public String getWinnerMsg()
+    {
+        return sidePanel.getWinnersInfo();
+    }
     public String[] showSetupOptions(String message) throws Exception {
         SetupPanel panel = new SetupPanel();
         panel.setInfoLabel(message);
