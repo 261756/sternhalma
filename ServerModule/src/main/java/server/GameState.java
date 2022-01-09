@@ -13,6 +13,7 @@ import java.util.Objects;
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
 public class GameState {
+    private MoveValidator validator;
     private Hex[][] hexes;
     private int gameId;
     private int place; // które miejsce zostało ostatnio zajęte (ilu graczy już wygrało)
@@ -26,7 +27,7 @@ public class GameState {
 
     /**
      * Klasa przechowująca koordynat tabeli hexes
-     */
+     *
     public class Cord{
         public int x;
         public int y;
@@ -35,16 +36,42 @@ public class GameState {
             this.x = x;
             this.y = y;
         }
-    }
+    }*/
     // koordynaty wchodzące w skład poszczególnych trójkątów
     private ArrayList<Cord> Ncords;
     private ArrayList<Cord> Scords;
     private ArrayList<Cord> NWcords;
+
+    public ArrayList<Cord> getNcords() {
+        return Ncords;
+    }
+
+    public ArrayList<Cord> getScords() {
+        return Scords;
+    }
+
+    public ArrayList<Cord> getNWcords() {
+        return NWcords;
+    }
+
+    public ArrayList<Cord> getNEcords() {
+        return NEcords;
+    }
+
+    public ArrayList<Cord> getSWcords() {
+        return SWcords;
+    }
+
+    public ArrayList<Cord> getSEcords() {
+        return SEcords;
+    }
+
     private ArrayList<Cord> NEcords;
     private ArrayList<Cord> SWcords;
     private ArrayList<Cord> SEcords;
     public GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
     {
+        this.validator = new MoveValidator(this);
         this.serverLogDisplay = serverLogDisplay;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
@@ -252,6 +279,7 @@ public class GameState {
         }
         while (players.get(n).checkIfWinner());
         currentPlayer=n;
+        this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
     }
     public int getCurrentPlayer()
     {
@@ -278,7 +306,7 @@ public class GameState {
      * @return
      */
     public Boolean moveIsLegal(int a, int b, int c ,int d) {
-        return true;
+        return validator.moveIsLegal(a, b, c, d);
     }
 
     public void writeToAllPlayers(String s) throws IOException {
@@ -299,6 +327,7 @@ public class GameState {
             gameStarted = true;
             log("All players are connected. The game started.");
             writeToAllPlayers("turnChanged" + players.get(0).getColorname());
+            this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
     }
     public boolean getGameStarted()
