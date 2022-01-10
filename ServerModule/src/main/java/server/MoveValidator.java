@@ -1,6 +1,8 @@
 package server;
 
 import hex.Hex;
+import server.boardTools.AbstractRegionFactory;
+import server.boardTools.Region;
 
 import java.util.ArrayList;
 
@@ -13,8 +15,9 @@ import java.util.ArrayList;
  * Ponadto, jeśli pionek znajdzie się w obszarze docelowym (róg naprzeciw rogu startowego),
  * wówczas ten pionek może wykonywać ruchy tylko w obrębie tego obszaru
  */
-public class MoveValidator {
-    private final GameState gameState;
+public class MoveValidator extends AbstractMoveValidator {
+    private GameState gameState;
+    private AbstractRegionFactory regionFactory;
     private ArrayList<Cord> objective;
     private boolean firstMove;
     private boolean turnContinue;
@@ -22,21 +25,24 @@ public class MoveValidator {
     private int lastY;
 
     /**
-     * Konstruktor
-     * @param gameState stan gry, dla którego sprawdzana jest poprawność ruchów
-     */
-    public MoveValidator(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    /**
      * Metoda zmieniająca konfigurację sprawdzacza dla następnego gracza, na początku jego tury
      * @param color kolor gracza
      */
+    @Override
     public void newTurn(Hex.State color) {
         this.turnContinue = true;
         this.firstMove = true;
         setObjective(color);
+    }
+
+    @Override
+    public void setGameState(GameState game) {
+        this.gameState = game;
+    }
+
+    @Override
+    public void setRegionFactory(AbstractRegionFactory factory) {
+        this.regionFactory = factory;
     }
 
     /**
@@ -47,6 +53,7 @@ public class MoveValidator {
      * @param d y końcowe
      * @return true -> gdy ruch poprawny, false -> w przeciwnym wypadku
      */
+    @Override
     public boolean moveIsLegal(int a, int b, int c, int d) {
         if (isInsideObjective(a,b) && !isInsideObjective(c,d)) {
             return false;
@@ -143,12 +150,12 @@ public class MoveValidator {
     //Metoda ustawiająca odpowiedni narożnik jako cel
     private void setObjective(Hex.State color) {
         switch (color) {
-            case RED -> this.objective = gameState.getScords();
-            case WHITE -> this.objective = gameState.getSWcords();
-            case GREEN -> this.objective = gameState.getNWcords();
-            case BLUE -> this.objective = gameState.getNcords();
-            case BLACK -> this.objective = gameState.getNEcords();
-            case YELLOW -> this.objective = gameState.getSEcords();
+            case RED -> this.objective = regionFactory.getRegion(Region.SOUTH);
+            case WHITE -> this.objective = regionFactory.getRegion(Region.SOUTHWEST);
+            case GREEN -> this.objective = regionFactory.getRegion(Region.NORTHWEST);
+            case BLUE -> this.objective = regionFactory.getRegion(Region.NORTH);
+            case BLACK -> this.objective = regionFactory.getRegion(Region.NORTHEAST);
+            case YELLOW -> this.objective = regionFactory.getRegion(Region.SOUTHEAST);
             default -> this.objective = null;
         }
     }

@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import org.mockito.junit.MockitoJUnitRunner;
-import server.GameState;
-import server.PlayerHandler;
-import server.Server;
+import server.*;
+import server.boardTools.AbstractRegionFactory;
+import server.boardTools.RegionFactory;
 import server.gui.ServerLogDisplay;
 
 import java.io.IOException;
@@ -18,7 +18,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestConnectingPlayers {
-
+    AbstractMoveValidator validator = new MoveValidator();
+    AbstractRegionFactory factory = new RegionFactory();
     @Mock
     PlayerHandler playerHandler;
     @Mock
@@ -31,7 +32,7 @@ public class TestConnectingPlayers {
     @Test
     public void testGameStarting() throws IOException {
         Assert.assertNotNull(serverLogDisplay);
-        GameState GS = new GameState(3,0,serverLogDisplay);
+        GameState GS = new GameState(3,0,serverLogDisplay, validator, factory);
         GS.addPlayer(playerHandler);
         Assert.assertFalse(GS.getGameStarted());
         GS.addPlayer(playerHandler);

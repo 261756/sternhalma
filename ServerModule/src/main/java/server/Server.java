@@ -2,6 +2,7 @@ package server;
 
 
 import hex.Hex;
+import server.boardTools.RegionFactory;
 import server.gui.ServerLog;
 
 
@@ -35,7 +36,7 @@ public class Server {
                 if (socket == null) {
                     socket = listener.accept();
                 }
-                GameState GS = new GameState(numberOfPlayers,id_count,serverLog);
+                GameState GS = new GameState(numberOfPlayers,id_count,serverLog, new MoveValidator(), new RegionFactory());
                 pool.execute(new PlayerHandler(socket, GS, Hex.State.RED));
                 if (numberOfPlayers == 2) {
                     socket =listener.accept();

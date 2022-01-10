@@ -7,6 +7,8 @@ import org.junit.Test;
 import server.Cord;
 import server.GameState;
 import server.MoveValidator;
+import server.boardTools.AbstractRegionFactory;
+import server.boardTools.RegionFactory;
 
 import java.util.ArrayList;
 
@@ -15,30 +17,14 @@ import static org.mockito.Mockito.when;
 
 public class TestMoveValidator {
     GameState game = mock(GameState.class);
-    MoveValidator validator = new MoveValidator(game);
+    MoveValidator validator = new MoveValidator();
+    AbstractRegionFactory factory = new RegionFactory();
     Hex[][] array = new Hex[13][17];
-    private static final ArrayList<Cord> Ncords;
-    private static final ArrayList<Cord> Scords;
-    static  {
-        Ncords = new ArrayList<Cord>();
-        Ncords.add(new Cord(6,0));
-        Ncords.add(new Cord(5,1));
-        Ncords.add(new Cord(6,1));
-        Ncords.add(new Cord(5,2));
-        Ncords.add(new Cord(6,2));
-        Ncords.add(new Cord(7,2));
-        Ncords.add(new Cord(4,3));
-        Ncords.add(new Cord(5,3));
-        Ncords.add(new Cord(6,3));
-        Ncords.add(new Cord(7,3));
-        Scords = new ArrayList<Cord>();
-        Ncords.add(new Cord(16,6));
-    }
     @Before
     public void setup() {
+        validator.setGameState(game);
+        validator.setRegionFactory(factory);
         validator.newTurn(Hex.State.BLUE);
-        when(game.getNcords()).thenReturn(Ncords);
-        when(game.getScords()).thenReturn(Scords);
         when(game.getHexes()).thenReturn(array);
         for (int i = 0; i < 17; i++) {
             for(int j = 0; j<13; j++) {
