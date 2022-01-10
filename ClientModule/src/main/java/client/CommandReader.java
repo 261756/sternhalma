@@ -42,7 +42,7 @@ public class CommandReader {
      */
     public void processInstruction(String command) {
         if (command.startsWith("sendingHexes")) {
-            client.updateBoard(new BoardAndString(command.substring(12)).getBoardValue());
+            client.updateBoard(BoardAndString.getBoardValue(command.substring(12)));
             client.updateFrameBoard();
         }
         if (command.startsWith("assignColor")) {

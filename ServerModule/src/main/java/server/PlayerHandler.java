@@ -61,7 +61,7 @@ public class PlayerHandler implements Runnable {
                 }
                 else if (command.equals("requestHexes"))
                 {
-                    SCO.writeString("sendingHexes" + new BoardAndString(GS.getHexes()).getStringValue());
+                    SCO.writeString("sendingHexes" + BoardAndString.getStringValue(GS.getHexes()));
                     if (!addedToGS) {
                         GS.addPlayer(this);
                         addedToGS=true;

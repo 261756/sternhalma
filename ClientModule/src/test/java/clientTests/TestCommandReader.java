@@ -27,7 +27,7 @@ public class TestCommandReader {
                 array[j][i] = new Hex(Hex.State.NULL);
             }
         }
-        String command = "sendingHexes" + new BoardAndString(array).getStringValue();
+        String command = "sendingHexes" + BoardAndString.getStringValue(array);
         reader.processInstruction(command);
         verify(client).updateFrameBoard();
     }

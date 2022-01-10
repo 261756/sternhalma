@@ -19,8 +19,8 @@ public class TestBoardAndString {
         array[2][0] = new Hex(Hex.State.BLUE);
         array[3][0] = new Hex(Hex.State.EMPTY);
         array[12][16] = new Hex(Hex.State.BLUE);
-        String value = new BoardAndString(array).getStringValue();
-        Hex[][] converted = new BoardAndString(value).getBoardValue();
+        String value = BoardAndString.getStringValue(array);
+        Hex[][] converted = BoardAndString.getBoardValue(value);
         for (int i = 0; i < 17; i++) {
             for(int j = 0; j<13; j++) {
                 Assert.assertEquals(array[j][i].getState(),converted[j][i].getState());
