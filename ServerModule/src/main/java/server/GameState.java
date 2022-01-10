@@ -350,7 +350,7 @@ public class GameState {
         }
 
         boolean verdict = false;
-        if (player == Hex.State.BLUE)
+        if (player == Hex.State.RED)
         {
             // czerwony wygrał jeśli South(BLUE) trójkąt jest wypełniony czerwonymi
             for(int i =0; i< Scords.size(); i++)
@@ -363,7 +363,7 @@ public class GameState {
             verdict = true;
         }
 
-        if (player == Hex.State.RED)
+        if (player == Hex.State.BLUE)
         {
             // niebieski wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
             for(int i =0; i< Ncords.size(); i++)
