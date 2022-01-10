@@ -1,10 +1,7 @@
 package server;
 
 import server.gui.ServerLog;
-import server.gui.ServerLogDisplay;
-
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 

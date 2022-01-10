@@ -1,13 +1,10 @@
 package client.gui;
-
-import client.Client;
 import hex.Hex;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.channels.CancelledKeyException;
 
 /**
  * Panel zawierający planszę

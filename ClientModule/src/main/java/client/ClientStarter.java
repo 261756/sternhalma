@@ -1,9 +1,6 @@
 package client;
 
-import client.Client;
-
 import java.io.IOException;
-import java.net.Socket;
 
 /**
  * Klasa tworząca instancję klienta.

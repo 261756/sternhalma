@@ -1,16 +1,11 @@
 package serverTests;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import server.NoGUIInitializer;
 import server.Server;
 import server.gui.AcceptButton;
 import server.gui.ServerLogDisplay;
 import server.gui.StartPopup;
-
-import java.util.concurrent.ExecutorService;
 
 import static org.mockito.Mockito.*;
 

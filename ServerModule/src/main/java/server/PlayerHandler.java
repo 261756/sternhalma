@@ -2,13 +2,9 @@ package server;
 
 import hex.BoardAndString;
 import hex.Hex;
-
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 
 /**
  * każdy klient dostanie swój własny playerHandler (testowane connectionCount)
@@ -121,6 +117,7 @@ public class PlayerHandler implements Runnable {
                 }
                 writeToAllPlayers("left" + pegsColor.name());
             } catch (IOException e) {
+                System.out.println("I/O Exception");
             }
 
             GS.log("Disconnected "+ pegsColor.name() + " from game " + GS.getGameId() + ": " + socket);

@@ -1,6 +1,15 @@
 package server;
 
+/**
+ * Klasa z funkcją inicjalizującą serwer bez użycia GUI
+ */
 public class NoGUIInitializer {
+    /**
+     * Funkcja inicjalizująca serwer bez GUI
+     * @param S serwer do wystartowania
+     * @param port port na którym chcemy wystartować
+     * @param numberOfPlayers liczba graczy serwera
+     */
     public static void startServerNoGUI(Server S, String port, String numberOfPlayers) {
         try {
             int portI = Integer.parseInt(port);
