@@ -30,7 +30,7 @@ public class BoardHex extends JPanel{
 
     /**
      * Ustawia kolor BoardHexu na podstawie Hex.State
-     * @param state
+     * @param state stan na podstawie którego ustalamy kolor
      */
     public void setColor(Hex.State state) {
         if (state == Hex.State.RED)

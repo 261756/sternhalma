@@ -34,26 +34,47 @@ public class GameState {
     private ArrayList<Cord> SWcords;
     private ArrayList<Cord> SEcords;
 
+    /**
+     *
+     * @return Lista północnych koordynatów
+     */
     public ArrayList<Cord> getNcords() {
         return Ncords;
     }
-
+    /**
+     *
+     * @return Lista południowych koordynatów
+     */
     public ArrayList<Cord> getScords() {
         return Scords;
     }
-
+    /**
+     *
+     * @return Lista północno-zachodnich koordynatów
+     */
     public ArrayList<Cord> getNWcords() {
         return NWcords;
     }
-
+    /**
+     *
+     * @return Lista północno-wschodnich koordynatów
+     */
     public ArrayList<Cord> getNEcords() {
         return NEcords;
     }
 
+    /**
+     *
+     * @return Lista południowo-zachodnich koordynatów
+     */
     public ArrayList<Cord> getSWcords() {
         return SWcords;
     }
 
+    /**
+     *
+     * @return Lista połódniowo-wschodnich koordynatów
+     */
     public ArrayList<Cord> getSEcords() {
         return SEcords;
     }
@@ -273,8 +294,8 @@ public class GameState {
     }
 
     /**
-     * TODO: Pause turę gracza socket
-     * @param socket
+     * Funkcja ustawiająca currentPlayer na następnego gracza zgodnie z ruchem wskazówek zegara
+     * @param socket socket currentPlayer'a
      */
     public void passTurn(Socket socket)
     {
@@ -329,16 +350,21 @@ public class GameState {
 
     /**
      * Metoda sprawdzająca, czy ruch jest poprawny
-     * @return
+     * @return czy ruch jest legalny
+     * @param a koordynat x pola 1.
+     * @param b koordynat y pola 1.
+     * @param c koordynat x pola docelowego
+     * @param d koordynat y pola docelowego
      */
     public boolean moveIsLegal(int a, int b, int c ,int d) {
         return validator.moveIsLegal(a, b, c, d);
+        //return true;
     }
 
     /**
      * Metoda wysyłająca komendy do klientów. Przechowuje komendy, jeśli jeszcze nie wszyscy gracze się połączyli
      * @param s komenda
-     * @throws IOException
+     * @throws IOException input/output exception przy uzywaniu write
      */
     public void writeToAllPlayers(String s) throws IOException {
 
@@ -358,6 +384,7 @@ public class GameState {
 
     /**
      * Wyślij wiadomości z buffer do gracza o kolorze pegs
+     * @param pegs - kolor dla którego trzeba aktywować writeBuffer
      */
     public void activateWriteBuffer(Hex.State pegs) throws IOException {
         for (int i = 0; i < players.size(); i++)
@@ -373,7 +400,7 @@ public class GameState {
 
     /**
      * Dodaje gracza do tablicy graczy w gamestate
-     * @param p
+     * @param p PlayerHandler do dodania
      */
     public void addPlayer(PlayerHandler p) throws IOException {
         players.add(p);
@@ -389,7 +416,7 @@ public class GameState {
                     activePlayers.add(i);
                 }
             }
-            currentPlayer= new Random().nextInt(activePlayers.size());
+            currentPlayer= activePlayers.get(new Random().nextInt(activePlayers.size()));
             writeToAllPlayers("turnChanged" + players.get(currentPlayer).getColorname());
             this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
@@ -397,7 +424,7 @@ public class GameState {
 
     /**
      * Zwraca stan rozpoczęcia gry
-     * @return true- jeśli gra się zaczęła, false- w przeciwnym wypadku
+     * @return true jeśli gra się zaczęła, false- w przeciwnym wypadku
      */
     public boolean getGameStarted()
     {
@@ -513,9 +540,9 @@ public class GameState {
 
     /**
      * Sprawdza, czy dany gracz zwyciężył
-     * @param player
-     * @return
-     * @throws IOException
+     * @param player gracz, o którego pytamy
+     * @return true-gracz jest zwycięzcą, false-gracz nie jest zwycięzcą
+     * @throws IOException I/O Exception
      */
     boolean checkIfWon(Hex.State player) throws IOException {
 
