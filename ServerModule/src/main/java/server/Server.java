@@ -2,7 +2,7 @@ package server;
 
 
 import hex.Hex;
-import server.gui.ServerLogDisplay;
+import server.gui.ServerLog;
 
 
 import java.net.ServerSocket;
@@ -14,9 +14,9 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
-    ServerLogDisplay serverLogDisplay;
-    public Server(ServerLogDisplay serverLogDisplay) throws Exception {
-        this.serverLogDisplay = serverLogDisplay;
+    ServerLog serverLog;
+    public Server(ServerLog serverLog) throws Exception {
+        this.serverLog = serverLog;
     }
 
     /**
@@ -26,7 +26,7 @@ public class Server {
      */
     public void startServer(int serverPort, int numberOfPlayers) throws Exception {
         try (var listener = new ServerSocket(serverPort)) {
-            serverLogDisplay.log("Serwer wystartował na porcie " + serverPort +", hostuje gry dla " + numberOfPlayers + " graczy.");
+            serverLog.log("Serwer wystartował na porcie " + serverPort +", hostuje gry dla " + numberOfPlayers + " graczy.");
             int id_count = 0;
             Socket socket = null;
             var pool = Executors.newFixedThreadPool(20);
@@ -35,7 +35,7 @@ public class Server {
                 if (socket == null) {
                     socket = listener.accept();
                 }
-                GameState GS = new GameState(numberOfPlayers,id_count,serverLogDisplay);
+                GameState GS = new GameState(numberOfPlayers,id_count,serverLog);
                 pool.execute(new PlayerHandler(socket, GS, Hex.State.RED));
                 if (numberOfPlayers == 2) {
                     socket =listener.accept();
@@ -93,7 +93,7 @@ public class Server {
     }
     public void log(String msg)
     {
-        serverLogDisplay.log(msg);
+        serverLog.log(msg);
     }
 
 

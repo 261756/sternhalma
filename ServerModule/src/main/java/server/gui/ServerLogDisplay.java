@@ -1,12 +1,14 @@
 package server.gui;
 
+import server.Server;
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
 /**
  * Okienko z logami serwera.
  */
-public class ServerLogDisplay extends JFrame {
+public class ServerLogDisplay extends JFrame implements ServerLog {
     JTextArea textArea;
     public ServerLogDisplay()
     {
@@ -22,6 +24,7 @@ public class ServerLogDisplay extends JFrame {
         this.setVisible(true);
 
     }
+    @Override
     public synchronized void log(String msg) {
         textArea.append("\n" + msg);
     }

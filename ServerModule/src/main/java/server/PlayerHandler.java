@@ -38,8 +38,8 @@ public class PlayerHandler implements Runnable {
         this.socket = socket;
         this.GS = gs;
         pegsColor = pegs;
-        SCO = new ServerCommunicatorOut(socket.getOutputStream(),GS.getServerLogDisplay(), this);
-        SCI = new ServerCommunicatorIn(socket.getInputStream(), GS.getServerLogDisplay(),this);
+        SCO = new ServerCommunicatorOut(socket.getOutputStream(),GS.getServerLog(), this);
+        SCI = new ServerCommunicatorIn(socket.getInputStream(), GS.getServerLog(),this);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class PlayerHandler implements Runnable {
                 {
                     if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
                         GS.passTurn(socket);
-                        GS.serverLogDisplay.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
+                        GS.serverLog.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
                         writeToAllPlayers("turnChanged" + GS.getCurrentPlayerColorName());
                     }
                 }
@@ -112,7 +112,7 @@ public class PlayerHandler implements Runnable {
                 left=true;
                 if (GS.checkTurn(socket) && GS.getGameStarted() == true) {
                     GS.passTurn(socket);
-                    GS.serverLogDisplay.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
+                    GS.serverLog.log("Turn of player: " + GS.getCurrentPlayer() + ", " + GS.getCurrentPlayerColorName());
                     writeToAllPlayers("turnChanged" + GS.getCurrentPlayerColorName());
                 }
                 if (GS.checkIfGameEnded())

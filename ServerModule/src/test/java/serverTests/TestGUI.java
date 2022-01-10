@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import server.NoGUIInitializer;
 import server.Server;
 import server.gui.AcceptButton;
 import server.gui.ServerLogDisplay;
@@ -29,6 +30,12 @@ public class TestGUI {
         StartPopup startPopup = new StartPopup(S);
         startPopup.sendInputNoGUI("999","2");
         verify(S,timeout(2000)).startServer(999,2);
+    }
+    @Test
+    public void testNoGUI() throws Exception {
+        Server S = mock(Server.class);
+        NoGUIInitializer.startServerNoGUI(S,"999","2");
+        verify(S,times(1)).startServer(999,2);
     }
     @Test
     public void testLogDisplay() throws Exception {

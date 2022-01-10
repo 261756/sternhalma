@@ -2,7 +2,7 @@ package server;
 
 import hex.Hex;
 import server.boardTools.*;
-import server.gui.ServerLogDisplay;
+import server.gui.ServerLog;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -25,7 +25,7 @@ public class GameState {
     private ArrayList<ArrayList<String >> writeBuffer; // tutaj lądują wiadomości wysyłane do klientów, którzy jeszcze nie połączyli sie z serwerem
     static final int xAxis = 13;
     static final int yAxis = 17;
-    ServerLogDisplay serverLogDisplay;
+    ServerLog serverLog;
 
     // koordynaty wchodzące w skład poszczególnych trójkątów
     private ArrayList<Cord> Ncords;
@@ -81,10 +81,10 @@ public class GameState {
     }
 
 
-    public GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
+    public GameState(int numberOfPlayers, int id, ServerLog serverLog)
     {
         this.validator = new MoveValidator(this);
-        this.serverLogDisplay = serverLogDisplay;
+        this.serverLog = serverLog;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
         players = new ArrayList<PlayerHandler>();
@@ -329,7 +329,7 @@ public class GameState {
      */
     public void log(String m)
     {
-        serverLogDisplay.log(m);
+        serverLog.log(m);
     }
 
     /**
@@ -467,7 +467,7 @@ public class GameState {
      * Zwraca element, na którym wypisywane są logi serwera
      * @return element, na którym wypisywane są logi serwera
      */
-    public ServerLogDisplay getServerLogDisplay() {
-        return serverLogDisplay;
+    public ServerLog getServerLog() {
+        return serverLog;
     }
 }

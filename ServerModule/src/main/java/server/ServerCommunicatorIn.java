@@ -1,5 +1,6 @@
 package server;
 
+import server.gui.ServerLog;
 import server.gui.ServerLogDisplay;
 
 import java.io.IOException;
@@ -14,12 +15,12 @@ import java.util.Scanner;
 public class ServerCommunicatorIn {
 
     Scanner in;
-    ServerLogDisplay serverLogDisplay;
+    ServerLog serverLog;
     PlayerHandler playerHandler;
-    ServerCommunicatorIn(InputStream inputStream, ServerLogDisplay serverLogDisplay, PlayerHandler playerHandler)
+    ServerCommunicatorIn(InputStream inputStream, ServerLog serverLog, PlayerHandler playerHandler)
     {
         in = new Scanner(inputStream);
-        this.serverLogDisplay = serverLogDisplay;
+        this.serverLog = serverLog;
         this.playerHandler = playerHandler;
     }
     Boolean availableCommandFromClient()
@@ -29,7 +30,7 @@ public class ServerCommunicatorIn {
     String getCommandFromClient()
     {
         String ret = in.nextLine();
-        serverLogDisplay.log("Recieved from Game " + playerHandler.getGameId() + ", " + playerHandler.getColorname() + ": "+ ret);
+        serverLog.log("Recieved from Game " + playerHandler.getGameId() + ", " + playerHandler.getColorname() + ": "+ ret);
         return ret;
 
     }
