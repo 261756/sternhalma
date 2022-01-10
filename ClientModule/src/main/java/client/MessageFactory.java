@@ -32,7 +32,7 @@ public class MessageFactory {
         StringBuilder builder = new StringBuilder(prevmsg);
         String n = "<div style='text-align: center;'>" + place + ". miejsce zajął:<font color = '" + color + "'><br>" + color + "</div><br>";
         builder.insert(6,n);
-        System.out.println(builder.toString());
+        //System.out.println(builder.toString());
         return  builder.toString();
     }
 
@@ -46,7 +46,7 @@ public class MessageFactory {
         StringBuilder builder = new StringBuilder(prevmsg);
         String n = "<div style='text-align: center;'><font color = '" + color + "'>" + color + "<br><font color = 'BLACK'> wyszedł z gry.</div><br>";
         builder.insert(6,n);
-        System.out.println(builder.toString());
+        //System.out.println(builder.toString());
         return  builder.toString();
     }
 }

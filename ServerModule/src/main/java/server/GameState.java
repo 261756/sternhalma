@@ -362,7 +362,7 @@ public class GameState {
                 counter++;
             }
         }
-        System.out.println(counter + " " + numberOfPlayers);
+        //System.out.println(counter + " " + numberOfPlayers);
         return counter >= numberOfPlayers - 1;
     }
 
