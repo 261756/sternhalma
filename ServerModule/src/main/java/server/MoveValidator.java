@@ -1,6 +1,5 @@
 package server;
 
-import hex.BoardAndString;
 import hex.Hex;
 
 import java.util.ArrayList;
@@ -15,90 +14,17 @@ import java.util.ArrayList;
  * wówczas ten pionek może wykonywać ruchy tylko w obrębie tego obszaru
  */
 public class MoveValidator {
-    /*private static final ArrayList<int[]> cornerN = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {6,0});
-        cornerN.add(new int[] {5,1});
-        cornerN.add(new int[] {6,1});
-        cornerN.add(new int[] {5,2});
-        cornerN.add(new int[] {6,2});
-        cornerN.add(new int[] {7,2});
-        cornerN.add(new int[] {4,3});
-        cornerN.add(new int[] {5,3});
-        cornerN.add(new int[] {6,3});
-        cornerN.add(new int[] {7,3});
-    }
-    private static final ArrayList<int[]> cornerNE = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {9,4});
-        cornerN.add(new int[] {10,4});
-        cornerN.add(new int[] {11,4});
-        cornerN.add(new int[] {12,4});
-        cornerN.add(new int[] {9,5});
-        cornerN.add(new int[] {10,5});
-        cornerN.add(new int[] {11,5});
-        cornerN.add(new int[] {10,6});
-        cornerN.add(new int[] {11,6});
-        cornerN.add(new int[] {10,7});
-    }
-    private static final ArrayList<int[]> cornerSE = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {9,12});
-        cornerN.add(new int[] {10,12});
-        cornerN.add(new int[] {11,12});
-        cornerN.add(new int[] {12,12});
-        cornerN.add(new int[] {9,11});
-        cornerN.add(new int[] {10,11});
-        cornerN.add(new int[] {11,11});
-        cornerN.add(new int[] {10,10});
-        cornerN.add(new int[] {11,10});
-        cornerN.add(new int[] {10,9});
-    }
-    private static final ArrayList<int[]> cornerS = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {6,16});
-        cornerN.add(new int[] {5,15});
-        cornerN.add(new int[] {6,15});
-        cornerN.add(new int[] {5,14});
-        cornerN.add(new int[] {6,14});
-        cornerN.add(new int[] {7,14});
-        cornerN.add(new int[] {4,13});
-        cornerN.add(new int[] {5,13});
-        cornerN.add(new int[] {6,13});
-        cornerN.add(new int[] {7,13});
-    }
-    private static final ArrayList<int[]> cornerSW = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {0,12});
-        cornerN.add(new int[] {1,12});
-        cornerN.add(new int[] {2,12});
-        cornerN.add(new int[] {3,12});
-        cornerN.add(new int[] {0,11});
-        cornerN.add(new int[] {1,11});
-        cornerN.add(new int[] {2,11});
-        cornerN.add(new int[] {1,10});
-        cornerN.add(new int[] {2,10});
-        cornerN.add(new int[] {1,9});
-    }
-    private static final ArrayList<int[]> cornerNW = new ArrayList<>();
-    static {
-        cornerN.add(new int[] {0,4});
-        cornerN.add(new int[] {1,4});
-        cornerN.add(new int[] {2,4});
-        cornerN.add(new int[] {3,4});
-        cornerN.add(new int[] {0,5});
-        cornerN.add(new int[] {1,5});
-        cornerN.add(new int[] {2,5});
-        cornerN.add(new int[] {1,6});
-        cornerN.add(new int[] {2,6});
-        cornerN.add(new int[] {1,7});
-    }*/
-    private GameState gameState;
+    private final GameState gameState;
     private ArrayList<Cord> objective;
     private boolean firstMove;
     private boolean turnContinue;
     private int lastX;
     private int lastY;
+
+    /**
+     * Konstruktor
+     * @param gameState stan gry, dla którego sprawdzana jest poprawność ruchów
+     */
     public MoveValidator(GameState gameState) {
         this.gameState = gameState;
     }
@@ -114,7 +40,7 @@ public class MoveValidator {
     }
 
     /**
-     * Metoda sprawdzająca czy ruch (a,b) -> (c,d) jest zgodny z zasadami
+     * Metoda sprawdzająca, czy ruch (a,b) -> (c,d) jest zgodny z zasadami
      * @param a x początkowe
      * @param b y początkowe
      * @param c x końcowe
@@ -150,6 +76,10 @@ public class MoveValidator {
         return false;
     }
 
+    /**
+     * Metoda pozwalająca otrzymać informację, czy wykonano skok, czy krok
+     * @return zwraca true, jeśli gracz wykonał skok, false, gdy wykonał krok o 1 pole
+     */
     public boolean isTurnContinue() {
         return turnContinue;
     }

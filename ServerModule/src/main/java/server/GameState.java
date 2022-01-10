@@ -6,7 +6,6 @@ import server.gui.ServerLogDisplay;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -14,7 +13,7 @@ import java.util.Random;
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
 public class GameState {
-    private MoveValidator validator;
+    private final MoveValidator validator;
     private Hex[][] hexes;
     private int gameId;
     private int place; // które miejsce zostało ostatnio zajęte (ilu graczy już wygrało)
@@ -27,22 +26,13 @@ public class GameState {
     static final int yAxis = 17;
     ServerLogDisplay serverLogDisplay;
 
-    /**
-     * Klasa przechowująca koordynat tabeli hexes
-     *
-    public class Cord{
-        public int x;
-        public int y;
-        Cord(int x,int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }*/
     // koordynaty wchodzące w skład poszczególnych trójkątów
     private ArrayList<Cord> Ncords;
     private ArrayList<Cord> Scords;
     private ArrayList<Cord> NWcords;
+    private ArrayList<Cord> NEcords;
+    private ArrayList<Cord> SWcords;
+    private ArrayList<Cord> SEcords;
 
     public ArrayList<Cord> getNcords() {
         return Ncords;
@@ -68,9 +58,7 @@ public class GameState {
         return SEcords;
     }
 
-    private ArrayList<Cord> NEcords;
-    private ArrayList<Cord> SWcords;
-    private ArrayList<Cord> SEcords;
+
     public GameState(int numberOfPlayers, int id, ServerLogDisplay serverLogDisplay)
     {
         this.validator = new MoveValidator(this);
@@ -86,8 +74,9 @@ public class GameState {
     }
 
     /**
-     * TODO: budowanie prawdziwej gwiazdy dawida, teraz jest placeholder
-     * @param numberOfPlayers - liczba graczy na podstawie ktorej trzeba zbudowac różne plansze
+     * Klasa tworząca stan początkowy planszy dla zadanej liczby graczy
+     * TODO: sprawdzić w innych klasach opcję gry dla 5
+     * @param numberOfPlayers - liczba graczy, na podstawie której trzeba zbudować różne plansze
      */
     public void initBoard(int numberOfPlayers)
     {
@@ -104,8 +93,6 @@ public class GameState {
         fillScords();
         fillSEcords();
         fillSWcords();
-        /*hexes[0][0] = new Hex(Hex.State.BLUE);
-        hexes[12][16] = new Hex(Hex.State.BLUE);*/
         initNE(Hex.State.EMPTY);
         initNW(Hex.State.EMPTY);
         initSW(Hex.State.EMPTY);
@@ -160,6 +147,10 @@ public class GameState {
         Ncords.add(new Cord(6,3));
         Ncords.add(new Cord(7,3));
     }
+
+    /**
+     * Uzupełnia tablicę koordynatów północno-wschodniego trójkąta
+     */
     public void fillNEcords()
     {
         NEcords = new ArrayList<Cord>();
@@ -174,6 +165,9 @@ public class GameState {
         NEcords.add(new Cord(11,6));
         NEcords.add(new Cord(10,7));
     }
+    /**
+     * Uzupełnia tablicę koordynatów północno-zachodniego trójkąta
+     */
     public void fillNWcords()
     {
         NWcords = new ArrayList<Cord>();
@@ -188,6 +182,9 @@ public class GameState {
         NWcords.add(new Cord(2,6));
         NWcords.add(new Cord(1,7));
     }
+    /**
+     * Uzupełnia tablicę koordynatów południowo-wschodniego trójkąta
+     */
     public void fillSEcords()
     {
 
@@ -203,6 +200,9 @@ public class GameState {
         SEcords.add(new Cord(11,10));
         SEcords.add(new Cord(10,9));
     }
+    /**
+     * Uzupełnia tablicę koordynatów południowo-zachodniego trójkąta
+     */
     public void fillSWcords()
     {
         SWcords = new ArrayList<Cord>();
@@ -217,7 +217,9 @@ public class GameState {
         SWcords.add(new Cord(2,10));
         SWcords.add(new Cord(1,9));
     }
-
+    /**
+     * Uzupełnia tablicę koordynatów południowego trójkąta
+     */
     public void fillScords()
     {
         Scords = new ArrayList<Cord>();
@@ -233,15 +235,18 @@ public class GameState {
         Scords.add(new Cord(7,13));
     }
 
-
+    /**
+     * Zwraca tablicę zawierającą stan planszy
+     * @return stan planszy
+     */
     public Hex[][] getHexes() {
         return hexes;
     }
 
     /**
-     * TODO: Sprawdza czy teraz jest tura gracza który używa danego socket
-     * @param socket
-     * @return
+     * Sprawdza, czy teraz jest tura gracza, który używa danego socket
+     * @param socket Socket gracza
+     * @return true- jeśli jest tura danego gracza, false- w p. wypadku
      */
     public Boolean checkTurn(Socket socket)
     {
@@ -252,9 +257,9 @@ public class GameState {
     }
 
     /**
-     *
-     * @param socket
-     * @return return number of player with socket
+     * Zwraca numer gracza o danym Socket
+     * @param socket Socket gracza
+     * @return number gracza
      */
     public int getPlayerNumber(Socket socket)
     {
@@ -284,15 +289,33 @@ public class GameState {
         currentPlayer=n;
         this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
     }
+
+    /**
+     * Zwraca numer gracza, którego teraz jest tura
+     * @return numer gracza, którego teraz jest tura
+     */
     public int getCurrentPlayer()
     {
         return currentPlayer;
     }
+
+    /**
+     * Zwarca nazwę koloru gracza, którego teraz jest tura
+     * @return nazwa koloru pionka gracza, którego teraz jest tura
+     */
     public String getCurrentPlayerColorName()
     {
         return players.get(currentPlayer).getColorname();
     }
 
+    /**
+     * Metoda przesuwająca pionek (a,b) -> (c,d), jeśli ruch ten jest zgodny z zasadami
+     * @param a x początkowe
+     * @param b y początkowe
+     * @param c x końcowe
+     * @param d y końcowe
+     * @return true -> gdy ruch wykonany, false -> w przeciwnym wypadku
+     */
     public boolean move(int a, int b, int c ,int d)
     {
         if (moveIsLegal(a,b,c,d))
@@ -305,13 +328,18 @@ public class GameState {
     }
 
     /**
-     * TODO: Używa zasad gry aby sprawdzić czy ruch jest legalny
+     * Metoda sprawdzająca, czy ruch jest poprawny
      * @return
      */
-    public Boolean moveIsLegal(int a, int b, int c ,int d) {
+    public boolean moveIsLegal(int a, int b, int c ,int d) {
         return validator.moveIsLegal(a, b, c, d);
     }
 
+    /**
+     * Metoda wysyłająca komendy do klientów. Przechowuje komendy, jeśli jeszcze nie wszyscy gracze się połączyli
+     * @param s komenda
+     * @throws IOException
+     */
     public void writeToAllPlayers(String s) throws IOException {
 
         for (int i = 0; i < players.size(); i++)
@@ -366,16 +394,21 @@ public class GameState {
             this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
     }
+
+    /**
+     * Zwraca stan rozpoczęcia gry
+     * @return true- jeśli gra się zaczęła, false- w przeciwnym wypadku
+     */
     public boolean getGameStarted()
     {
         return gameStarted;
     }
 
     /**
-     * init north
-     * @param state Hex.State
+     * Uzupełnia północny narożnik zadanym stanem
+     * @param state stan, którym należy wypełnić narożnik
      */
-    public void initN(Hex.State state) {
+    private void initN(Hex.State state) {
         for(int i =0; i< Ncords.size(); i++)
         {
             hexes[Ncords.get(i).x][Ncords.get(i).y] = new Hex(state);
@@ -386,7 +419,7 @@ public class GameState {
      * init north-east
      * @param state Hex.State
      */
-    public void initNE(Hex.State state) {
+    private void initNE(Hex.State state) {
         for(int i =0; i< NEcords.size(); i++)
         {
             hexes[NEcords.get(i).x][NEcords.get(i).y] = new Hex(state);
@@ -397,7 +430,7 @@ public class GameState {
      * init south-east
      * @param state Hex.State
      */
-    public void initSE(Hex.State state) {
+    private void initSE(Hex.State state) {
         for(int i =0; i< SEcords.size(); i++)
         {
             hexes[SEcords.get(i).x][SEcords.get(i).y] = new Hex(state);
@@ -407,7 +440,7 @@ public class GameState {
      * init south
      * @param state Hex.State
      */
-    public void initS(Hex.State state) {
+    private void initS(Hex.State state) {
         for(int i =0; i< Scords.size(); i++)
         {
             hexes[Scords.get(i).x][Scords.get(i).y] = new Hex(state);
@@ -417,7 +450,7 @@ public class GameState {
      * init south-west
      * @param state Hex.State
      */
-    public void initSW(Hex.State state) {
+    private void initSW(Hex.State state) {
         for(int i =0; i< SWcords.size(); i++)
         {
             hexes[SWcords.get(i).x][SWcords.get(i).y] = new Hex(state);
@@ -427,7 +460,7 @@ public class GameState {
      * init north-west
      * @param state Hex.State
      */
-    public void initNW(Hex.State state) {
+    private void initNW(Hex.State state) {
         for(int i =0; i< NWcords.size(); i++)
         {
             hexes[NWcords.get(i).x][NWcords.get(i).y] = new Hex(state);
@@ -438,7 +471,7 @@ public class GameState {
      * init center
      * @param state Hex.State
      */
-    public void initCenter(Hex.State state) {
+    private void initCenter(Hex.State state) {
         for (int i = 0; i < 5; i++) {
             hexes[4+i][4] = new Hex(state);
             hexes[4+i][12] = new Hex(state);
@@ -459,15 +492,31 @@ public class GameState {
             hexes[2+i][8] = new Hex(state);
         }
     }
+
+    /**
+     * Zwraca id gry
+     * @return id gry
+     */
     public int getGameId()
     {
         return gameId;
     }
 
+    /**
+     * Dodaj wpis do log
+     * @param m
+     */
     public void log(String m)
     {
         serverLogDisplay.log(m);
     }
+
+    /**
+     * Sprawdza, czy dany gracz zwyciężył
+     * @param player
+     * @return
+     * @throws IOException
+     */
     boolean checkIfWon(Hex.State player) throws IOException {
 
         // jeśli player wygrał już wcześniej
@@ -480,12 +529,12 @@ public class GameState {
         }
 
         boolean verdict = false;
-        if (player == Hex.State.RED)
+        if (player == Hex.State.BLUE)
         {
             // czerwony wygrał jeśli South(BLUE) trójkąt jest wypełniony czerwonymi
             for(int i =0; i< Scords.size(); i++)
             {
-                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.RED)
+                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.BLUE)
                 {
                     return false;
                 }
@@ -493,12 +542,12 @@ public class GameState {
             verdict = true;
         }
 
-        if (player == Hex.State.BLUE)
+        if (player == Hex.State.RED)
         {
             // niebieski wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
             for(int i =0; i< Ncords.size(); i++)
             {
-                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.BLUE)
+                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.RED)
                 {
                     return false;
                 }
@@ -558,6 +607,11 @@ public class GameState {
         else
             return false;
     }
+
+    /**
+     * Zlicza graczy, którzy opuścili grę lub wygrali. Jeśli tylko jeden gracz gra dalej, można zakończyć grę.
+     * @return true- jeśli można zakończyć grę, false- w przeciwnym wypadku
+     */
     public boolean checkIfGameEnded()
     {
         int counter = 0;
@@ -575,6 +629,10 @@ public class GameState {
         }
         return false;
     }
+
+    /**
+     * Inicjuje buffer do przechowywania komend dla graczy, którzy jeszcze się nie połączyli
+     */
     public void initBuffer()
     {
         writeBuffer = new ArrayList<>();
@@ -584,6 +642,10 @@ public class GameState {
         }
     }
 
+    /**
+     * Zwraca element, na którym wypisywane są logi serwera
+     * @return element, na którym wypisywane są logi serwera
+     */
     public ServerLogDisplay getServerLogDisplay() {
         return serverLogDisplay;
     }

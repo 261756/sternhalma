@@ -5,7 +5,6 @@ import hex.Hex;
 import server.gui.ServerLogDisplay;
 
 
-import javax.swing.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;

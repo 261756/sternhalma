@@ -20,15 +20,11 @@ public class TestBoardAndString {
         array[3][0] = new Hex(Hex.State.EMPTY);
         array[12][16] = new Hex(Hex.State.BLUE);
         String value = new BoardAndString(array).getStringValue();
-        System.out.println(value);
         Hex[][] converted = new BoardAndString(value).getBoardValue();
         for (int i = 0; i < 17; i++) {
             for(int j = 0; j<13; j++) {
-                System.out.print(converted[j][i].state.name() + " ");
+                Assert.assertEquals(array[j][i].getState(),converted[j][i].getState());
             }
         }
-        System.out.println();
-        Assert.assertEquals(array[0][0].getState(),converted[0][0].getState());
-        Assert.assertEquals(array[12][16].getState(),converted[12][16].getState());
     }
 }

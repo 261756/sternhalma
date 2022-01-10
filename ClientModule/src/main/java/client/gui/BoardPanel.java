@@ -17,8 +17,8 @@ public class BoardPanel extends JPanel {
     private boolean isBoardCreated = false;
     final static int xAxis = 13;
     final static int yAxis = 17;
-    private Color boardColor;
-    private BoardHex[][] board = new BoardHex[xAxis][yAxis];
+    private final Color boardColor;
+    private final BoardHex[][] board = new BoardHex[xAxis][yAxis];
     boolean selected; // czy został wybrany pierwszy target move?
     int x1; int y1;
 
@@ -43,7 +43,6 @@ public class BoardPanel extends JPanel {
         for (int j = 0; j < yAxis; j++)
         {
             JPanel p = new JPanel();
-            //p.setBackground(boardColor);
             p.setOpaque(false);
             p.setLayout(new FlowLayout(FlowLayout.CENTER,(int)(this.getHeight()*0.118/yAxis),0));
             for (int i = 0; i < xAxis; i++) {

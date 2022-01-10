@@ -11,9 +11,9 @@ import java.util.Scanner;
  * Klasa odbierająca komendy z serwera
  */
 public class CommandReader {
-    Client client;
-    Scanner scanner;
-    CommandReader(Client client) {
+    private Client client;
+    private Scanner scanner;
+    public CommandReader(Client client) {
         this.client = client;
     }
 
@@ -36,13 +36,11 @@ public class CommandReader {
      * Metoda pobiera polecenia z serwera, następnie wywołuje odpowienie metody na kliencie
      * OBSŁUGIWANE POLECENIA:
      * sendingHexes - metoda konwertuje przychodzący string na tablicę hexów i updateuje ją dla klienta
-     * moveMade - metoda po otrzymaniu komunikatu że ktoś wykonał ruch prosi serwer o wysłanie jej tablicy hexów
-     * assignColor - metoda ustawia kolor gracza na kolor otrzymany z serwera
-     * turnChanged - metoda informuje gracza który gracz ma teraz ruch
+     * moveMade -  po otrzymaniu komunikatu że ktoś wykonał ruch prosi serwer o wysłanie jej tablicy hexów
+     * assignColor - ustawia kolor gracza na kolor otrzymany z serwera
+     * turnChanged - informuje gracza który gracz ma teraz ruch
      */
-    public void fetchInstruction()  {
-        String command = scanner.nextLine();
-        System.out.println(command);
+    public void processInstruction(String command) {
         if (command.startsWith("sendingHexes")) {
             client.updateBoard(new BoardAndString(command.substring(12)).getBoardValue());
             client.updateFrameBoard();
@@ -51,7 +49,7 @@ public class CommandReader {
             client.setPegsColor(Hex.State.valueOf(command.substring(11)));
         }
         if (command.startsWith("moveMade")) {
-            client.commandWriter.requestBoardState();
+            client.requestHexes();
         }
         if (command.startsWith("turnChanged")) {
             client.setCurrentPlayer(command.substring(11));
@@ -67,5 +65,10 @@ public class CommandReader {
         {
             client.updateLeavers(command.substring(4));
         }
+    }
+    public void fetchInstruction()  {
+        String command = scanner.nextLine();
+        System.out.println(command);
+        processInstruction(command);
     }
 }

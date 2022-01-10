@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 
 /**
  * Okno klienta, zawiera boardPanel wyświetlający Hexy
- * TODO: panel z przyciskiem pasowania
  */
 public class ClientFrame extends JFrame {
 

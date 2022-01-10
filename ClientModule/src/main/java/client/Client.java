@@ -5,7 +5,6 @@ import hex.Hex;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * Klasa klienta commandReader odczytuje komendy, commandWriter wysyła komendy
@@ -33,10 +32,12 @@ public class Client {
         this.gameState = new ClientGameState();
         this.commandReader = new CommandReader(this);
         this.commandWriter = new CommandWriter(this);
-        clientFrame.setSize(800,800);//temp
-        clientFrame.setVisible(true);//temp
     }
 
+    public void display(int width, int height) {
+        clientFrame.setSize(width,height);
+        clientFrame.setVisible(true);
+    }
 
     public void startConfiguration(String message) {
         try {
@@ -58,6 +59,7 @@ public class Client {
      * konfiguracja commandWriter, commandReader
      * @param socket socket
      */
+
     public void setCommunication(Socket socket) {
         Client.socket = socket;
         commandWriter.setConnection(socket);
@@ -68,6 +70,7 @@ public class Client {
      * Odświerza stan lokalnej planszy
      * @param array tablica Hex[][]
      */
+
     public void updateBoard(Hex[][] array) {
         gameState.setHexes(array);
     }
@@ -75,6 +78,7 @@ public class Client {
     /**
      * Odświerza stan wyświetlanej planszy
      */
+
     public void updateFrameBoard(){
         clientFrame.updateBoard();
     }
@@ -82,6 +86,7 @@ public class Client {
      * Główna metoda. Najpierw prosi o stan planszy, potem przyjmuje polecenia
      * @throws IOException od socket.close() nie wiem czy to będzie działać
      */
+
     public void play() throws IOException {
         commandReader.fetchInstruction(); // przyjmowanie przypisanego koloru
         clientFrame.setTitle("Gracz " + pegsColor.name());
@@ -116,16 +121,19 @@ public class Client {
      * Ustawia Hex.State przypisany do klienta
      * @param color - Hex.State mający zostać przypisany
      */
+
     public void setPegsColor(Hex.State color)
     {
         pegsColor = color;
     }
+
     public void setMyTurn(boolean bool) {
         this.myTurn = bool;
     }
     public boolean isMyTurn() {
         return this.myTurn;
     }
+
     public void setCurrentPlayer(String substring) {
         if (substring.equals(pegsColor.name())) {
             setMyTurn(true);
@@ -141,6 +149,11 @@ public class Client {
             }
         }
     }
+
+    public void requestHexes() {
+        commandWriter.requestBoardState();
+    }
+
     public void updateWinners(String substring)
     {
         int size = substring.length();
@@ -149,6 +162,7 @@ public class Client {
         String color = substring.substring(0,size-1);
         this.clientFrame.updateWinners(new MessageFactory().winnerMsg(clientFrame.getWinnerMsg(),color,number));
     }
+
     public void updateLeavers(String substring)
     {
         this.clientFrame.updateWinners(new MessageFactory().leftMsg(clientFrame.getWinnerMsg(),substring));
