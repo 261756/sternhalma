@@ -48,19 +48,20 @@ public class TestConnectingPlayers {
             @Override
             public void run() {
                 try {
-                    server.startServer(9999, 6);
+                    server.startServer(8492, 6);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         serverThread.start();
-        Socket socket1 = new Socket("localhost",9999);
-        Socket socket2 = new Socket("localhost",9999);
-        Socket socket3 = new Socket("localhost",9999);
-        Socket socket4 = new Socket("localhost",9999);
-        Socket socket5 = new Socket("localhost",9999);
-        Socket socket6 = new Socket("localhost",9999);
+        Thread.sleep(500);
+        Socket socket1 = new Socket("localhost",8492);
+        Socket socket2 = new Socket("localhost",8492);
+        Socket socket3 = new Socket("localhost",8492);
+        Socket socket4 = new Socket("localhost",8492);
+        Socket socket5 = new Socket("localhost",8492);
+        Socket socket6 = new Socket("localhost",8492);
         server.log("test");
     }
 
