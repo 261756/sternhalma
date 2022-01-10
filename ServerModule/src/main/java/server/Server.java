@@ -16,6 +16,11 @@ import java.util.concurrent.Executors;
 public class Server {
 
     ServerLog serverLog;
+
+    /**
+     * Konstruktor
+     * @param serverLog log serwera
+     */
     public Server(ServerLog serverLog) {
         this.serverLog = serverLog;
     }
@@ -92,6 +97,11 @@ public class Server {
             }
         }
     }
+
+    /**
+     * Wysyła String na log serwera
+     * @param msg wpis do przesłania
+     */
     public void log(String msg)
     {
         serverLog.log(msg);

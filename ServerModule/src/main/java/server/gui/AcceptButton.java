@@ -8,7 +8,15 @@ import java.awt.event.ActionListener;
  * Przycisk akceptujący ustawienia serwera
  */
 public class AcceptButton extends JButton {
+    /**
+     * parent element
+     */
     StartPopup startPopup;
+
+    /**
+     * Konstruktor
+     * @param startPopup parent element
+     */
     public AcceptButton(StartPopup startPopup)
     {
         super("Akceptuj");

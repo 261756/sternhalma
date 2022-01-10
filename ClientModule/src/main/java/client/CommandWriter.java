@@ -8,8 +8,13 @@ import java.net.Socket;
  * Klasa wysyłająca odpowiednie polecenia na serwer
  */
 public class CommandWriter {
-    Client client;
-    PrintWriter printWriter;
+    private final Client client;
+    private PrintWriter printWriter;
+
+    /**
+     * Konstruktor
+     * @param client powiązany klient
+     */
     public CommandWriter(Client client) {
         this.client = client;
     }
@@ -44,6 +49,10 @@ public class CommandWriter {
     {
         printWriter.println("requestMove" + x1 + " " + y1 + " " + x2 + " " + y2);
     }
+
+    /**
+     * Powiadamia serwer o spasowaniu tury
+     */
     public void passTurn() {
         printWriter.println("passTurn");
     }

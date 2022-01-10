@@ -2,7 +2,7 @@ package hex;
 
 
 /**
- * Umożliwia konwersję Hex[25][17] na String i String na Hex[25][17]. Nie dodaje nagłówka
+ * Umożliwia konwersję Hex[13][17] na String i String na Hex[13][17]. Nie dodaje nagłówka
  */
 public class BoardAndString {
     final static int xAxis = 13;

@@ -29,6 +29,11 @@ public class CommandReader {
         }
 
     }
+
+    /**
+     * Zwraca czy na wejściu scannera jest nowa linia
+     * @return true jeśli jest nowa lina na wejściu scannera
+     */
     public boolean hasNext() {
         return scanner.hasNextLine();
     }
@@ -39,6 +44,8 @@ public class CommandReader {
      * moveMade -  po otrzymaniu komunikatu że ktoś wykonał ruch prosi serwer o wysłanie jej tablicy hexów
      * assignColor - ustawia kolor gracza na kolor otrzymany z serwera
      * turnChanged - informuje gracza który gracz ma teraz ruch
+     * won - informuje o zwycięzcy
+     * gemeEnded - informuje o zakończeniu gry
      */
     public void processInstruction(String command) {
         if (command.startsWith("sendingHexes")) {
@@ -66,6 +73,10 @@ public class CommandReader {
             client.updateLeavers(command.substring(4));
         }
     }
+
+    /**
+     * Pobiera linę ze scannera
+     */
     public void fetchInstruction()  {
         String command = scanner.nextLine();
         System.out.println(command);

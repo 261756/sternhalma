@@ -5,12 +5,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Panel boczny
+ */
 class SidePanel extends JPanel {
     private static final int WIDTH = 120;
     private final JButton passButton;
     private final JLabel turnInfo;
     private final JLabel winnersInfo;
     private final ClientFrame clientFrame;
+    /**
+     * Konstruktor
+     * @param clientFrame parent element
+     */
     public SidePanel(ClientFrame clientFrame) {
         this.clientFrame = clientFrame;
         this.setBackground(new Color(255, 197, 168));
@@ -41,15 +48,33 @@ class SidePanel extends JPanel {
         this.setVisible(false);
     }
 
+    /**
+     * Zmieni widoczność panelu na widoczny
+     */
     public void displaySidePanel() {
         this.setVisible(true);
     }
+
+    /**
+     * Ustaw informację o turze
+     * @param turnInfo informacja
+     */
     public void setTurnInfo(String turnInfo) {
         this.turnInfo.setText(turnInfo);
     }
+
+    /**
+     * Ustaw informację o zwycięzcy
+     * @param winnersInfo informacja
+     */
     public void setWinnersInfo(String winnersInfo) {
         this.winnersInfo.setText(winnersInfo);
     }
+
+    /**
+     * Zwraca wcześniejsze informacje o zwycięzcach
+     * @return wcześniejsze informacje
+     */
     public String getWinnersInfo()
     {
         return winnersInfo.getText();

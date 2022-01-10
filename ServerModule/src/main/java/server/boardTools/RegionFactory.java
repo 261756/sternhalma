@@ -12,7 +12,7 @@ public class RegionFactory extends AbstractRegionFactory {
     private final HashMap<Region,ArrayList<Cord>> regions = new HashMap<>();
     /**
      * Zwraca listę punktów należących do danej strefy
-     * @param region narożnik, który chcemy otrzymać
+     * @param region region, który chcemy otrzymać
      * @return lista punktów należących do danej strefy
      */
     @Override

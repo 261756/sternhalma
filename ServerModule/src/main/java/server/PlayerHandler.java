@@ -12,9 +12,10 @@ import java.net.Socket;
  *
  * OBSŁUGIWANE KOMENDY:
  * requestHexes: odpowiada "sendingHexes", wysyła tablicę Hexów
- * requestMove: wykonuje zadany przez gracza ruch, zwraca każdemu graczowi moveMade
- * passTurn: pasuje turę gracza
- *
+ * requestMove: wykonuje zadany przez gracza ruch, zwraca każdemu graczowi moveMade,
+ * wysyła graczom powiadomienie o zwycięstwie któregoś z graczy
+ * passTurn: pasuje turę gracza, wysyła Turn changed do graczy
+ * quit: wysyła do wszystkich graczy informacje o opuszczeniu gry przez danego graca
  *
  */
 public class PlayerHandler implements Runnable {
@@ -27,6 +28,13 @@ public class PlayerHandler implements Runnable {
     private boolean left; // czy gracz wyszedł z gry zanim wygrał
     private boolean addedToGS;
 
+    /**
+     * Konstruktor wątku handlara gracza
+     * @param socket socket gracza
+     * @param gs stan gry
+     * @param pegs kolor pionków gracza
+     * @throws IOException błąd połączenia
+     */
     PlayerHandler(Socket socket, GameState gs, Hex.State pegs) throws IOException {
         winner = false;
         left = false;
@@ -38,6 +46,9 @@ public class PlayerHandler implements Runnable {
         SCI = new ServerCommunicatorIn(socket.getInputStream(), GS.getServerLog(),this);
     }
 
+    /**
+     * Główna metoda wątku. Przyjmuje i wysyła odpowiednie komendy
+     */
     @Override
     public void run() {
         GS.log("Connected " + pegsColor.name() + " to game " + GS.getGameId() + ": " + socket );
@@ -135,6 +146,12 @@ public class PlayerHandler implements Runnable {
     private void writeToAllPlayers(String command) throws IOException {
         GS.writeToAllPlayers(command);
     }
+
+    /**
+     * Wysyła wiadomość do klienta
+     * @param s wiadomość
+     * @throws IOException błąd połączenia
+     */
     public void write(String s) throws IOException {
         SCO.writeString(s);
     }
@@ -151,21 +168,46 @@ public class PlayerHandler implements Runnable {
         GS.log("Sent to Game " + GS.getGameId() + ", [ALL COLORS]: " + msg);
 
     }*/
+
+    /**
+     * zwraca id gry
+     * @return id gry
+     */
     public int getGameId()
     {
         return GS.getGameId();
     }
+
+    /**
+     * Zwraca kolor gracza
+     * @return nazwa koloru gracza
+     */
     public String getColorname()
     {
         return pegsColor.name();
     }
+
+    /**
+     * Zwraca socket gracza
+     * @return socket gracza
+     */
     public Socket getSocket() {
         return socket;
     }
+
+    /**
+     * Zwraca czy gracz wygrał
+     * @return true, jeśli gracz wygrał
+     */
     public boolean checkIfWinner()
     {
         return winner;
     }
+
+    /**
+     * Zwraca czy gracz wyszedł z gry, zanim wygrał
+     * @return true, jeśli gracz wyszedł z gry, zanim wygrał
+     */
     public boolean checkIfLeft()
     {
         return left;

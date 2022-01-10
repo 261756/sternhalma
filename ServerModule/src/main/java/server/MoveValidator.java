@@ -35,11 +35,19 @@ public class MoveValidator extends AbstractMoveValidator {
         setObjective(color);
     }
 
+    /**
+     * Ustawia powiązany stan gry
+     * @param game stan gry
+     */
     @Override
     public void setGameState(GameState game) {
         this.gameState = game;
     }
 
+    /**
+     * Ustawia odpowiednie definicje regionów planszy
+     * @param factory definicje regionów
+     */
     @Override
     public void setRegionFactory(AbstractRegionFactory factory) {
         this.regionFactory = factory;

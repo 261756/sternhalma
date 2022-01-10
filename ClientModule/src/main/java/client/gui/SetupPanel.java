@@ -4,14 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel z dwoma TextField, wykorzystywany, aby pobrać adres serwera
+ * Panel z dwoma TextField, wykorzystywany, aby pobrać adres serwera i port
  */
 public class SetupPanel extends JPanel {
-    JTextField hostAddress;
-    JTextField portField;
-    JLabel hostAddressLabel;
-    JLabel portLabel;
-    JLabel infoLabel;
+    private final JTextField hostAddress;
+    private final JTextField portField;
+    private final JLabel hostAddressLabel;
+    private final JLabel portLabel;
+    private final JLabel infoLabel;
+
+    /**
+     * Konstruktor
+     */
     public SetupPanel() {
         super(new GridLayout(0,1));
         this.hostAddress = new JTextField("localhost");

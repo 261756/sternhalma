@@ -28,7 +28,14 @@ public class GameState {
     static final int yAxis = 17;
     ServerLog serverLog;
 
-
+    /**
+     * Standardowy konstruktor
+     * @param numberOfPlayers ilość graczy
+     * @param id identyfikator gry
+     * @param serverLog log serwera
+     * @param validator sprawdzacz ruchów
+     * @param factory definicje regionów planszy
+     */
     public GameState(int numberOfPlayers, int id, ServerLog serverLog, AbstractMoveValidator validator, AbstractRegionFactory factory)
     {
         this.moveValidator = validator;
@@ -38,7 +45,7 @@ public class GameState {
         this.serverLog = serverLog;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
-        players = new ArrayList<PlayerHandler>();
+        players = new ArrayList<>();
         this.currentPlayer=0;
         initBoard(this.numberOfPlayers, new InitialStateBuilder(xAxis, yAxis, regionFactory), regionFactory);
         gameStarted = false;
@@ -98,10 +105,7 @@ public class GameState {
      */
     public Boolean checkTurn(Socket socket)
     {
-        if (currentPlayer == getPlayerNumber(socket)) {
-            return true;
-        }
-        return false;
+        return currentPlayer == getPlayerNumber(socket);
     }
 
     /**
@@ -255,8 +259,8 @@ public class GameState {
     }
 
     /**
-     * Dodaj wpis do log
-     * @param m
+     * Dodaj wpis do loggera
+     * @param m wpis
      */
     public void log(String m)
     {

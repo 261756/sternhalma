@@ -13,6 +13,11 @@ public class StartPopup extends JFrame {
     Server server;
     PortField portField = new PortField(this);
     ComboNumberOfPlayers comboNumberOfPlayers = new ComboNumberOfPlayers(this);
+
+    /**
+     * Konstruktor okienka
+     * @param server serwer do konfiguracji
+     */
     public StartPopup(Server server)
     {
         this.setTitle("Wybierz parametry");
@@ -69,6 +74,12 @@ public class StartPopup extends JFrame {
         }
 
     }
+
+    /**
+     * Startuje serwer, bez użycia okienek
+     * @param port port, na którym działa serwer
+     * @param numberOfPlayers liczba graczy
+     */
     public void sendInputNoGUI(String port, String numberOfPlayers) {
             this.setVisible(false);
             Thread serverThread = new Thread(new Runnable() {

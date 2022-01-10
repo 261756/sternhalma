@@ -6,7 +6,11 @@ import javax.swing.*;
  * Okienko z logami serwera.
  */
 public class ServerLogDisplay extends JFrame implements ServerLog {
-    JTextArea textArea;
+    private final JTextArea textArea;
+
+    /**
+     * Konstruktor, okienko jest widoczne od razu po stworzeniu
+     */
     public ServerLogDisplay()
     {
         this.setTitle("Logi serwera");
@@ -21,6 +25,11 @@ public class ServerLogDisplay extends JFrame implements ServerLog {
         this.setVisible(true);
 
     }
+
+    /**
+     * Wysyła logi na okienko
+     * @param msg log
+     */
     @Override
     public synchronized void log(String msg) {
         textArea.append("\n" + msg);

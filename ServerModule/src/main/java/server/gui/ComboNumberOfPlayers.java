@@ -8,6 +8,11 @@ import javax.swing.*;
 public class ComboNumberOfPlayers extends JComboBox<Integer> {
 
     StartPopup startPopup;
+
+    /**
+     * Konstruktor
+     * @param startPopup parent element
+     */
     ComboNumberOfPlayers(StartPopup startPopup)
     {
         //super(new Integer[]{2, 3, 4, 5, 6});

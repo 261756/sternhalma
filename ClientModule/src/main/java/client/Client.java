@@ -27,6 +27,9 @@ public class Client {
      */
     public ClientGameState gameState;
 
+    /**
+     * Konstruktor
+     */
     public Client() {
         this.clientFrame = new ClientFrame(this);
         this.gameState = new ClientGameState();
@@ -34,11 +37,21 @@ public class Client {
         this.commandWriter = new CommandWriter(this);
     }
 
+    /**
+     * Ustawia wielkość okienka klienta i zmienia stan okienka na widoczny
+     * @param width szerokość okienka
+     * @param height wysokość okienka
+     */
     public void display(int width, int height) {
         clientFrame.setSize(width,height);
         clientFrame.setVisible(true);
     }
 
+    /**
+     * Wywołuje odpowiednie metody z okienka odpowiedzialne z wyświetlenie dialogu,
+     * aby pobrać dane do połączenia z serwerem. Następnie próbuje się połączyć z serwerem.
+     * @param message komunikat wyświetlany na dialogu
+     */
     public void startConfiguration(String message) {
         try {
             String[] array = clientFrame.showSetupOptions(message);
@@ -59,7 +72,6 @@ public class Client {
      * konfiguracja commandWriter, commandReader
      * @param socket socket
      */
-
     public void setCommunication(Socket socket) {
         Client.socket = socket;
         commandWriter.setConnection(socket);
@@ -70,7 +82,6 @@ public class Client {
      * Odświerza stan lokalnej planszy
      * @param array tablica Hex[][]
      */
-
     public void updateBoard(Hex[][] array) {
         gameState.setHexes(array);
     }
@@ -78,7 +89,6 @@ public class Client {
     /**
      * Odświerza stan wyświetlanej planszy
      */
-
     public void updateFrameBoard(){
         clientFrame.updateBoard();
     }
@@ -86,7 +96,6 @@ public class Client {
      * Główna metoda. Najpierw prosi o stan planszy, potem przyjmuje polecenia
      * @throws IOException od socket.close() nie wiem czy to będzie działać
      */
-
     public void play() throws IOException {
         commandReader.fetchInstruction(); // przyjmowanie przypisanego koloru
         clientFrame.setTitle("Gracz " + pegsColor.name());
@@ -99,9 +108,7 @@ public class Client {
                 commandReader.fetchInstruction();
             }
             commandWriter.quit();
-        }
-
-    catch (Exception e) {
+        } catch (Exception e) {
         e.printStackTrace();
         } finally {
             socket.close();
@@ -110,6 +117,7 @@ public class Client {
     }
 
     /**
+     * Zwraca Kolor tego klienta
      * @return Hex.State przypisany do tego klienta
      */
     public Hex.State getPegsColor()
@@ -118,22 +126,34 @@ public class Client {
     }
 
     /**
-     * Ustawia Hex.State przypisany do klienta
+     * Ustawia Kolor przypisany do klienta
      * @param color - Hex.State mający zostać przypisany
      */
-
     public void setPegsColor(Hex.State color)
     {
         pegsColor = color;
     }
 
+    /**
+     * Zmienia flagę tury tego gracza
+     * @param bool true- tura tego gracza, false- w przeciwnym wypadku
+     */
     public void setMyTurn(boolean bool) {
         this.myTurn = bool;
     }
+
+    /**
+     * Zwraca czy teraz tura tego gracza
+     * @return true- jeśli tura tego gracza
+     */
     public boolean isMyTurn() {
         return this.myTurn;
     }
 
+    /**
+     * Powiadamia gracza czyja teraz jest tura
+     * @param substring kolor gracza, który teraz ma turę
+     */
     public void setCurrentPlayer(String substring) {
         if (substring.equals(pegsColor.name())) {
             setMyTurn(true);
@@ -150,10 +170,17 @@ public class Client {
         }
     }
 
+    /**
+     * Prosi serwer o obecny stan gry
+     */
     public void requestHexes() {
         commandWriter.requestBoardState();
     }
 
+    /**
+     * Informuje gracza o zwycięstwie jednego z graczy
+     * @param substring kolor + miejsce
+     */
     public void updateWinners(String substring)
     {
         int size = substring.length();
@@ -163,6 +190,10 @@ public class Client {
         this.clientFrame.updateWinners(MessageFactory.winnerMsg(clientFrame.getWinnerMsg(),color,number));
     }
 
+    /**
+     * Informuje gracza o wyjściu z gry jednego z graczy
+     * @param substring kolor gracza, który wyszedł
+     */
     public void updateLeavers(String substring)
     {
         this.clientFrame.updateWinners(MessageFactory.leftMsg(clientFrame.getWinnerMsg(),substring));

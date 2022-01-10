@@ -10,10 +10,23 @@ import java.awt.*;
  * Okno klienta, zawiera boardPanel wyświetlający Hexy
  */
 public class ClientFrame extends JFrame {
-
+    /**
+     * Panel z planszą
+     */
     protected BoardPanel boardPanel;
+    /**
+     * Panel boczny
+     */
     protected SidePanel sidePanel;
+    /**
+     * Klient
+     */
     protected Client client;
+
+    /**
+     * Konstruktor
+     * @param client klient
+     */
     public ClientFrame(Client client) {
 
         this.client = client;
@@ -24,20 +37,46 @@ public class ClientFrame extends JFrame {
         this.getContentPane().add(sidePanel,BorderLayout.EAST);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    /**
+     * Odświeża planszę
+     */
     public void updateBoard()
     {
         boardPanel.updateBoard();
     }
+
+    /**
+     * Wyświetla powiadomienie o turze
+     * @param message powiadomienie
+     */
     public void notify(String message) {
         sidePanel.setTurnInfo(message);
     }
+
+    /**
+     * Wyświetla powiadomienie o zwycięzcy
+     * @param message powiadomienie
+     */
     public void updateWinners(String message) {
         sidePanel.setWinnersInfo(message);
     }
+
+    /**
+     * Zwraca wcześniejsze powiadomienie o zwycięzcy
+     * @return wcześniejsze powiadomienie
+     */
     public String getWinnerMsg()
     {
         return sidePanel.getWinnersInfo();
     }
+
+    /**
+     * Wyświetla dialog do pobrania adresu serwera. Zwraca adres i port serwera
+     * @param message wiadomość do wyświetlenia na dialogu
+     * @return adres i port serwera podany przez użytkownika
+     * @throws Exception gdy dialog zostanie zamknięty przez użytkownika
+     */
     public String[] showSetupOptions(String message) throws Exception {
         SetupPanel panel = new SetupPanel();
         panel.setInfoLabel(message);

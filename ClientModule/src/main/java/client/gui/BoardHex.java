@@ -22,10 +22,6 @@ public class BoardHex extends JPanel{
         hovered = false;
         color = Color.white;
         this.setOpaque(false);
-        //setBackground(Color.white);
-        //setBorder(BorderFactory.createLineBorder(Color.black));
-        //setLayout(new GridBagLayout());
-
     }
 
     /**
@@ -49,7 +45,6 @@ public class BoardHex extends JPanel{
             this.color = (new Color(216,181,140));
         if (state == Hex.State.NULL)
             this.color = (Color.black);
-        //setBackground(color);
 
     }
 
@@ -74,11 +69,9 @@ public class BoardHex extends JPanel{
             g.setColor(Color.black);
         }
         int pWidth = this.getWidth();
-        //g.fillOval(0,0,43,43);
         g.fillOval((int)(0.05*pWidth/2),(int)(0.05*pWidth/2),(int)(0.95*pWidth),(int)(0.95*pWidth));
         g.setColor(color);
         g.fillOval((int)(0.15*pWidth/2),(int)(0.15*pWidth/2),(int)(0.85*pWidth),(int)(0.85*pWidth));
-        //g.fillOval(0,0,40,40);
     }
 
     /**
@@ -89,11 +82,20 @@ public class BoardHex extends JPanel{
     {
         selected = set;
     }
+
+    /**
+     * Zwraca czy pole wybrane
+     * @return true, jeśli pole wybrane
+     */
     public boolean getSelected()
     {
         return selected;
     }
 
+    /**
+     * Ustawia flagę informującą, czy pole jest najechane
+     * @param set true- jeśli pole najechane, false w przeciwnym wypadku
+     */
     public void setHoveredOver(boolean set) {
         hovered = set;
     }
