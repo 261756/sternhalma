@@ -1,13 +1,137 @@
 @startuml
-class clientTests.TestRecievingHexes {
-+ void TEST1()
-}
 class server.ServerCommunicatorIn {
 ~ Scanner in
+~ ServerLog serverLog
+~ PlayerHandler playerHandler
 ~ Boolean availableCommandFromClient()
 ~ String getCommandFromClient()
 }
-class client.exceptions.UnknownCommandException {
+class server.PlayerHandler {
+- Socket socket
+- GameState GS
+- ServerCommunicatorOut SCO
+- ServerCommunicatorIn SCI
+- Hex.State pegsColor
+- boolean winner
+- boolean left
+- boolean addedToGS
++ void run()
+- boolean handleMove(String)
+- void writeToAllPlayers(String)
++ void write(String)
++ int getGameId()
++ String getColorname()
++ Socket getSocket()
++ boolean checkIfWinner()
++ boolean checkIfLeft()
+}
+class client.ClientStarter {
++ {static} void main(String[])
+}
+
+class server.gui.StartPopup {
+~ Server server
+~ PortField portField
+~ ComboNumberOfPlayers comboNumberOfPlayers
++ void sendInput()
++ void sendInputNoGUI(String,String)
+}
+class server.boardTools.InitialStateBuilder {
+- int xAxis
+- int yAxis
+- AbstractRegionFactory regionFactory
+- Hex[][] hexes
++ Hex[][] getHexes()
++ void createEmptyBoard()
++ void initRegion(Hex.State,Region)
+}
+
+class server.Cord {
++ int x
++ int y
+}
+class hex.Hex {
++ State state
++ State getState()
++ void setState(State)
+}
+class server.gui.ComboNumberOfPlayers {
+~ StartPopup startPopup
+}
+
+class client.CommandReader {
+- Client client
+- Scanner scanner
++ void setConnection(Socket)
++ boolean hasNext()
++ void processInstruction(String)
++ void fetchInstruction()
+}
+class server.GameState {
+- AbstractMoveValidator moveValidator
+- AbstractRegionFactory regionFactory
+- Hex[][] hexes
+- int gameId
+- int place
+- boolean gameStarted
+- int numberOfPlayers
+- int currentPlayer
+- ArrayList<PlayerHandler> players
+- ArrayList<ArrayList<String>> writeBuffer
+~ {static} int xAxis
+~ {static} int yAxis
+~ ServerLog serverLog
++ void initBoard(int,AbstractStateBuilder,AbstractRegionFactory)
++ Hex[][] getHexes()
++ Boolean checkTurn(Socket)
++ int getPlayerNumber(Socket)
++ void passTurn(Socket)
++ int getCurrentPlayer()
++ String getCurrentPlayerColorName()
++ boolean move(int,int,int,int)
++ void writeToAllPlayers(String)
++ void activateWriteBuffer(Hex.State)
++ void addPlayer(PlayerHandler)
++ boolean getGameStarted()
++ int getGameId()
++ void log(String)
+~ boolean checkIfWon(Hex.State)
++ boolean checkIfGameEnded()
++ void initBuffer()
++ ServerLog getServerLog()
+}
+abstract class server.AbstractMoveValidator {
++ boolean moveIsLegal(int,int,int,int)
++ {abstract}void newTurn(Hex.State)
++ {abstract}void setGameState(GameState)
++ {abstract}void setRegionFactory(AbstractRegionFactory)
+}
+class hex.BoardAndString {
+~ {static} int xAxis
+~ {static} int yAxis
++ {static} String getStringValue(Hex[][])
++ {static} Hex[][] getBoardValue(String)
+}
+class server.boardTools.RegionFactory {
+- HashMap<Region,ArrayList<Cord>> regions
++ ArrayList<Cord> getRegion(Region)
+- ArrayList<Cord> getCcords()
+- ArrayList<Cord> getNcords()
+- ArrayList<Cord> getNEcords()
+- ArrayList<Cord> getNWcords()
+- ArrayList<Cord> getSEcords()
+- ArrayList<Cord> getSWcords()
+- ArrayList<Cord> getScords()
+}
+interface server.gui.ServerLog {
+~ void log(String)
+}
+class server.gui.ServerLogTerminal {
++ void log(String)
+}
+class server.gui.ServerLogDisplay {
+~ JTextArea textArea
++ void log(String)
 }
 class client.gui.BoardPanel {
 - ClientFrame clientFrame
@@ -22,78 +146,28 @@ class client.gui.BoardPanel {
 + void createBoard()
 + void updateBoard()
 }
-class client.gui.SidePanel {
-~ JButton passButton
-~ JLabel turnInfo
-~ ClientFrame clientFrame
-+ void displaySidePanel()
-+ void setTurnInfo(String)
-+ Dimension getPreferredSize()
-}
-class server.gui.ComboNumberOfPlayers {
-~ StartPopup startPopup
-}
-class server.ServerCommunicatorOut {
-~ PrintWriter out
-+ void writeString(String)
-}
-class server.gui.ServerLogDisplay {
-~ JTextArea textArea
-+ void log(String)
-}
-class client.ClientStarter {
+class server.ServerStarter {
 + {static} void main(String[])
 }
-class server.gui.StartPopup {
-~ Server server
-~ PortField portField
-~ ComboNumberOfPlayers comboNumberOfPlayers
-+ void sendInput()
-}
-class server.gui.AcceptButton {
-~ StartPopup startPopup
-}
-class client.gui.BoardHex {
-- Color color
-- Boolean selected
-+ void setColor(Hex.State)
-+ Dimension getPreferredSize()
-+ void paint(Graphics)
-+ void setSelected(boolean)
-}
-class client.CommandWriter {
-~ Client client
-~ PrintWriter printWriter
-+ void setConnection(Socket)
-+ void requestBoardState()
-+ void quit()
-+ void move(int,int,int,int)
-+ void passTurn()
-}
-class server.PlayerHandler {
-- Socket socket
-- GameState GS
-- ServerCommunicatorOut SCO
-- ServerCommunicatorIn SCI
-- int connectionCount
-- Hex.State pegsColor
-+ void run()
-- void handleMove(String)
-- void writeToAllPlayers(String)
-+ void write(String)
-+ void logIn(String)
-+ void logOut(String)
-+ void logOutAll(String)
-}
-class client.CommandReader {
-~ Client client
-~ Scanner scanner
-+ void setConnection(Socket)
-+ boolean hasNext()
-+ void fetchInstruction()
-}
-class server.gui.PortField {
-~ StartPopup startPopup
+class server.MoveValidator {
+- GameState gameState
+- AbstractRegionFactory regionFactory
+- ArrayList<Cord> objective
+- boolean firstMove
+- boolean turnContinue
+- int lastX
+- int lastY
++ void newTurn(Hex.State)
++ void setGameState(GameState)
++ void setRegionFactory(AbstractRegionFactory)
++ boolean moveIsLegal(int,int,int,int)
++ boolean isTurnContinue()
+- boolean walkHex(int,int,int,int)
+- boolean jumpHex(int,int,int,int)
+- void setObjective(Hex.State)
+- boolean isInsideObjective(int,int)
+- boolean isEmpty(int,int)
+- boolean hasPeg(int,int)
 }
 class client.gui.SetupPanel {
 ~ JTextField hostAddress
@@ -105,9 +179,62 @@ class client.gui.SetupPanel {
 + String getPortText()
 + void setInfoLabel(String)
 }
-class clientTests.TestBoardAndString {
-+ void testConversion()
+
+class client.CommandWriter {
+~ Client client
+~ PrintWriter printWriter
++ void setConnection(Socket)
++ void requestBoardState()
++ void quit()
++ void move(int,int,int,int)
++ void passTurn()
 }
+class client.gui.ClientFrame {
+# BoardPanel boardPanel
+# SidePanel sidePanel
+# Client client
++ void updateBoard()
++ void notify(String)
++ void updateWinners(String)
++ String getWinnerMsg()
++ String[] showSetupOptions(String)
+}
+
+class server.NoGUIInitializer {
++ {static} void startServerNoGUI(Server,String,String)
+}
+class client.exceptions.UnknownCommandException {
+}
+class server.gui.AcceptButton {
+~ StartPopup startPopup
+}
+class client.MessageFactory {
++ {static} String myTurnMsg()
++ {static} String opponentTurnMsg(String)
++ {static} String winnerMsg(String,String,int)
++ {static} String leftMsg(String,String)
+}
+class client.gui.BoardHex {
+- Color color
+- Boolean selected
+- Boolean hovered
++ void setColor(Hex.State)
++ Dimension getPreferredSize()
++ void paint(Graphics)
++ void setSelected(boolean)
++ boolean getSelected()
++ void setHoveredOver(boolean)
+}
+
+abstract class server.boardTools.AbstractRegionFactory {
++ {abstract}ArrayList<Cord> getRegion(Region)
+}
+class server.Server {
+~ ServerLog serverLog
++ void startServer(int,int)
++ void log(String)
+}
+
 class client.ClientGameState {
 ~ Hex[][] hexes
 ~ {static} int xAxis
@@ -115,62 +242,15 @@ class client.ClientGameState {
 + void setHexes(Hex[][])
 + Hex getHexAt(int,int)
 }
-class server.GameState {
-- Hex[][] hexes
-- int gameId
-- int numberOfPlayers
-- ArrayList<PlayerHandler> players
-~ {static} int xAxis
-~ {static} int yAxis
-~ ServerLogDisplay serverLogDisplay
-+ void initBoard(int)
-+ Hex[][] getHexes()
-+ Boolean checkTurn(Socket)
-+ void passTurn(Socket)
-+ void move(int,int,int,int)
-+ Boolean moveIsLegal(int,int,int,int)
-+ void writeToAllPlayers(String)
-+ void addPlayer(PlayerHandler)
-+ void initN(Hex.State)
-+ void initNE(Hex.State)
-+ void initSE(Hex.State)
-+ void initS(Hex.State)
-+ void initSW(Hex.State)
-+ void initNW(Hex.State)
-+ void initCenter(Hex.State)
-+ int getGameId()
-+ void log(String)
-}
-class server.ServerStarter {
-+ {static} void main(String[])
-}
-class hex.Hex {
-+ State state
-+ State getState()
-+ void setState(State)
-}
-class server.Server {
-~ ServerLogDisplay serverLogDisplay
-+ void startServer(int,int)
-+ void log(String)
-}
-class hex.BoardAndString {
-~ Hex[][] hexes
-~ String value
-~ {static} int xAxis
-~ {static} int yAxis
-+ String getStringValue()
-- void setStringValue()
-+ Hex[][] getBoardValue()
-- void setHexValue()
-}
 class client.Client {
 - {static} Socket socket
 - Hex.State pegsColor
+- boolean myTurn
 - ClientFrame clientFrame
 + CommandReader commandReader
 + CommandWriter commandWriter
 + ClientGameState gameState
++ void display(int,int)
 + void startConfiguration(String)
 + void setCommunication(Socket)
 + void updateBoard(Hex[][])
@@ -178,41 +258,65 @@ class client.Client {
 + void play()
 + Hex.State getPegsColor()
 + void setPegsColor(Hex.State)
++ void setMyTurn(boolean)
++ boolean isMyTurn()
++ void setCurrentPlayer(String)
++ void requestHexes()
++ void updateWinners(String)
++ void updateLeavers(String)
 }
-class clientTests.TestClientChannels {
-+ void testUpdateBoard()
-+ void testSetBoard()
+abstract class server.boardTools.AbstractStateBuilder {
++ {abstract}Hex[][] getHexes()
++ {abstract}void createEmptyBoard()
++ {abstract}void initRegion(Hex.State,Region)
 }
-class client.gui.ClientFrame {
-# BoardPanel boardPanel
-# SidePanel sidePanel
-# Client client
-+ void updateBoard()
-+ void setInfo(String)
-+ String[] showSetupOptions(String)
+class server.ServerCommunicatorOut {
+~ PrintWriter out
+~ ServerLog serverLog
+~ PlayerHandler playerHandler
++ void writeString(String)
+}
+class server.gui.PortField {
+~ StartPopup startPopup
+}
+class client.gui.SidePanel {
+- {static} int WIDTH
+- JButton passButton
+- JLabel turnInfo
+- JLabel winnersInfo
+- ClientFrame clientFrame
++ void displaySidePanel()
++ void setTurnInfo(String)
++ void setWinnersInfo(String)
++ String getWinnersInfo()
++ Dimension getPreferredSize()
 }
 
 
-client.exceptions.Exception <|-- client.exceptions.UnknownCommandException
-client.gui.JPanel <|-- client.gui.BoardPanel
-client.gui.JPanel <|-- client.gui.SidePanel
-server.gui.JComboBox <|-- server.gui.ComboNumberOfPlayers
-server.gui.JFrame <|-- server.gui.ServerLogDisplay
+server.Runnable <|.. server.PlayerHandler
 server.gui.JFrame <|-- server.gui.StartPopup
+server.boardTools.AbstractStateBuilder <|-- server.boardTools.InitialStateBuilder
+java.io.Serializable <|.. hex.Hex
+server.gui.JComboBox <|-- server.gui.ComboNumberOfPlayers
+server.boardTools.AbstractRegionFactory <|-- server.boardTools.RegionFactory
+server.gui.ServerLog <|.. server.gui.ServerLogTerminal
+server.gui.ServerLog <|.. server.gui.ServerLogDisplay
+server.gui.JFrame <|-- server.gui.ServerLogDisplay
+client.gui.JPanel <|-- client.gui.BoardPanel
+server.AbstractMoveValidator <|-- server.MoveValidator
+client.gui.JPanel <|-- client.gui.SetupPanel
+client.gui.JFrame <|-- client.gui.ClientFrame
+client.exceptions.Exception <|-- client.exceptions.UnknownCommandException
 server.gui.JButton <|-- server.gui.AcceptButton
 client.gui.JPanel <|-- client.gui.BoardHex
-server.Runnable <|.. server.PlayerHandler
 server.gui.JTextField <|-- server.gui.PortField
-client.gui.JPanel <|-- client.gui.SetupPanel
-java.io.Serializable <|.. hex.Hex
-client.gui.JFrame <|-- client.gui.ClientFrame
-
+client.gui.JPanel <|-- client.gui.SidePanel
 
 server.PlayerHandler *-- server.ServerCommunicatorIn
 server.PlayerHandler *-- server.ServerCommunicatorOut
 server.Server <-- server.ServerStarter
 server.gui.StartPopup <-- server.ServerStarter
-server.gui.ServerLogDisplay <-- server.ServerStarter
+server.gui.ServerLog <-- server.ServerStarter
 server.GameState <-- server.Server
 server.gui.StartPopup *-- server.gui.ComboNumberOfPlayers
 server.gui.StartPopup *-- server.gui.PortField
@@ -227,12 +331,14 @@ client.gui.ClientFrame *-- client.gui.SidePanel
 client.gui.ClientFrame *-- client.gui.BoardPanel
 client.gui.ClientFrame --> client.gui.SetupPanel
 client.gui.BoardPanel *-- client.gui.BoardHex
-server.GameState *-- server.gui.ServerLogDisplay
-
-
 
 hex.BoardAndString <-- client.CommandReader
 hex.BoardAndString <-- server.PlayerHandler
 server.GameState   o-- hex.Hex
 client.ClientGameState o--  hex.Hex
+
+server.boardTools.AbstractRegionFactory <-- server.GameState
+server.AbstractMoveValidator <-- server.GameState
+server.boardTools.AbstractStateBuilder <-- server.GameState
+
 @enduml
