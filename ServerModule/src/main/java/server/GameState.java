@@ -14,7 +14,8 @@ import java.util.Random;
  * Klasa zawierająca planszę, informacje o stanie rozgrywki.
  */
 public class GameState {
-    private final MoveValidator validator;
+    private final AbstractMoveValidator moveValidator;
+    private final AbstractRegionFactory regionFactory;
     private Hex[][] hexes;
     private final int gameId;
     private int place; // które miejsce zostało ostatnio zajęte (ilu graczy już wygrało)
@@ -27,70 +28,19 @@ public class GameState {
     static final int yAxis = 17;
     ServerLog serverLog;
 
-    // koordynaty wchodzące w skład poszczególnych trójkątów
-    private ArrayList<Cord> Ncords;
-    private ArrayList<Cord> Scords;
-    private ArrayList<Cord> NWcords;
-    private ArrayList<Cord> NEcords;
-    private ArrayList<Cord> SWcords;
-    private ArrayList<Cord> SEcords;
 
-    /**
-     *
-     * @return Lista północnych koordynatów
-     */
-    public ArrayList<Cord> getNcords() {
-        return Ncords;
-    }
-    /**
-     *
-     * @return Lista południowych koordynatów
-     */
-    public ArrayList<Cord> getScords() {
-        return Scords;
-    }
-    /**
-     *
-     * @return Lista północno-zachodnich koordynatów
-     */
-    public ArrayList<Cord> getNWcords() {
-        return NWcords;
-    }
-    /**
-     *
-     * @return Lista północno-wschodnich koordynatów
-     */
-    public ArrayList<Cord> getNEcords() {
-        return NEcords;
-    }
-
-    /**
-     *
-     * @return Lista południowo-zachodnich koordynatów
-     */
-    public ArrayList<Cord> getSWcords() {
-        return SWcords;
-    }
-
-    /**
-     *
-     * @return Lista połódniowo-wschodnich koordynatów
-     */
-    public ArrayList<Cord> getSEcords() {
-        return SEcords;
-    }
-
-
-    public GameState(int numberOfPlayers, int id, ServerLog serverLog)
+    public GameState(int numberOfPlayers, int id, ServerLog serverLog, AbstractMoveValidator validator, AbstractRegionFactory factory)
     {
-        this.validator = new MoveValidator(this);
+        this.moveValidator = validator;
+        this.moveValidator.setGameState(this);
+        this.regionFactory = factory;
+        this.moveValidator.setRegionFactory(this.regionFactory);
         this.serverLog = serverLog;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
         players = new ArrayList<PlayerHandler>();
         this.currentPlayer=0;
-        AbstractRegionFactory factory = new RegionFactory();
-        initBoard(this.numberOfPlayers, new InitialStateBuilder(xAxis, yAxis, factory), factory);
+        initBoard(this.numberOfPlayers, new InitialStateBuilder(xAxis, yAxis, regionFactory), regionFactory);
         gameStarted = false;
         initBuffer();
     }
@@ -105,12 +55,6 @@ public class GameState {
         for (Region region : Region.values()) {
             boardBuilder.initRegion(Hex.State.EMPTY, region);
         }
-        Ncords = regionFactory.getRegion(Region.NORTH);
-        Scords = regionFactory.getRegion(Region.SOUTH);
-        NEcords = regionFactory.getRegion(Region.NORTHEAST);
-        NWcords = regionFactory.getRegion(Region.NORTHWEST);
-        SEcords = regionFactory.getRegion(Region.SOUTHEAST);
-        SWcords = regionFactory.getRegion(Region.SOUTHWEST);
         switch(numberOfPlayers) {
             case 2 -> {
                 boardBuilder.initRegion(Hex.State.RED, Region.NORTH);
@@ -191,7 +135,7 @@ public class GameState {
         }
         while (players.get(n).checkIfWinner() || players.get(n).checkIfLeft());
         currentPlayer=n;
-        this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
+        this.moveValidator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
     }
 
     /**
@@ -222,26 +166,13 @@ public class GameState {
      */
     public boolean move(int a, int b, int c ,int d)
     {
-        if (moveIsLegal(a,b,c,d))
+        if (moveValidator.moveIsLegal(a, b, c, d))
         {
             hexes[c][d].setState(hexes[a][b].getState());
             hexes[a][b].setState(Hex.State.EMPTY);
             return true;
         }
         return false;
-    }
-
-    /**
-     * Metoda sprawdzająca, czy ruch jest poprawny
-     * @return czy ruch jest legalny
-     * @param a koordynat x pola 1.
-     * @param b koordynat y pola 1.
-     * @param c koordynat x pola docelowego
-     * @param d koordynat y pola docelowego
-     */
-    public boolean moveIsLegal(int a, int b, int c ,int d) {
-        return validator.moveIsLegal(a, b, c, d);
-        //return true;
     }
 
     /**
@@ -301,7 +232,7 @@ public class GameState {
             }
             currentPlayer= activePlayers.get(new Random().nextInt(activePlayers.size()));
             writeToAllPlayers("turnChanged" + players.get(currentPlayer).getColorname());
-            this.validator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
+            this.moveValidator.newTurn(Hex.State.valueOf(getCurrentPlayerColorName()));
         }
     }
 
@@ -341,10 +272,8 @@ public class GameState {
     boolean checkIfWon(Hex.State player) throws IOException {
 
         // jeśli player wygrał już wcześniej
-        for (int i = 0; i < players.size(); i++)
-        {
-            if (Objects.equals(players.get(i).getColorname(), player.name()) && players.get(i).checkIfWinner())
-            {
+        for (PlayerHandler playerHandler : players) {
+            if (Objects.equals(playerHandler.getColorname(), player.name()) && playerHandler.checkIfWinner()) {
                 return true;
             }
         }
@@ -353,10 +282,8 @@ public class GameState {
         if (player == Hex.State.RED)
         {
             // czerwony wygrał jeśli South(BLUE) trójkąt jest wypełniony czerwonymi
-            for(int i =0; i< Scords.size(); i++)
-            {
-                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.RED)
-                {
+            for (Cord scord : regionFactory.getRegion(Region.SOUTH)) {
+                if (hexes[scord.x][scord.y].getState() != Hex.State.RED) {
                     return false;
                 }
             }
@@ -366,10 +293,8 @@ public class GameState {
         if (player == Hex.State.BLUE)
         {
             // niebieski wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
-            for(int i =0; i< Ncords.size(); i++)
-            {
-                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.BLUE)
-                {
+            for (Cord ncord : regionFactory.getRegion(Region.NORTH)) {
+                if (hexes[ncord.x][ncord.y].getState() != Hex.State.BLUE) {
                     return false;
                 }
             }
@@ -377,10 +302,8 @@ public class GameState {
         }
         if (player == Hex.State.YELLOW)
         {
-            for(int i =0; i< SEcords.size(); i++)
-            {
-                if (hexes[SEcords.get(i).x][SEcords.get(i).y].getState() != Hex.State.YELLOW)
-                {
+            for (Cord sEcord : regionFactory.getRegion(Region.SOUTHEAST)) {
+                if (hexes[sEcord.x][sEcord.y].getState() != Hex.State.YELLOW) {
                     return false;
                 }
             }
@@ -388,10 +311,8 @@ public class GameState {
         }
         if (player == Hex.State.WHITE)
         {
-            for(int i =0; i< SWcords.size(); i++)
-            {
-                if (hexes[SWcords.get(i).x][SWcords.get(i).y].getState() != Hex.State.WHITE)
-                {
+            for (Cord sWcord : regionFactory.getRegion(Region.SOUTHWEST)) {
+                if (hexes[sWcord.x][sWcord.y].getState() != Hex.State.WHITE) {
                     return false;
                 }
             }
@@ -399,10 +320,8 @@ public class GameState {
         }
         if (player == Hex.State.BLACK)
         {
-            for(int i =0; i< NEcords.size(); i++)
-            {
-                if (hexes[NEcords.get(i).x][NEcords.get(i).y].getState() != Hex.State.BLACK)
-                {
+            for (Cord nEcord : regionFactory.getRegion(Region.NORTHEAST)) {
+                if (hexes[nEcord.x][nEcord.y].getState() != Hex.State.BLACK) {
                     return false;
                 }
             }
@@ -410,10 +329,8 @@ public class GameState {
         }
         if (player == Hex.State.GREEN)
         {
-            for(int i =0; i< NWcords.size(); i++)
-            {
-                if (hexes[NWcords.get(i).x][NWcords.get(i).y].getState() != Hex.State.GREEN)
-                {
+            for (Cord nWcord : regionFactory.getRegion(Region.NORTHWEST)) {
+                if (hexes[nWcord.x][nWcord.y].getState() != Hex.State.GREEN) {
                     return false;
                 }
             }
@@ -436,19 +353,13 @@ public class GameState {
     public boolean checkIfGameEnded()
     {
         int counter = 0;
-        for (int i = 0; i < players.size(); i++)
-        {
-            if (players.get(i).checkIfWinner() || players.get(i).checkIfLeft())
-            {
+        for (PlayerHandler player : players) {
+            if (player.checkIfWinner() || player.checkIfLeft()) {
                 counter++;
             }
         }
         System.out.println(counter + " " + numberOfPlayers);
-        if (counter >= numberOfPlayers-1)
-        {
-            return true;
-        }
-        return false;
+        return counter >= numberOfPlayers - 1;
     }
 
     /**
