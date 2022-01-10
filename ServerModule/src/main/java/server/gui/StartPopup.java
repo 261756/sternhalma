@@ -10,9 +10,9 @@ import java.awt.*;
  */
 public class StartPopup extends JFrame {
 
-    Server server;
-    PortField portField = new PortField(this);
-    ComboNumberOfPlayers comboNumberOfPlayers = new ComboNumberOfPlayers(this);
+    private final Server server;
+    private final PortField portField = new PortField(this);
+    private final ComboNumberOfPlayers comboNumberOfPlayers = new ComboNumberOfPlayers(this);
 
     /**
      * Konstruktor okienka

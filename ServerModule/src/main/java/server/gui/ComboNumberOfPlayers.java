@@ -7,7 +7,7 @@ import javax.swing.*;
  */
 public class ComboNumberOfPlayers extends JComboBox<Integer> {
 
-    StartPopup startPopup;
+    private StartPopup startPopup;
 
     /**
      * Konstruktor
