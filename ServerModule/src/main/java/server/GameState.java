@@ -1,6 +1,7 @@
 package server;
 
 import hex.Hex;
+import server.boardTools.*;
 import server.gui.ServerLogDisplay;
 
 import java.io.IOException;
@@ -86,174 +87,56 @@ public class GameState {
         this.serverLogDisplay = serverLogDisplay;
         this.numberOfPlayers = numberOfPlayers;
         this.gameId = id;
-        hexes = new Hex[xAxis][yAxis];
         players = new ArrayList<PlayerHandler>();
         this.currentPlayer=0;
-        initBoard(this.numberOfPlayers);
+        AbstractRegionFactory factory = new RegionFactory();
+        initBoard(this.numberOfPlayers, new InitialStateBuilder(xAxis, yAxis, factory), factory);
         gameStarted = false;
         initBuffer();
     }
 
     /**
      * Klasa tworząca stan początkowy planszy dla zadanej liczby graczy
-     * TODO: sprawdzić w innych klasach opcję gry dla 5
      * @param numberOfPlayers - liczba graczy, na podstawie której trzeba zbudować różne plansze
      */
-    public void initBoard(int numberOfPlayers)
+    public void initBoard(int numberOfPlayers, AbstractStateBuilder boardBuilder, AbstractRegionFactory regionFactory)
     {
-        for (int i = 0; i < xAxis; i++)
-        {
-            for (int j = 0; j < yAxis; j++)
-            {
-                hexes[i][j] = new Hex(Hex.State.NULL);
+        boardBuilder.createEmptyBoard();
+        for (Region region : Region.values()) {
+            boardBuilder.initRegion(Hex.State.EMPTY, region);
+        }
+        Ncords = regionFactory.getRegion(Region.NORTH);
+        Scords = regionFactory.getRegion(Region.SOUTH);
+        NEcords = regionFactory.getRegion(Region.NORTHEAST);
+        NWcords = regionFactory.getRegion(Region.NORTHWEST);
+        SEcords = regionFactory.getRegion(Region.SOUTHEAST);
+        SWcords = regionFactory.getRegion(Region.SOUTHWEST);
+        switch(numberOfPlayers) {
+            case 2 -> {
+                boardBuilder.initRegion(Hex.State.RED, Region.NORTH);
+                boardBuilder.initRegion(Hex.State.BLUE, Region.SOUTH);
+            }
+            case 3 -> {
+                boardBuilder.initRegion(Hex.State.RED, Region.NORTH);
+                boardBuilder.initRegion(Hex.State.GREEN, Region.SOUTHEAST);
+                boardBuilder.initRegion(Hex.State.BLACK, Region.SOUTHWEST);
+            }
+            case 4 -> {
+                boardBuilder.initRegion(Hex.State.RED, Region.NORTH);
+                boardBuilder.initRegion(Hex.State.BLUE, Region.SOUTH);
+                boardBuilder.initRegion(Hex.State.YELLOW, Region.NORTHWEST);
+                boardBuilder.initRegion(Hex.State.GREEN, Region.SOUTHEAST);
+            }
+            case 6 -> {
+                boardBuilder.initRegion(Hex.State.RED, Region.NORTH);
+                boardBuilder.initRegion(Hex.State.BLUE, Region.SOUTH);
+                boardBuilder.initRegion(Hex.State.YELLOW, Region.NORTHWEST);
+                boardBuilder.initRegion(Hex.State.GREEN, Region.SOUTHEAST);
+                boardBuilder.initRegion(Hex.State.BLACK, Region.SOUTHWEST);
+                boardBuilder.initRegion(Hex.State.WHITE, Region.NORTHEAST);
             }
         }
-        fillNcords();
-        fillNEcords();
-        fillNWcords();
-        fillScords();
-        fillSEcords();
-        fillSWcords();
-        initNE(Hex.State.EMPTY);
-        initNW(Hex.State.EMPTY);
-        initSW(Hex.State.EMPTY);
-        initSE(Hex.State.EMPTY);
-        initCenter(Hex.State.EMPTY);
-        initS(Hex.State.EMPTY);
-        initN(Hex.State.RED);
-        if (numberOfPlayers == 2) {
-            initS(Hex.State.BLUE);
-
-        }
-
-        if (numberOfPlayers == 3) {
-            initSE(Hex.State.GREEN);
-            initSW(Hex.State.BLACK);
-        }
-
-        if (numberOfPlayers == 4) {
-            initNW(Hex.State.YELLOW);
-            initS(Hex.State.BLUE);
-            initSE(Hex.State.GREEN);
-        }
-
-        if (numberOfPlayers >= 5) {
-            initSW(Hex.State.BLACK);
-            initS(Hex.State.BLUE);
-            initSE(Hex.State.GREEN);
-            initNE(Hex.State.WHITE);
-        }
-
-        if (numberOfPlayers == 6) {
-            initNW(Hex.State.YELLOW);
-        }
-
-
-    }
-
-    /**
-     * Uzupełnia tablicę koordynatów północnego trójkąta
-     */
-    public void fillNcords()
-    {
-        Ncords = new ArrayList<Cord>();
-        Ncords.add(new Cord(6,0));
-        Ncords.add(new Cord(5,1));
-        Ncords.add(new Cord(6,1));
-        Ncords.add(new Cord(5,2));
-        Ncords.add(new Cord(6,2));
-        Ncords.add(new Cord(7,2));
-        Ncords.add(new Cord(4,3));
-        Ncords.add(new Cord(5,3));
-        Ncords.add(new Cord(6,3));
-        Ncords.add(new Cord(7,3));
-    }
-
-    /**
-     * Uzupełnia tablicę koordynatów północno-wschodniego trójkąta
-     */
-    public void fillNEcords()
-    {
-        NEcords = new ArrayList<Cord>();
-        NEcords.add(new Cord(9,4));
-        NEcords.add(new Cord(10,4));
-        NEcords.add(new Cord(11,4));
-        NEcords.add(new Cord(12,4));
-        NEcords.add(new Cord(9,5));
-        NEcords.add(new Cord(10,5));
-        NEcords.add(new Cord(11,5));
-        NEcords.add(new Cord(10,6));
-        NEcords.add(new Cord(11,6));
-        NEcords.add(new Cord(10,7));
-    }
-    /**
-     * Uzupełnia tablicę koordynatów północno-zachodniego trójkąta
-     */
-    public void fillNWcords()
-    {
-        NWcords = new ArrayList<Cord>();
-        NWcords.add(new Cord(0,4));
-        NWcords.add(new Cord(1,4));
-        NWcords.add(new Cord(2,4));
-        NWcords.add(new Cord(3,4));
-        NWcords.add(new Cord(0,5));
-        NWcords.add(new Cord(1,5));
-        NWcords.add(new Cord(2,5));
-        NWcords.add(new Cord(1,6));
-        NWcords.add(new Cord(2,6));
-        NWcords.add(new Cord(1,7));
-    }
-    /**
-     * Uzupełnia tablicę koordynatów południowo-wschodniego trójkąta
-     */
-    public void fillSEcords()
-    {
-
-        SEcords = new ArrayList<Cord>();
-        SEcords.add(new Cord(9,12));
-        SEcords.add(new Cord(10,12));
-        SEcords.add(new Cord(11,12));
-        SEcords.add(new Cord(12,12));
-        SEcords.add(new Cord(9,11));
-        SEcords.add(new Cord(10,11));
-        SEcords.add(new Cord(11,11));
-        SEcords.add(new Cord(10,10));
-        SEcords.add(new Cord(11,10));
-        SEcords.add(new Cord(10,9));
-    }
-    /**
-     * Uzupełnia tablicę koordynatów południowo-zachodniego trójkąta
-     */
-    public void fillSWcords()
-    {
-        SWcords = new ArrayList<Cord>();
-        SWcords.add(new Cord(0,12));
-        SWcords.add(new Cord(1,12));
-        SWcords.add(new Cord(2,12));
-        SWcords.add(new Cord(3,12));
-        SWcords.add(new Cord(0,11));
-        SWcords.add(new Cord(1,11));
-        SWcords.add(new Cord(2,11));
-        SWcords.add(new Cord(1,10));
-        SWcords.add(new Cord(2,10));
-        SWcords.add(new Cord(1,9));
-    }
-    /**
-     * Uzupełnia tablicę koordynatów południowego trójkąta
-     */
-    public void fillScords()
-    {
-        Scords = new ArrayList<Cord>();
-        Scords.add(new Cord(6,16));
-        Scords.add(new Cord(5,15));
-        Scords.add(new Cord(6,15));
-        Scords.add(new Cord(5,14));
-        Scords.add(new Cord(6,14));
-        Scords.add(new Cord(7,14));
-        Scords.add(new Cord(4,13));
-        Scords.add(new Cord(5,13));
-        Scords.add(new Cord(6,13));
-        Scords.add(new Cord(7,13));
+        hexes = boardBuilder.getHexes();
     }
 
     /**
@@ -432,95 +315,6 @@ public class GameState {
     }
 
     /**
-     * Uzupełnia północny narożnik zadanym stanem
-     * @param state stan, którym należy wypełnić narożnik
-     */
-    private void initN(Hex.State state) {
-        for(int i =0; i< Ncords.size(); i++)
-        {
-            hexes[Ncords.get(i).x][Ncords.get(i).y] = new Hex(state);
-        }
-    }
-
-    /**
-     * init north-east
-     * @param state Hex.State
-     */
-    private void initNE(Hex.State state) {
-        for(int i =0; i< NEcords.size(); i++)
-        {
-            hexes[NEcords.get(i).x][NEcords.get(i).y] = new Hex(state);
-        }
-    }
-
-    /**
-     * init south-east
-     * @param state Hex.State
-     */
-    private void initSE(Hex.State state) {
-        for(int i =0; i< SEcords.size(); i++)
-        {
-            hexes[SEcords.get(i).x][SEcords.get(i).y] = new Hex(state);
-        }
-    }
-    /**
-     * init south
-     * @param state Hex.State
-     */
-    private void initS(Hex.State state) {
-        for(int i =0; i< Scords.size(); i++)
-        {
-            hexes[Scords.get(i).x][Scords.get(i).y] = new Hex(state);
-        }
-    }
-    /**
-     * init south-west
-     * @param state Hex.State
-     */
-    private void initSW(Hex.State state) {
-        for(int i =0; i< SWcords.size(); i++)
-        {
-            hexes[SWcords.get(i).x][SWcords.get(i).y] = new Hex(state);
-        }
-    }
-    /**
-     * init north-west
-     * @param state Hex.State
-     */
-    private void initNW(Hex.State state) {
-        for(int i =0; i< NWcords.size(); i++)
-        {
-            hexes[NWcords.get(i).x][NWcords.get(i).y] = new Hex(state);
-        }
-    }
-
-    /**
-     * init center
-     * @param state Hex.State
-     */
-    private void initCenter(Hex.State state) {
-        for (int i = 0; i < 5; i++) {
-            hexes[4+i][4] = new Hex(state);
-            hexes[4+i][12] = new Hex(state);
-        }
-        for (int i = 0; i < 6; i++) {
-            hexes[3+i][5] = new Hex(state);
-            hexes[3+i][11] = new Hex(state);
-        }
-        for (int i = 0; i < 7; i++) {
-            hexes[3+i][6] = new Hex(state);
-            hexes[3+i][10] = new Hex(state);
-        }
-        for (int i = 0; i < 8; i++) {
-            hexes[2+i][7] = new Hex(state);
-            hexes[2+i][9] = new Hex(state);
-        }
-        for (int i = 0; i < 9; i++) {
-            hexes[2+i][8] = new Hex(state);
-        }
-    }
-
-    /**
      * Zwraca id gry
      * @return id gry
      */
@@ -561,7 +355,7 @@ public class GameState {
             // czerwony wygrał jeśli South(BLUE) trójkąt jest wypełniony czerwonymi
             for(int i =0; i< Scords.size(); i++)
             {
-                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.BLUE)
+                if (hexes[Scords.get(i).x][Scords.get(i).y].getState() != Hex.State.RED)
                 {
                     return false;
                 }
@@ -574,7 +368,7 @@ public class GameState {
             // niebieski wygrał jeśli North(RED) trójkąt jest wypełniony niebieskimi
             for(int i =0; i< Ncords.size(); i++)
             {
-                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.RED)
+                if (hexes[Ncords.get(i).x][Ncords.get(i).y].getState() != Hex.State.BLUE)
                 {
                     return false;
                 }
