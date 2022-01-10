@@ -2,8 +2,6 @@ package server.gui;
 
 import server.NoGUIInitializer;
 import server.Server;
-import server.ServerStarter;
-
 import javax.swing.*;
 import java.awt.*;
 

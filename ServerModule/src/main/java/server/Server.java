@@ -15,13 +15,13 @@ import java.util.concurrent.Executors;
 public class Server {
 
     ServerLog serverLog;
-    public Server(ServerLog serverLog) throws Exception {
+    public Server(ServerLog serverLog) {
         this.serverLog = serverLog;
     }
 
     /**
      * Główna pętla serwera, jeśli ktoś próbuje się połączyć z portem, to jest mu nadawany PlayerHandler
-     * @throws Exception
+     * @throws Exception exceptions
      * @param serverPort - port servera
      */
     public void startServer(int serverPort, int numberOfPlayers) throws Exception {

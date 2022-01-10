@@ -1,5 +1,8 @@
 package server.gui;
 
+/**
+ * Klasa logująca grę do terminala
+ */
 public class ServerLogTerminal implements ServerLog{
 
     @Override

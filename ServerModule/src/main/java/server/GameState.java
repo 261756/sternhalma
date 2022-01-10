@@ -16,12 +16,12 @@ import java.util.Random;
 public class GameState {
     private final MoveValidator validator;
     private Hex[][] hexes;
-    private int gameId;
+    private final int gameId;
     private int place; // które miejsce zostało ostatnio zajęte (ilu graczy już wygrało)
     private boolean gameStarted; // czy do gry podłączyli się wszyscy gracze
     private final int numberOfPlayers;
     private int currentPlayer; // numer gracza ktory ma teraz ture
-    private ArrayList<PlayerHandler> players;
+    private final ArrayList<PlayerHandler> players;
     private ArrayList<ArrayList<String >> writeBuffer; // tutaj lądują wiadomości wysyłane do klientów, którzy jeszcze nie połączyli sie z serwerem
     static final int xAxis = 13;
     static final int yAxis = 17;

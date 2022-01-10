@@ -7,10 +7,10 @@ import java.awt.event.ActionListener;
 
 class SidePanel extends JPanel {
     private static final int WIDTH = 120;
-    private JButton passButton;
-    private JLabel turnInfo;
-    private JLabel winnersInfo;
-    private ClientFrame clientFrame;
+    private final JButton passButton;
+    private final JLabel turnInfo;
+    private final JLabel winnersInfo;
+    private final ClientFrame clientFrame;
     public SidePanel(ClientFrame clientFrame) {
         this.clientFrame = clientFrame;
         this.setBackground(new Color(255, 197, 168));

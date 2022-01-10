@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Klasa odbierająca komendy z serwera
  */
 public class CommandReader {
-    private Client client;
+    private final Client client;
     private Scanner scanner;
     public CommandReader(Client client) {
         this.client = client;

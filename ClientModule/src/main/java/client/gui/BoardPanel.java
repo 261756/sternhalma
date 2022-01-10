@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
  * Panel zawierający planszę
  */
 public class BoardPanel extends JPanel {
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     private boolean isBoardCreated = false;
     final static int xAxis = 13;
     final static int yAxis = 17;

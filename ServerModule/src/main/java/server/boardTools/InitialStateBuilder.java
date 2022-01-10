@@ -7,9 +7,9 @@ import server.Cord;
  * Klasa budująca początkową planszę
  */
 public class InitialStateBuilder extends AbstractStateBuilder{
-    private int xAxis;
-    private int yAxis;
-    private AbstractRegionFactory regionFactory;
+    private final int xAxis;
+    private final int yAxis;
+    private final AbstractRegionFactory regionFactory;
     private Hex[][] hexes;
 
     /**

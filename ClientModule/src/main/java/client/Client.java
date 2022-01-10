@@ -13,7 +13,7 @@ public class Client {
     private static Socket socket;
     private Hex.State pegsColor;
     private boolean myTurn;
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     /**
      * CommandReader przypisany do klienta, pisze do serwera.
      */
