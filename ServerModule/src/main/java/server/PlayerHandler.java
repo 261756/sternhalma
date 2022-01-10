@@ -141,7 +141,7 @@ public class PlayerHandler implements Runnable {
     public void write(String s) throws IOException {
         SCO.writeString(s);
     }
-    public void logIn(String msg)
+    /*public void logIn(String msg)
     {
         GS.log("Received from Game " + GS.getGameId() + ", " + pegsColor.name() + ": "+ msg);
     }
@@ -153,7 +153,7 @@ public class PlayerHandler implements Runnable {
 
         GS.log("Sent to Game " + GS.getGameId() + ", [ALL COLORS]: " + msg);
 
-    }
+    }*/
     public int getGameId()
     {
         return GS.getGameId();

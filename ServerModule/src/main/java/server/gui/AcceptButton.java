@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  */
 public class AcceptButton extends JButton {
     StartPopup startPopup;
-    AcceptButton(StartPopup startPopup)
+    public AcceptButton(StartPopup startPopup)
     {
         super("Akceptuj");
         this.startPopup = startPopup;

@@ -9,9 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import server.GameState;
 import server.PlayerHandler;
+import server.Server;
 import server.gui.ServerLogDisplay;
 
 import java.io.IOException;
+import java.net.Socket;
 
 import static org.mockito.Mockito.when;
 
@@ -37,6 +39,29 @@ public class TestConnectingPlayers {
         Assert.assertFalse(GS.getGameStarted());
         GS.addPlayer(playerHandler);
         Assert.assertTrue(GS.getGameStarted());
+    }
+    @Test
+    public void testConnectingSockets() throws Exception {
+        ServerLogDisplay serverLogDisplay = new ServerLogDisplay();
+        Server server = new Server(serverLogDisplay);
+        Thread serverThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    server.startServer(9999, 6);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        serverThread.start();
+        Socket socket1 = new Socket("localhost",9999);
+        Socket socket2 = new Socket("localhost",9999);
+        Socket socket3 = new Socket("localhost",9999);
+        Socket socket4 = new Socket("localhost",9999);
+        Socket socket5 = new Socket("localhost",9999);
+        Socket socket6 = new Socket("localhost",9999);
+        server.log("test");
     }
 
 }
