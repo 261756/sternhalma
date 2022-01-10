@@ -137,7 +137,7 @@ public class Client {
     public void setCurrentPlayer(String substring) {
         if (substring.equals(pegsColor.name())) {
             setMyTurn(true);
-            this.clientFrame.notify(new MessageFactory().myTurnMsg());
+            this.clientFrame.notify(MessageFactory.myTurnMsg());
         } else {
             setMyTurn(false);
             if (substring.equals("gameEnded"))
@@ -145,7 +145,7 @@ public class Client {
                 this.clientFrame.notify("<html><div style='text-align: center;'>Koniec gry.</div><br></html>");
             }
             else {
-                this.clientFrame.notify(new MessageFactory().opponentTurnMsg(substring));
+                this.clientFrame.notify(MessageFactory.opponentTurnMsg(substring));
             }
         }
     }
@@ -160,11 +160,11 @@ public class Client {
         String numberS = substring.substring(size-1);
         int number = Integer.parseInt(numberS);
         String color = substring.substring(0,size-1);
-        this.clientFrame.updateWinners(new MessageFactory().winnerMsg(clientFrame.getWinnerMsg(),color,number));
+        this.clientFrame.updateWinners(MessageFactory.winnerMsg(clientFrame.getWinnerMsg(),color,number));
     }
 
     public void updateLeavers(String substring)
     {
-        this.clientFrame.updateWinners(new MessageFactory().leftMsg(clientFrame.getWinnerMsg(),substring));
+        this.clientFrame.updateWinners(MessageFactory.leftMsg(clientFrame.getWinnerMsg(),substring));
     }
 }
