@@ -6,9 +6,12 @@ import server.boardTools.RegionFactory;
 import server.gui.ServerLog;
 
 
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
+
+import static java.lang.System.exit;
 
 /**
  * Klasa główna serwera
@@ -30,8 +33,10 @@ public class Server {
      * @throws Exception exceptions
      * @param serverPort - port servera
      */
-    public void startServer(int serverPort, int numberOfPlayers) throws Exception {
-        try (var listener = new ServerSocket(serverPort)) {
+    public boolean startServer(int serverPort, int numberOfPlayers) throws Exception {
+        ServerSocket listener = null;
+        try  {
+            listener = new ServerSocket(serverPort);
             serverLog.log("Serwer wystartował na porcie " + serverPort +", hostuje gry dla " + numberOfPlayers + " graczy.");
             int id_count = 0;
             Socket socket = null;
@@ -96,6 +101,18 @@ public class Server {
 
             }
         }
+        catch (BindException e)
+        {
+            serverLog.log("Adres jest już zajęty!");
+            //exit(0);
+        }
+        catch (Exception e){
+            if (listener != null) {
+                listener.close();
+            }
+            e.printStackTrace();
+        }
+        return true;
     }
 
     /**

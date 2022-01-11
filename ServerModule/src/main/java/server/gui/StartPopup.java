@@ -42,7 +42,7 @@ public class StartPopup extends JFrame {
     /**
      * Wysysła do serwera port i liczbe graczy jednocześnie startując go
      */
-    public void sendInput() {
+    public boolean sendInput() {
         try {
             int port = Integer.parseInt(portField.getText());
             if (port > 65535 || port < 0)
@@ -50,7 +50,6 @@ public class StartPopup extends JFrame {
                 throw new NumberFormatException();
             }
             int numberOfPlayers = (int) comboNumberOfPlayers.getSelectedItem();
-            this.setVisible(false);
             Thread serverThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -62,6 +61,12 @@ public class StartPopup extends JFrame {
                 }
             });
             serverThread.start();
+            Thread.sleep(10);
+            if (serverThread.getState() == Thread.State.TERMINATED)
+            {
+                //System.out.println("terminated");
+                return false;
+            }
 
 
         }
@@ -72,7 +77,7 @@ public class StartPopup extends JFrame {
         catch (Exception e) {
             System.exit(0);
         }
-
+        return true;
     }
 
     /**

@@ -24,7 +24,10 @@ public class AcceptButton extends JButton {
         this.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 try {
-                    startPopup.sendInput();
+                    if (startPopup.sendInput())
+                    {
+                        startPopup.setVisible(false);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
