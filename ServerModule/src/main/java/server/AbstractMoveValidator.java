@@ -21,7 +21,7 @@ public abstract class AbstractMoveValidator {
 
     /**
      * Metoda zaczynająca nową turę dla gracza o danym kolorze
-     * @param color
+     * @param color kolor gracza
      */
     public abstract void newTurn(Hex.State color);
 

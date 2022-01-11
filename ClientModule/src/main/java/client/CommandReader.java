@@ -13,6 +13,11 @@ import java.util.Scanner;
 public class CommandReader {
     private final Client client;
     private Scanner scanner;
+
+    /**
+     * Konstruktor
+     * @param client parent klient
+     */
     public CommandReader(Client client) {
         this.client = client;
     }
@@ -46,6 +51,7 @@ public class CommandReader {
      * turnChanged - informuje gracza który gracz ma teraz ruch
      * won - informuje o zwycięzcy
      * gemeEnded - informuje o zakończeniu gry
+     * @param command
      */
     public void processInstruction(String command) {
         if (command.startsWith("sendingHexes")) {

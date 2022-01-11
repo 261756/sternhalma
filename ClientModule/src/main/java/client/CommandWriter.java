@@ -45,6 +45,14 @@ public class CommandWriter {
     {
         printWriter.println("quit");
     }
+
+    /**
+     * Prosi serwer o ruch
+     * @param x1 x początkowe
+     * @param y1 y początkowe
+     * @param x2 x końcowe
+     * @param y2 y końcowe
+     */
     public void move(int x1, int y1, int x2, int y2)
     {
         printWriter.println("requestMove" + x1 + " " + y1 + " " + x2 + " " + y2);

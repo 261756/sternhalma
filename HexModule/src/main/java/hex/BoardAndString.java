@@ -7,9 +7,11 @@ package hex;
 public class BoardAndString {
     final static int xAxis = 13;
     final static int yAxis = 17;
+
     /**
-     * Zwraca zapis String
-     * @return String
+     * Zwraca planszę przekonwertowaną na String
+     * @param hexes plansza
+     * @return plansza zapisana jako String
      */
     public static String getStringValue(Hex[][] hexes) {
         String value = "";
@@ -22,8 +24,9 @@ public class BoardAndString {
     }
 
     /**
-     * Zwraca tablicę
-     * @return Hex[13][17]
+     * Zwraca planszę odtworzoną ze String
+     * @param value plansza jako String
+     * @return plansza
      */
     public static Hex[][] getBoardValue(String value) {
         Hex[][] hexes = new Hex[xAxis][yAxis];

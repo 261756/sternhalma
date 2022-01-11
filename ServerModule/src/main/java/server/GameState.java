@@ -54,7 +54,9 @@ public class GameState {
 
     /**
      * Klasa tworząca stan początkowy planszy dla zadanej liczby graczy
-     * @param numberOfPlayers - liczba graczy, na podstawie której trzeba zbudować różne plansze
+     * @param numberOfPlayers liczba graczy, na podstawie której trzeba zbudować różne plansze
+     * @param boardBuilder builder planszy
+     * @param regionFactory definicja regionów planszy
      */
     public void initBoard(int numberOfPlayers, AbstractStateBuilder boardBuilder, AbstractRegionFactory regionFactory)
     {
@@ -203,6 +205,7 @@ public class GameState {
     /**
      * Wyślij wiadomości z buffer do gracza o kolorze pegs
      * @param pegs - kolor dla którego trzeba aktywować writeBuffer
+     * @throws IOException błąd writing
      */
     public void activateWriteBuffer(Hex.State pegs) throws IOException {
         for (int i = 0; i < players.size(); i++)
@@ -219,6 +222,7 @@ public class GameState {
     /**
      * Dodaje gracza do tablicy graczy w gamestate
      * @param p PlayerHandler do dodania
+     * @throws IOException błąd writing
      */
     public void addPlayer(PlayerHandler p) throws IOException {
         players.add(p);

@@ -22,7 +22,7 @@ public class Server {
 
     /**
      * Konstruktor
-     * @param serverLog log serwera
+     * @param serverLog logger serwera
      */
     public Server(ServerLog serverLog) {
         this.serverLog = serverLog;
@@ -31,7 +31,8 @@ public class Server {
     /**
      * Główna pętla serwera, jeśli ktoś próbuje się połączyć z portem, to jest mu nadawany PlayerHandler
      * @throws Exception exceptions
-     * @param serverPort - port servera
+     * @param serverPort port servera
+     * @param numberOfPlayers ilość graczy
      */
     public boolean startServer(int serverPort, int numberOfPlayers) throws Exception {
         ServerSocket listener = null;
