@@ -1,8 +1,10 @@
 package server;
 
 import hex.Hex;
+import org.springframework.data.relational.core.sql.SQL;
 import server.boardTools.*;
 import server.gui.ServerLog;
+import server.sql.UpdateSQL;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -26,6 +28,8 @@ public class GameState {
     private ArrayList<ArrayList<String >> writeBuffer; // tutaj lądują wiadomości wysyłane do klientów, którzy jeszcze nie połączyli sie z serwerem
     static final int xAxis = 13;
     static final int yAxis = 17;
+    private final int SQLGameNumber;
+    private int moveNumber;
     ServerLog serverLog;
 
     /**
@@ -38,6 +42,8 @@ public class GameState {
      */
     public GameState(int numberOfPlayers, int id, ServerLog serverLog, AbstractMoveValidator validator, AbstractRegionFactory factory)
     {
+        moveNumber = 0;
+        SQLGameNumber = UpdateSQL.addGame(numberOfPlayers);
         this.moveValidator = validator;
         this.moveValidator.setGameState(this);
         this.regionFactory = factory;
@@ -176,6 +182,8 @@ public class GameState {
         {
             hexes[c][d].setState(hexes[a][b].getState());
             hexes[a][b].setState(Hex.State.EMPTY);
+            UpdateSQL.addMove(SQLGameNumber,moveNumber,a,b,c,d,hexes[c][d].getState().name());
+            moveNumber++;
             return true;
         }
         return false;

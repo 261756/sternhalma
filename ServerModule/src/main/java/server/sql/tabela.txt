@@ -1,0 +1,28 @@
+drop database if exists warcaby;
+
+CREATE DATABASE warcaby;
+
+CREATE USER 'warcabyUser'@'localhost' IDENTIFIED BY 'warcaby123';
+GRANT ALL PRIVILEGES ON warcaby.* TO 'warcabyUser'@'localhost';
+USE warcaby;
+
+DROP TABLE if exists game;
+
+CREATE TABLE game(
+  id int AUTO_INCREMENT PRIMARY KEY,
+  numberOfPlayers int,
+  status enum('ended','ongoing')
+);
+
+DROP TABLE if exists move;
+
+CREATE TABLE move(
+  id int AUTO_INCREMENT PRIMARY KEY,
+  game_id int,
+  number int,
+  x1 int,
+  y1 int,
+  x2 int,
+  y2 int,
+  color enum('RED','BLUE','GREEN','YELLOW','WHITE','BLACK')
+);
