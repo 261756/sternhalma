@@ -200,15 +200,13 @@ public class Client {
     {
         this.clientFrame.updateWinners(MessageFactory.leftMsg(clientFrame.getWinnerMsg(),substring));
     }
-    public void startReplayMode() {
-        String gameList = "1 2 3 4 5";
-        //TODO: choose game
+    public void startReplayMode(String gameList) {
         int gameId = clientFrame.showReplayOptions(Arrays.stream(gameList.split(" ")).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new));
         if (gameId != -1) {
+            commandWriter.requestGame(gameId);
             clientFrame.changeToReplayMode();
             clientFrame.notify("<html><div style='text-align: center;'>Powtórka gry: " + gameId + "</div></html>");
         }
-        System.out.println(gameId);
         this.counter = 0;
     }
     public void requestNext() {

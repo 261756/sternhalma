@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -51,4 +52,9 @@ public class ConnectionJDBC {
         return number;
     }
 
+    public String getGameList() {
+        String SQL = "select id from warcaby.game";
+        List<String> list = jdbcTemplateObject.queryForList(SQL,String.class);
+        return String.join(" ", list);
+    }
 }

@@ -73,7 +73,7 @@ public class CommandReader {
         if (command.startsWith("gameEnded"))
         {
             client.setCurrentPlayer("gameEnded");
-            client.startReplayMode();
+            client.startReplayMode(command.substring(9));
         }
         if (command.startsWith("left"))
         {

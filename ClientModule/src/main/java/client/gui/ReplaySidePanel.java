@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class ReplaySidePanel extends BasicSidePanel {
     public ReplaySidePanel(ClientFrame clientFrame) {
         super(clientFrame);
-        JButton nextButton = new JButton("Next");
+        JButton nextButton = new JButton("Następny");
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

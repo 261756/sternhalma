@@ -2,6 +2,8 @@ package server;
 
 import hex.BoardAndString;
 import hex.Hex;
+import server.sql.QuerySQL;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -80,7 +82,8 @@ public class PlayerHandler implements Runnable {
                         GS.log(pegsColor + " won!");
                         if (GS.checkIfGameEnded())
                         {
-                            writeToAllPlayers("gameEnded");
+                            writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
+                            //writeToAllPlayers("gameEnded");
                         }
                     }
                 }
@@ -124,7 +127,8 @@ public class PlayerHandler implements Runnable {
                 }
                 if (GS.checkIfGameEnded())
                 {
-                    writeToAllPlayers("gameEnded");
+                    //writeToAllPlayers("gameEnded");
+                    writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
                 }
                 writeToAllPlayers("left" + pegsColor.name());
             } catch (IOException e) {
