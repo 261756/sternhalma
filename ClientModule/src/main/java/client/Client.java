@@ -5,6 +5,7 @@ import hex.Hex;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * Klasa klienta commandReader odczytuje komendy, commandWriter wysyła komendy
@@ -14,6 +15,7 @@ public class Client {
     private Hex.State pegsColor;
     private boolean myTurn;
     private final ClientFrame clientFrame;
+    private int counter;
     /**
      * CommandReader przypisany do klienta, pisze do serwera.
      */
@@ -197,5 +199,19 @@ public class Client {
     public void updateLeavers(String substring)
     {
         this.clientFrame.updateWinners(MessageFactory.leftMsg(clientFrame.getWinnerMsg(),substring));
+    }
+    public void startReplayMode() {
+        String gameList = "1 2 3 4 5";
+        //TODO: choose game
+        int gameId = clientFrame.showReplayOptions(Arrays.stream(gameList.split(" ")).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new));
+        if (gameId != -1) {
+            clientFrame.changeToReplayMode();
+            clientFrame.notify("<html><div style='text-align: center;'>Powtórka gry: " + gameId + "</div></html>");
+        }
+        System.out.println(gameId);
+        this.counter = 0;
+    }
+    public void requestNext() {
+        commandWriter.requestPast(counter + 1);
     }
 }

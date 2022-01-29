@@ -17,7 +17,7 @@ public class ClientFrame extends JFrame {
     /**
      * Panel boczny
      */
-    protected SidePanel sidePanel;
+    protected BasicSidePanel sidePanel;
     /**
      * Klient
      */
@@ -87,5 +87,18 @@ public class ClientFrame extends JFrame {
             throw new Exception();
         }
     }
-
+    public void changeToReplayMode() {
+        this.sidePanel = new ReplaySidePanel(this);
+        this.getContentPane().add(sidePanel,BorderLayout.EAST);
+        this.sidePanel.displaySidePanel();
+    }
+    public int showReplayOptions(Integer[] gameNumbers) {
+        ReplaySetupPanel panel = new ReplaySetupPanel(gameNumbers);
+        int input = JOptionPane.showConfirmDialog(this,panel,"Tryb powtórki",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
+        if (input == JOptionPane.YES_OPTION) {
+            return panel.getSelectedGame();
+        } else {
+            return -1;
+        }
+    }
 }

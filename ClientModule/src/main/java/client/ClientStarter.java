@@ -11,6 +11,8 @@ public class ClientStarter {
         //client.setCommunication(new Socket("localhost", 59898));
         client.display(800,800);
         client.startConfiguration("Podaj adres serwera i port");
+        //client.startReplayMode();
         client.play();
+
     }
 }

@@ -64,4 +64,12 @@ public class CommandWriter {
     public void passTurn() {
         printWriter.println("passTurn");
     }
+
+    /**
+     * Wysyła zapytanie o stan po ruchy z gry
+     * @param number numer ruchu
+     */
+    public void requestPast(int number) {
+        printWriter.println("requestPastHexes" + " " + number);
+    }
 }
