@@ -71,6 +71,7 @@ public class PlayerHandler implements Runnable {
                 {
                     creator = new ReplayStateCreator(new InitialStateBuilder(13,17, new RegionFactory()),
                             Integer.parseInt(command.substring(15)));
+                    SCO.writeString("sendingHexes" + BoardAndString.getStringValue(creator.getHexes()));
                 }
                 else if (command.startsWith("requestPastHexes"))
                 {
