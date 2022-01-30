@@ -95,11 +95,11 @@ public class ClientFrame extends JFrame {
         this.validate();
         this.repaint();
     }
-    public int showReplayOptions(Integer[] gameNumbers) {
+    public int showReplayOptions(String[] gameNumbers) {
         ReplaySetupPanel panel = new ReplaySetupPanel(gameNumbers);
         int input = JOptionPane.showConfirmDialog(this,panel,"Tryb powtórki",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
         if (input == JOptionPane.YES_OPTION) {
-            return panel.getSelectedGame();
+            return Integer.parseInt(panel.getSelectedGame());
         } else {
             return -1;
         }

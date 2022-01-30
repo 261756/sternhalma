@@ -61,8 +61,7 @@ public class ReplayStateCreator {
         return hexes;
     }
     private void swap(int[] cords) {
-        Hex.State temp = hexes[cords[2]][cords[3]].getState();
         hexes[cords[2]][cords[3]] = new Hex(hexes[cords[0]][cords[1]].getState());
-        hexes[cords[0]][cords[1]] = new Hex(temp);
+        hexes[cords[0]][cords[1]] = new Hex(Hex.State.EMPTY);
     }
 }

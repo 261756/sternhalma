@@ -201,7 +201,7 @@ public class Client {
         this.clientFrame.updateWinners(MessageFactory.leftMsg(clientFrame.getWinnerMsg(),substring));
     }
     public void startReplayMode(String gameList) {
-        int gameId = clientFrame.showReplayOptions(Arrays.stream(gameList.split(" ")).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new));
+        int gameId = clientFrame.showReplayOptions(gameList.split(" "));
         if (gameId != -1) {
             commandWriter.requestGame(gameId);
             clientFrame.changeToReplayMode();

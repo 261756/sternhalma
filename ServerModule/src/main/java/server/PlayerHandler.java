@@ -83,7 +83,7 @@ public class PlayerHandler implements Runnable {
 
                 }
                 else if (command.equals("requestGames")) {
-                    writeToAllPlayers("gameList" + QuerySQL.getGameList());
+                    SCO.writeString("gameList" + QuerySQL.getGameList());
                 }
                 else if (GS.checkIfGameEnded())
                 {
