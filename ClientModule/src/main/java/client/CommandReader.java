@@ -73,11 +73,21 @@ public class CommandReader {
         if (command.startsWith("gameEnded"))
         {
             client.setCurrentPlayer("gameEnded");
-            client.startReplayMode(command.substring(9));
+            client.commandWriter.requestGameList();
         }
         if (command.startsWith("left"))
         {
             client.updateLeavers(command.substring(4));
+        }
+        if (command.startsWith("message")) {
+            if (command.length() > 7) {
+                client.notifyPlayer(command.substring(7));
+            }
+        }
+        if (command.startsWith("gameList")) {
+            if (command.length() > 8) {
+                client.startReplayMode(command.substring(8));
+            }
         }
     }
 

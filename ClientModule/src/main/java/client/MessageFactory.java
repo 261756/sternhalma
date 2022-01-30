@@ -49,4 +49,7 @@ public class MessageFactory {
         //System.out.println(builder.toString());
         return  builder.toString();
     }
+    public static String simpleMsg(String message) {
+        return "<html><div style='text-align: center;'>" + message + "</div><br></html>";
+    }
 }

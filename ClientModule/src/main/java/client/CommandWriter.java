@@ -76,4 +76,6 @@ public class CommandWriter {
     public void requestGame(int number) {
         printWriter.println("requestPastGame" + number);
     }
+
+    public void requestGameList() {printWriter.println("requestGames");}
 }

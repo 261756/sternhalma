@@ -2,6 +2,9 @@ package server;
 
 import hex.BoardAndString;
 import hex.Hex;
+import server.boardTools.InitialStateBuilder;
+import server.boardTools.RegionFactory;
+import server.boardTools.ReplayStateCreator;
 import server.sql.QuerySQL;
 
 import java.io.IOException;
@@ -29,7 +32,7 @@ public class PlayerHandler implements Runnable {
     private boolean winner;
     private boolean left; // czy gracz wyszedł z gry zanim wygrał
     private boolean addedToGS;
-
+    private ReplayStateCreator creator;
     /**
      * Konstruktor wątku handlara gracza
      * @param socket socket gracza
@@ -64,7 +67,24 @@ public class PlayerHandler implements Runnable {
         try {
             while (SCI.availableCommandFromClient()) {
                 String command = SCI.getCommandFromClient();
-                if (GS.checkIfGameEnded())
+                if (command.startsWith("requestPastGame"))
+                {
+                    creator = new ReplayStateCreator(new InitialStateBuilder(13,17, new RegionFactory()),
+                            Integer.parseInt(command.substring(15)));
+                }
+                else if (command.startsWith("requestPastHexes"))
+                {
+                    if (creator.setState(Integer.parseInt(command.substring(16)))) {
+                        SCO.writeString("sendingHexes" + BoardAndString.getStringValue(creator.getHexes()));
+                    } else {
+                        SCO.writeString("message" + "Koniec powtórki");
+                    }
+
+                }
+                else if (command.equals("requestGames")) {
+                    writeToAllPlayers("gameList" + QuerySQL.getGameList());
+                }
+                else if (GS.checkIfGameEnded())
                 {
                     continue;
                 }
@@ -82,8 +102,8 @@ public class PlayerHandler implements Runnable {
                         GS.log(pegsColor + " won!");
                         if (GS.checkIfGameEnded())
                         {
-                            writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
-                            //writeToAllPlayers("gameEnded");
+                            //writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
+                            writeToAllPlayers("gameEnded");
                         }
                     }
                 }
@@ -127,8 +147,8 @@ public class PlayerHandler implements Runnable {
                 }
                 if (GS.checkIfGameEnded())
                 {
-                    //writeToAllPlayers("gameEnded");
-                    writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
+                    writeToAllPlayers("gameEnded");
+                    //writeToAllPlayers("gameEnded" + QuerySQL.getGameList());
                 }
                 writeToAllPlayers("left" + pegsColor.name());
             } catch (IOException e) {

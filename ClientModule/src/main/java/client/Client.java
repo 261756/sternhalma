@@ -210,6 +210,10 @@ public class Client {
         this.counter = 0;
     }
     public void requestNext() {
-        commandWriter.requestPast(counter + 1);
+        commandWriter.requestPast(counter);
+        counter++;
+    }
+    public void notifyPlayer(String message) {
+        this.clientFrame.notify(MessageFactory.simpleMsg(message));
     }
 }

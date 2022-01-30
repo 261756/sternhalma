@@ -1,13 +1,11 @@
 package server.sql;
 
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
 
@@ -56,5 +54,26 @@ public class ConnectionJDBC {
         String SQL = "select id from warcaby.game";
         List<String> list = jdbcTemplateObject.queryForList(SQL,String.class);
         return String.join(" ", list);
+    }
+
+    public int getNumberOfPlayers(int gameId) {
+        String SQL = "select numberOfPlayers from warcaby.game where id = ?";
+        Map<String, Object> map = jdbcTemplateObject.queryForMap(SQL,gameId);
+        return (int) map.get("numberOfPlayers");
+    }
+
+    public SimpleMove getMove(int gameId, int move) {
+        String SQL = "select x1,y1,x2,y2 from warcaby.move where game_id = ? and number = ?";
+        return (SimpleMove) jdbcTemplateObject.queryForObject(
+                SQL,
+                new BeanPropertyRowMapper(SimpleMove.class),
+                new Object[]{gameId,move});
+    }
+
+    public int getNumberOfMoves(int gameId) {
+        String SQL = "select count(id) from warcaby.move where game_id = ?";
+        Map<String, Object> map = jdbcTemplateObject.queryForMap(SQL,gameId);
+        Long result = (Long)map.get("count(id)");
+        return result.intValue();
     }
 }

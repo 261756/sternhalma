@@ -88,9 +88,12 @@ public class ClientFrame extends JFrame {
         }
     }
     public void changeToReplayMode() {
+        this.remove(sidePanel);
         this.sidePanel = new ReplaySidePanel(this);
         this.getContentPane().add(sidePanel,BorderLayout.EAST);
         this.sidePanel.displaySidePanel();
+        this.validate();
+        this.repaint();
     }
     public int showReplayOptions(Integer[] gameNumbers) {
         ReplaySetupPanel panel = new ReplaySetupPanel(gameNumbers);
