@@ -76,4 +76,8 @@ public class ConnectionJDBC {
         Long result = (Long)map.get("count(id)");
         return result.intValue();
     }
+    public void setEnded(int gameId) {
+        String SQL = "update warcaby.game SET status = 'ended' where id = ?";
+        jdbcTemplateObject.update(SQL,gameId);
+    }
 }

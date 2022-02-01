@@ -375,7 +375,11 @@ public class GameState {
             }
         }
         //System.out.println(counter + " " + numberOfPlayers);
-        return counter >= numberOfPlayers - 1;
+        if (counter >= numberOfPlayers - 1) {
+            UpdateSQL.setEnded(SQLGameNumber);
+            return true;
+        }
+        return false;
     }
 
     /**

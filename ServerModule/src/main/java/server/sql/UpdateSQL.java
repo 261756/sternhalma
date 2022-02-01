@@ -17,4 +17,11 @@ public class UpdateSQL {
                 (ConnectionJDBC) context.getBean("connectionJDBC");
         return connectionJDBC.createGame(numberOfPlayers);
     }
+    public static void setEnded(int gameId)
+    {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+        ConnectionJDBC connectionJDBC =
+                (ConnectionJDBC) context.getBean("connectionJDBC");
+        connectionJDBC.setEnded(gameId);
+    }
 }
